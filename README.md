@@ -1,26 +1,21 @@
-﻿# W5:[高性价比RTOS控制节点](https://github.com/OS-Q/W5) 
-
-高性价比RTOS控制节点，基于FreeRTOS开发
+﻿# [FreeRTOS](https://github.com/OS-Q/FreeRTOS) 
 
 [![sites](OS-Q/OS-Q.png)](http://www.OS-Q.com)
 
-#### 更多关于：[M2控制节点](https://github.com/OS-Q/M2) 可访问 www.OS-Q.com
+#### 关于系统架构：[OS-Q](https://github.com/OS-Q/OS-Q)
+
+## [描述](https://github.com/OS-Q/FreeRTOS/wiki) 
+
+关于该工程的一些说明
+
+## [包含资源](OS-Q/) 
+
+#### [freeRTOS](freeRTOS/)
+
+系统参考资料
 
 ---
 
-## 简介
-
-
-
----
-
-## 组成
-
-
-
----
-
-## 锻造最美之器
-
-##  www.OS-Q.com   |   qitas@qitas.cn
-
+####  © qitas@qitas.cn
+###  [OS-Q redefined Operation System](http://www.OS-Q.com)
+####  @ 2018-12-22
