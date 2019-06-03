@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>Flash</TargetName>
+      <TargetName>Qitas</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
