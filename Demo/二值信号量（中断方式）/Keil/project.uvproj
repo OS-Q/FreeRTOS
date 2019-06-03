@@ -427,16 +427,6 @@
               <FilePath>..\User\main.c</FilePath>
             </File>
             <File>
-              <FileName>includes.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\User\includes.h</FilePath>
-            </File>
-            <File>
-              <FileName>FreeRTOSConfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\User\FreeRTOSConfig.h</FilePath>
-            </File>
-            <File>
               <FileName>SysInfoTest.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\User\SysInfoTest.c</FilePath>
