@@ -1,71 +1,29 @@
 /*
-    FreeRTOS V8.2.2 - Copyright (C) 2015 Real Time Engineers Ltd.
-    All rights reserved
-
-    VISIT http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
-
-    This file is part of the FreeRTOS distribution.
-
-    FreeRTOS is free software; you can redistribute it and/or modify it under
-    the terms of the GNU General Public License (version 2) as published by the
-    Free Software Foundation >>!AND MODIFIED BY!<< the FreeRTOS exception.
-
-    ***************************************************************************
-    >>!   NOTE: The modification to the GPL is included to allow you to     !<<
-    >>!   distribute a combined work that includes FreeRTOS without being   !<<
-    >>!   obliged to provide the source code for proprietary components     !<<
-    >>!   outside of the FreeRTOS kernel.                                   !<<
-    ***************************************************************************
-
-    FreeRTOS is distributed in the hope that it will be useful, but WITHOUT ANY
-    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-    FOR A PARTICULAR PURPOSE.  Full license text is available on the following
-    link: http://www.freertos.org/a00114.html
-
-    ***************************************************************************
-     *                                                                       *
-     *    FreeRTOS provides completely free yet professionally developed,    *
-     *    robust, strictly quality controlled, supported, and cross          *
-     *    platform software that is more than just the market leader, it     *
-     *    is the industry's de facto standard.                               *
-     *                                                                       *
-     *    Help yourself get started quickly while simultaneously helping     *
-     *    to support the FreeRTOS project by purchasing a FreeRTOS           *
-     *    tutorial book, reference manual, or both:                          *
-     *    http://www.FreeRTOS.org/Documentation                              *
-     *                                                                       *
-    ***************************************************************************
-
-    http://www.FreeRTOS.org/FAQHelp.html - Having a problem?  Start by reading
-    the FAQ page "My application does not run, what could be wrong?".  Have you
-    defined configASSERT()?
-
-    http://www.FreeRTOS.org/support - In return for receiving this top quality
-    embedded software for free we request you assist our global community by
-    participating in the support forum.
-
-    http://www.FreeRTOS.org/training - Investing in training allows your team to
-    be as productive as possible as early as possible.  Now you can receive
-    FreeRTOS training directly from Richard Barry, CEO of Real Time Engineers
-    Ltd, and the world's leading authority on the world's leading RTOS.
-
-    http://www.FreeRTOS.org/plus - A selection of FreeRTOS ecosystem products,
-    including FreeRTOS+Trace - an indispensable productivity tool, a DOS
-    compatible FAT file system, and our tiny thread aware UDP/IP stack.
-
-    http://www.FreeRTOS.org/labs - Where new FreeRTOS products go to incubate.
-    Come and try FreeRTOS+TCP, our new open source TCP/IP stack for FreeRTOS.
-
-    http://www.OpenRTOS.com - Real Time Engineers ltd. license FreeRTOS to High
-    Integrity Systems ltd. to sell under the OpenRTOS brand.  Low cost OpenRTOS
-    licenses offer ticketed support, indemnification and commercial middleware.
-
-    http://www.SafeRTOS.com - High Integrity Systems also provide a safety
-    engineered and independently SIL3 certified version for use in safety and
-    mission critical applications that require provable dependability.
-
-    1 tab == 4 spaces!
-*/
+ * FreeRTOS Kernel V10.2.1
+ * Copyright (C) 2019 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * http://www.FreeRTOS.org
+ * http://aws.amazon.com/freertos
+ *
+ * 1 tab == 4 spaces!
+ */
 
 /*-----------------------------------------------------------
  * Implementation of functions defined in portable.h for the MicroBlaze port.
@@ -84,6 +42,10 @@
 #include <xintc_i.h>
 #include <xtmrctr.h>
 
+#if( configSUPPORT_DYNAMIC_ALLOCATION == 0 )
+	#error configSUPPORT_DYNAMIC_ALLOCATION must be set to 1 to use this port.
+#endif
+
 /* Tasks are started with interrupts enabled. */
 #define portINITIAL_MSR_STATE		( ( StackType_t ) 0x02 )
 
@@ -99,7 +61,7 @@ to reach zero, so it is initialised to a high value. */
 debugging. */
 #define portISR_STACK_FILL_VALUE	0x55555555
 
-/* Counts the nesting depth of calls to portENTER_CRITICAL().  Each task 
+/* Counts the nesting depth of calls to portENTER_CRITICAL().  Each task
 maintains it's own count, so this variable is saved as part of the task
 context. */
 volatile UBaseType_t uxCriticalNesting = portINITIAL_NESTING_VALUE;
@@ -117,10 +79,10 @@ uint32_t *pulISRStack;
 static void prvSetupTimerInterrupt( void );
 /*-----------------------------------------------------------*/
 
-/* 
- * Initialise the stack of a task to look exactly as if a call to 
+/*
+ * Initialise the stack of a task to look exactly as if a call to
  * portSAVE_CONTEXT had been made.
- * 
+ *
  * See the header file portable.h.
  */
 StackType_t *pxPortInitialiseStack( StackType_t *pxTopOfStack, TaskFunction_t pxCode, void *pvParameters )
@@ -129,16 +91,16 @@ extern void *_SDA2_BASE_, *_SDA_BASE_;
 const uint32_t ulR2 = ( uint32_t ) &_SDA2_BASE_;
 const uint32_t ulR13 = ( uint32_t ) &_SDA_BASE_;
 
-	/* Place a few bytes of known values on the bottom of the stack. 
+	/* Place a few bytes of known values on the bottom of the stack.
 	This is essential for the Microblaze port and these lines must
-	not be omitted.  The parameter value will overwrite the 
+	not be omitted.  The parameter value will overwrite the
 	0x22222222 value during the function prologue. */
 	*pxTopOfStack = ( StackType_t ) 0x11111111;
 	pxTopOfStack--;
 	*pxTopOfStack = ( StackType_t ) 0x22222222;
 	pxTopOfStack--;
 	*pxTopOfStack = ( StackType_t ) 0x33333333;
-	pxTopOfStack--; 
+	pxTopOfStack--;
 
 	/* First stack an initial value for the critical section nesting.  This
 	is initialised to zero as tasks are started with interrupts enabled. */
@@ -261,7 +223,7 @@ void vPortEndScheduler( void )
 /*-----------------------------------------------------------*/
 
 /*
- * Manual context switch called by portYIELD or taskYIELD.  
+ * Manual context switch called by portYIELD or taskYIELD.
  */
 void vPortYield( void )
 {
@@ -280,7 +242,7 @@ extern void VPortYieldASM( void );
 /*-----------------------------------------------------------*/
 
 /*
- * Hardware initialisation to generate the RTOS tick.   
+ * Hardware initialisation to generate the RTOS tick.
  */
 static void prvSetupTimerInterrupt( void )
 {
@@ -295,12 +257,12 @@ UBaseType_t uxMask;
    	XTmrCtr_mSetLoadReg( XPAR_OPB_TIMER_1_BASEADDR, portCOUNTER_0, ulCounterValue );
 	XTmrCtr_mSetControlStatusReg( XPAR_OPB_TIMER_1_BASEADDR, portCOUNTER_0, XTC_CSR_LOAD_MASK | XTC_CSR_INT_OCCURED_MASK );
 
-	/* Set the timer interrupt enable bit while maintaining the other bit 
+	/* Set the timer interrupt enable bit while maintaining the other bit
 	states. */
 	uxMask = XIntc_In32( ( XPAR_OPB_INTC_0_BASEADDR + XIN_IER_OFFSET ) );
 	uxMask |= XPAR_OPB_TIMER_1_INTERRUPT_MASK;
-	XIntc_Out32( ( XPAR_OPB_INTC_0_BASEADDR + XIN_IER_OFFSET ), ( uxMask ) );	
-	
+	XIntc_Out32( ( XPAR_OPB_INTC_0_BASEADDR + XIN_IER_OFFSET ), ( uxMask ) );
+
 	XTmrCtr_Start( &xTimer, XPAR_OPB_TIMER_1_DEVICE_ID );
 	XTmrCtr_mSetControlStatusReg(XPAR_OPB_TIMER_1_BASEADDR, portCOUNTER_0, XTC_CSR_ENABLE_TMR_MASK | XTC_CSR_ENABLE_INT_MASK | XTC_CSR_AUTO_RELOAD_MASK | XTC_CSR_DOWN_COUNT_MASK | XTC_CSR_INT_OCCURED_MASK );
 	XIntc_mAckIntr( XPAR_INTC_SINGLE_BASEADDR, 1 );
@@ -310,12 +272,12 @@ UBaseType_t uxMask;
 /*
  * The interrupt handler placed in the interrupt vector when the scheduler is
  * started.  The task context has already been saved when this is called.
- * This handler determines the interrupt source and calls the relevant 
+ * This handler determines the interrupt source and calls the relevant
  * peripheral handler.
  */
 void vTaskISRHandler( void )
 {
-static uint32_t ulPending;    
+static uint32_t ulPending;
 
 	/* Which interrupts are pending? */
 	ulPending = XIntc_In32( ( XPAR_INTC_SINGLE_BASEADDR + XIN_IVR_OFFSET ) );
@@ -346,7 +308,7 @@ static uint32_t ulPending;
 }
 /*-----------------------------------------------------------*/
 
-/* 
+/*
  * Handler for the timer interrupt.
  */
 void vTickISR( void *pvBaseAddress )
@@ -360,7 +322,7 @@ uint32_t ulCSR;
 	}
 
 	/* Clear the timer interrupt */
-	ulCSR = XTmrCtr_mGetControlStatusReg(XPAR_OPB_TIMER_1_BASEADDR, 0);	
+	ulCSR = XTmrCtr_mGetControlStatusReg(XPAR_OPB_TIMER_1_BASEADDR, 0);
 	XTmrCtr_mSetControlStatusReg( XPAR_OPB_TIMER_1_BASEADDR, portCOUNTER_0, ulCSR );
 }
 /*-----------------------------------------------------------*/
