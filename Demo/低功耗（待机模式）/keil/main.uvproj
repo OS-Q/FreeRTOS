@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>Flash</TargetName>
+      <TargetName>qitas</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
@@ -427,16 +427,6 @@
               <FilePath>..\User\main.c</FilePath>
             </File>
             <File>
-              <FileName>includes.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\User\includes.h</FilePath>
-            </File>
-            <File>
-              <FileName>FreeRTOSConfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\User\FreeRTOSConfig.h</FilePath>
-            </File>
-            <File>
               <FileName>SysInfoTest.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\User\SysInfoTest.c</FilePath>
@@ -620,21 +610,6 @@
               <FileName>heap_4.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\FreeRTOS\portable\MemMang\heap_4.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Doc</GroupName>
-          <Files>
-            <File>
-              <FileName>01.例程功能说明.txt</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Doc\01.例程功能说明.txt</FilePath>
-            </File>
-            <File>
-              <FileName>02.开发环境说明.txt</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Doc\02.开发环境说明.txt</FilePath>
             </File>
           </Files>
         </Group>
