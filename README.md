@@ -1,9 +1,9 @@
 ﻿# [FreeRTOS](https://github.com/OS-Q/FreeRTOS) 
 
-[![sites](OS-Q/OS-Q.png)](http://www.os-q.com)
+[![sites](http://182.61.61.133/link/resources/OSQ.png)](http://www.OS-Q.com)
 
+#### 关于系统架构：[OS-Q](https://github.com/OS-Q)
 #### 归属实时系统：[RTQ](https://github.com/OS-Q/RTQ)
-#### 关于系统架构：[OS-Q](https://github.com/OS-Q/OS-Q)
 
 ### [FreeRTOS简介](https://github.com/OS-Q/FreeRTOS/wiki)
 
@@ -15,6 +15,9 @@ FreeRTOS功能包括：任务管理、时间管理、信号量、消息队列、
 
 FreeRTOS可以在内存不到0.5KB、ROM为5-10KB的设备上运行，不过与TCP/IP架构结合使用更为常见，它更像是24KB内存和60KB闪存。FreeRTOS操作系统可以被方便地移植到不同处理器上工作，现已提供了ARM、MSP430、AVR、PIC、C8051F等多款处理器的移植。
 
-* [Demo例程](Demo/)
+### [收录资源](https://github.com/OS-Q) 
 
-### [OS-Q : Operation System for edge devices](http://www.OS-Q.com/FreeRTOS)
+* [文档](docs/)
+* [资源](src/)
+
+### [OS-Q = Open Solutions | Open Source |  Operating System ](http://www.OS-Q.com)
