@@ -2,7 +2,6 @@
 
 [![sites](http://182.61.61.133/link/resources/OSQ.png)](http://www.OS-Q.com)
 
-#### 关于系统架构：[OS-Q](https://github.com/OS-Q)
 #### 归属实时系统：[RTQ](https://github.com/OS-Q/RTQ)
 
 ### [FreeRTOS简介](https://github.com/OS-Q/FreeRTOS/wiki)
