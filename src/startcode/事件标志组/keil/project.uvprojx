@@ -581,21 +581,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Doc</GroupName>
-          <Files>
-            <File>
-              <FileName>01.例程功能说明.txt</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Doc\01.例程功能说明.txt</FilePath>
-            </File>
-            <File>
-              <FileName>02.开发环境说明.txt</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Doc\02.开发环境说明.txt</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>

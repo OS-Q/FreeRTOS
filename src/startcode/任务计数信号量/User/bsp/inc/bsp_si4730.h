@@ -1,23 +1,10 @@
-/*
-*********************************************************************************************************
-*
-*	Ä£¿éÃû³Æ : AM/FMÊÕÒô»úSi4730 Çı¶¯Ä£¿é
-*	ÎÄ¼şÃû³Æ : bsp_Si730.h
-*	°æ    ±¾ : V1.0
-*	Ëµ    Ã÷ : Í·ÎÄ¼ş
-*
-*	Copyright (C), 2013-2014, °²¸»À³www.OS-Q.comm
-*
-*********************************************************************************************************
-*/
-
 #ifndef __BSP_SI4730_H
 #define __BSP_SI4730_H
 
 #define I2C_ADDR_SI4730_W		0x22
 #define I2C_ADDR_SI4730_R		0x23
 
-/* Si4730 ¼Ä´æÆ÷¡¢ÃüÁî¶¨Òå */
+/* Si4730 å¯„å­˜å™¨ã€å‘½ä»¤å®šä¹‰ */
 
 /* FM/RDS Receiver Command Summary */
 enum
@@ -26,7 +13,7 @@ enum
 	SI4730_CMD_GET_REV 			= 0x10, /*Returns revision information on the device. */
 	SI4730_CMD_POWER_DOWN 		= 0x11, /*Power down device. */
 	SI4730_CMD_SET_PROPERTY 	= 0x12, /*Sets the value of a property. */
-	SI4730_CMD_GET_PROPERTY 	= 0x13, /*Retrieves a property¡¯s value. */
+	SI4730_CMD_GET_PROPERTY 	= 0x13, /*Retrieves a propertyâ€™s value. */
 	SI4730_CMD_GET_INT_STATUS 	= 0x14, /*Reads interrupt status bits. */
 	SI4730_CMD_PATCH_ARGS		= 0x15, /*Reserved command used for patch file downloads. */
 	SI4730_CMD_PATCH_DATA		= 0x16, /*Reserved command used for patch file downloads. */
@@ -65,5 +52,3 @@ uint8_t SI4730_SetProperty(uint16_t _usPropNumber, uint16_t _usPropValue);
 uint8_t SI4704_SetFMIntput(uint8_t _ch);
 
 #endif
-
-/***************************** °²¸»À³www.OS-Q.comm (END OF FILE) *********************************/

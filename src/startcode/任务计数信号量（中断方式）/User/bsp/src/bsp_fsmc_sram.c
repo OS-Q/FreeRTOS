@@ -1,28 +1,12 @@
-/*
-*********************************************************************************************************
-*
-*	Ä£¿éÃû³Æ : Íâ²¿SRAMÇı¶¯Ä£¿é
-*	ÎÄ¼şÃû³Æ : bsp_fsmc_sram.c
-*	°æ    ±¾ : V2.4
-*	Ëµ    Ã÷ : °²¸»À³STM32-V4¿ª·¢°å±êÅäµÄSRAMÎª 1M×Ö½Ú
-*
-*	ĞŞ¸Ä¼ÇÂ¼ :
-*		°æ±¾ºÅ  ÈÕÆÚ        ×÷Õß     ËµÃ÷
-*		V1.0    2015-05-23  armfly  ÕıÊ½·¢²¼
-*
-*	Copyright (C), 2015-2016, °²¸»À³www.OS-Q.comm
-*
-*********************************************************************************************************
-*/
 
 #include "bsp.h"
 
 /*
 *********************************************************************************************************
-*	º¯ Êı Ãû: bsp_InitExtSRAM
-*	¹¦ÄÜËµÃ÷: ÅäÖÃÁ¬½ÓÍâ²¿SRAMµÄGPIOºÍFSMC
-*	ĞÎ    ²Î:  ÎŞ
-*	·µ »Ø Öµ: ÎŞ
+*	å‡½ æ•° å: bsp_InitExtSRAM
+*	åŠŸèƒ½è¯´æ˜: é…ç½®è¿æ¥å¤–éƒ¨SRAMçš„GPIOå’ŒFSMC
+*	å½¢    å‚:  æ— 
+*	è¿” å› å€¼: æ— 
 *********************************************************************************************************
 */
 void bsp_InitExtSRAM(void)
@@ -36,7 +20,7 @@ void bsp_InitExtSRAM(void)
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD | RCC_APB2Periph_GPIOG | RCC_APB2Periph_GPIOE |
 	                     RCC_APB2Periph_GPIOF, ENABLE);
 
-	/* ÅäÖÃSRAMÊı¾İÏß */
+	/* é…ç½®SRAMæ•°æ®çº¿ */
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_8 | GPIO_Pin_9 |
 	                            GPIO_Pin_10 | GPIO_Pin_14 | GPIO_Pin_15;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
@@ -48,7 +32,7 @@ void bsp_InitExtSRAM(void)
 	                            GPIO_Pin_15;
 	GPIO_Init(GPIOE, &GPIO_InitStructure);
 
-	/* ÅäÖÃSRAM µØÖ·Ïß */
+	/* é…ç½®SRAM åœ°å€çº¿ */
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 |
 	                            GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_12 | GPIO_Pin_13 |
 	                            GPIO_Pin_14 | GPIO_Pin_15;
@@ -61,22 +45,22 @@ void bsp_InitExtSRAM(void)
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_12 | GPIO_Pin_13;
 	GPIO_Init(GPIOD, &GPIO_InitStructure);
 
-	/* ÅäÖÃ NOE ºÍ NWE */
+	/* é…ç½® NOE å’Œ NWE */
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 |GPIO_Pin_5;
 	GPIO_Init(GPIOD, &GPIO_InitStructure);
 
-	/* ÅäÖÃ NE3 */
+	/* é…ç½® NE3 */
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
 	GPIO_Init(GPIOG, &GPIO_InitStructure);
 
-	/* ÅäÖÃ NBL0, NBL1 */
+	/* é…ç½® NBL0, NBL1 */
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1;
 	GPIO_Init(GPIOE, &GPIO_InitStructure);
 
-	/* ÅäÖÃFSMC */
+	/* é…ç½®FSMC */
 	p.FSMC_AddressSetupTime = 0;
 	p.FSMC_AddressHoldTime = 0;
-	p.FSMC_DataSetupTime = 3;           /* ¸ù¾İSRAMµÄ×î´óËÙ¶È½øĞĞµ÷Õû  */
+	p.FSMC_DataSetupTime = 3;           /* æ ¹æ®SRAMçš„æœ€å¤§é€Ÿåº¦è¿›è¡Œè°ƒæ•´  */
 	p.FSMC_BusTurnAroundDuration = 0;
 	p.FSMC_CLKDivision = 0;
 	p.FSMC_DataLatency = 0;
@@ -106,10 +90,10 @@ void bsp_InitExtSRAM(void)
 
 /*
 *********************************************************************************************************
-*	º¯ Êı Ãû: bsp_TestExtSRAM
-*	¹¦ÄÜËµÃ÷: É¨Ãè²âÊÔÍâ²¿SRAM
-*	ĞÎ    ²Î: ÎŞ
-*	·µ »Ø Öµ: 0 ±íÊ¾²âÊÔÍ¨¹ı£» ´óÓÚ0±íÊ¾´íÎóµ¥ÔªµÄ¸öÊı¡£
+*	å‡½ æ•° å: bsp_TestExtSRAM
+*	åŠŸèƒ½è¯´æ˜: æ‰«ææµ‹è¯•å¤–éƒ¨SRAM
+*	å½¢    å‚: æ— 
+*	è¿” å› å€¼: 0 è¡¨ç¤ºæµ‹è¯•é€šè¿‡ï¼› å¤§äº0è¡¨ç¤ºé”™è¯¯å•å…ƒçš„ä¸ªæ•°ã€‚
 *********************************************************************************************************
 */
 uint8_t bsp_TestExtSRAM(void)
@@ -120,14 +104,14 @@ uint8_t bsp_TestExtSRAM(void)
 	uint32_t err;
 	const uint8_t ByteBuf[4] = {0x55, 0xA5, 0x5A, 0xAA};
 
-	/* Ğ´SRAM */
+	/* å†™SRAM */
 	pSRAM = (uint32_t *)EXT_SRAM_ADDR;
 	for (i = 0; i < EXT_SRAM_SIZE / 4; i++)
 	{
 		*pSRAM++ = i;
 	}
 
-	/* ¶ÁSRAM */
+	/* è¯»SRAM */
 	err = 0;
 	pSRAM = (uint32_t *)EXT_SRAM_ADDR;
 	for (i = 0; i < EXT_SRAM_SIZE / 4; i++)
@@ -144,7 +128,7 @@ uint8_t bsp_TestExtSRAM(void)
 	}
 
 #if 0
-	/* ¶ÔSRAM µÄÊı¾İÇó·´²¢Ğ´Èë */
+	/* å¯¹SRAM çš„æ•°æ®æ±‚åå¹¶å†™å…¥ */
 	pSRAM = (uint32_t *)EXT_SRAM_ADDR;
 	for (i = 0; i < EXT_SRAM_SIZE / 4; i++)
 	{
@@ -152,7 +136,7 @@ uint8_t bsp_TestExtSRAM(void)
 		pSRAM++;
 	}
 
-	/* ÔÙ´Î±È½ÏSRAMµÄÊı¾İ */
+	/* å†æ¬¡æ¯”è¾ƒSRAMçš„æ•°æ® */
 	err = 0;
 	pSRAM = (uint32_t *)EXT_SRAM_ADDR;
 	for (i = 0; i < EXT_SRAM_SIZE / 4; i++)
@@ -169,14 +153,14 @@ uint8_t bsp_TestExtSRAM(void)
 	}
 #endif
 
-	/* ²âÊÔ°´×Ö½Ú·½Ê½·ÃÎÊ, Ä¿µÄÊÇÑéÖ¤ FSMC_NBL0 ¡¢ FSMC_NBL1 ¿ÚÏß */
+	/* æµ‹è¯•æŒ‰å­—èŠ‚æ–¹å¼è®¿é—®, ç›®çš„æ˜¯éªŒè¯ FSMC_NBL0 ã€ FSMC_NBL1 å£çº¿ */
 	pBytes = (uint8_t *)EXT_SRAM_ADDR;
 	for (i = 0; i < sizeof(ByteBuf); i++)
 	{
 		*pBytes++ = ByteBuf[i];
 	}
 
-	/* ±È½ÏSRAMµÄÊı¾İ */
+	/* æ¯”è¾ƒSRAMçš„æ•°æ® */
 	err = 0;
 	pBytes = (uint8_t *)EXT_SRAM_ADDR;
 	for (i = 0; i < sizeof(ByteBuf); i++)
@@ -192,5 +176,3 @@ uint8_t bsp_TestExtSRAM(void)
 	}
 	return 0;
 }
-
-/***************************** °²¸»À³www.OS-Q.comm (END OF FILE) *********************************/
