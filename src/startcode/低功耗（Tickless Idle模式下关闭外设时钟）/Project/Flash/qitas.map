@@ -1289,24 +1289,24 @@ Image Symbol Table
     ../fplib/microlib/fpepilogue.c           0x00000000   Number         0  depilogue.o ABSOLUTE
     ../fplib/microlib/fpfix.c                0x00000000   Number         0  dfixul.o ABSOLUTE
     ../fplib/microlib/fpmul.c                0x00000000   Number         0  dmul.o ABSOLUTE
-    ..\..\FreeRTOS\croutine.c                0x00000000   Number         0  croutine.o ABSOLUTE
-    ..\..\FreeRTOS\event_groups.c            0x00000000   Number         0  event_groups.o ABSOLUTE
-    ..\..\FreeRTOS\list.c                    0x00000000   Number         0  list.o ABSOLUTE
-    ..\..\FreeRTOS\portable\MemMang\heap_4.c 0x00000000   Number         0  heap_4.o ABSOLUTE
-    ..\..\FreeRTOS\portable\RVDS\ARM_CM3\port.c 0x00000000   Number         0  port.o ABSOLUTE
-    ..\..\FreeRTOS\queue.c                   0x00000000   Number         0  queue.o ABSOLUTE
-    ..\..\FreeRTOS\tasks.c                   0x00000000   Number         0  tasks.o ABSOLUTE
-    ..\..\FreeRTOS\timers.c                  0x00000000   Number         0  timers.o ABSOLUTE
-    ..\..\Libraries\CMSIS\Device\ST\STM32F10x\Source\Templates\arm\startup_stm32f10x_hd.s 0x00000000   Number         0  startup_stm32f10x_hd.o ABSOLUTE
-    ..\..\Libraries\STM32F10x_StdPeriph_Driver\src\misc.c 0x00000000   Number         0  misc.o ABSOLUTE
-    ..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_bkp.c 0x00000000   Number         0  stm32f10x_bkp.o ABSOLUTE
-    ..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_exti.c 0x00000000   Number         0  stm32f10x_exti.o ABSOLUTE
-    ..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_flash.c 0x00000000   Number         0  stm32f10x_flash.o ABSOLUTE
-    ..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_gpio.c 0x00000000   Number         0  stm32f10x_gpio.o ABSOLUTE
-    ..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_pwr.c 0x00000000   Number         0  stm32f10x_pwr.o ABSOLUTE
-    ..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_rcc.c 0x00000000   Number         0  stm32f10x_rcc.o ABSOLUTE
-    ..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_tim.c 0x00000000   Number         0  stm32f10x_tim.o ABSOLUTE
-    ..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_usart.c 0x00000000   Number         0  stm32f10x_usart.o ABSOLUTE
+    ..\..\..\FreeRTOS\croutine.c                0x00000000   Number         0  croutine.o ABSOLUTE
+    ..\..\..\FreeRTOS\event_groups.c            0x00000000   Number         0  event_groups.o ABSOLUTE
+    ..\..\..\FreeRTOS\list.c                    0x00000000   Number         0  list.o ABSOLUTE
+    ..\..\..\FreeRTOS\portable\MemMang\heap_4.c 0x00000000   Number         0  heap_4.o ABSOLUTE
+    ..\..\..\FreeRTOS\portable\RVDS\ARM_CM3\port.c 0x00000000   Number         0  port.o ABSOLUTE
+    ..\..\..\FreeRTOS\queue.c                   0x00000000   Number         0  queue.o ABSOLUTE
+    ..\..\..\FreeRTOS\tasks.c                   0x00000000   Number         0  tasks.o ABSOLUTE
+    ..\..\..\FreeRTOS\timers.c                  0x00000000   Number         0  timers.o ABSOLUTE
+    ..\..\..\Libraries\CMSIS\Device\ST\STM32F10x\Source\Templates\arm\startup_stm32f10x_hd.s 0x00000000   Number         0  startup_stm32f10x_hd.o ABSOLUTE
+    ..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\misc.c 0x00000000   Number         0  misc.o ABSOLUTE
+    ..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_bkp.c 0x00000000   Number         0  stm32f10x_bkp.o ABSOLUTE
+    ..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_exti.c 0x00000000   Number         0  stm32f10x_exti.o ABSOLUTE
+    ..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_flash.c 0x00000000   Number         0  stm32f10x_flash.o ABSOLUTE
+    ..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_gpio.c 0x00000000   Number         0  stm32f10x_gpio.o ABSOLUTE
+    ..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_pwr.c 0x00000000   Number         0  stm32f10x_pwr.o ABSOLUTE
+    ..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_rcc.c 0x00000000   Number         0  stm32f10x_rcc.o ABSOLUTE
+    ..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_tim.c 0x00000000   Number         0  stm32f10x_tim.o ABSOLUTE
+    ..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_usart.c 0x00000000   Number         0  stm32f10x_usart.o ABSOLUTE
     ..\User\bsp\bsp.c                        0x00000000   Number         0  bsp.o ABSOLUTE
     ..\User\bsp\src\bsp_dwt.c                0x00000000   Number         0  bsp_dwt.o ABSOLUTE
     ..\User\bsp\src\bsp_key.c                0x00000000   Number         0  bsp_key.o ABSOLUTE
@@ -2051,7 +2051,7 @@ Image component sizes
 ==============================================================================
 
 
-      Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
+      Code (inc. data)   RO Data    RW Data    ZI Data      Debug
 
      11168       1424        336        168      20912     357195   Grand Totals
      11168       1424        336        168      20912     357195   ELF Image Totals
