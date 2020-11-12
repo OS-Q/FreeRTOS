@@ -1,0 +1,6 @@
+obj/
+list/
+RTE/
+DebugConfig/
+*.uvgu*
+*.uvop*
