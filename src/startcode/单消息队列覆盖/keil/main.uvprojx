@@ -338,7 +338,7 @@
               <MiscControls>--diag_suppress=870</MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F10X_HD</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\Libraries\CMSIS\Device\ST\STM32F10x\Include;..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\User\bsp;..\User\bsp\inc;..\User;..\..\..\Libraries\CMSIS\Include;..\..\..\FreeRTOS\include;..\..\..\FreeRTOS\portable\RVDS\ARM_CM3</IncludePath>
+              <IncludePath>..\..\..\Libraries\CMSIS\Device\ST\STM32F10x\Include;..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\..\BSP;..\..\BSP\inc;..\User;..\..\..\Libraries\CMSIS\Include;..\..\..\FreeRTOS\include;..\..\..\FreeRTOS\portable\RVDS\ARM_CM3</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -400,52 +400,52 @@
             <File>
               <FileName>bsp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\bsp\bsp.c</FilePath>
+              <FilePath>..\..\BSP\bsp.c</FilePath>
             </File>
             <File>
               <FileName>bsp.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\User\bsp\bsp.h</FilePath>
+              <FilePath>..\..\BSP\bsp.h</FilePath>
             </File>
             <File>
               <FileName>bsp_key.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\bsp\src\bsp_key.c</FilePath>
+              <FilePath>..\..\BSP\src\bsp_key.c</FilePath>
             </File>
             <File>
               <FileName>bsp_led.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\bsp\src\bsp_led.c</FilePath>
+              <FilePath>..\..\BSP\src\bsp_led.c</FilePath>
             </File>
             <File>
               <FileName>bsp_uart_fifo.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\bsp\src\bsp_uart_fifo.c</FilePath>
+              <FilePath>..\..\BSP\src\bsp_uart_fifo.c</FilePath>
             </File>
             <File>
               <FileName>bsp_user_lib.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\bsp\src\bsp_user_lib.c</FilePath>
+              <FilePath>..\..\BSP\src\bsp_user_lib.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_it.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\bsp\stm32f10x_it.c</FilePath>
+              <FilePath>..\..\BSP\stm32f10x_it.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_assert.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\bsp\stm32f10x_assert.c</FilePath>
+              <FilePath>..\..\BSP\stm32f10x_assert.c</FilePath>
             </File>
             <File>
               <FileName>bsp_dwt.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\bsp\src\bsp_dwt.c</FilePath>
+              <FilePath>..\..\BSP\src\bsp_dwt.c</FilePath>
             </File>
             <File>
               <FileName>bsp_tim_pwm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\bsp\src\bsp_tim_pwm.c</FilePath>
+              <FilePath>..\..\BSP\src\bsp_tim_pwm.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -515,7 +515,7 @@
             <File>
               <FileName>system_stm32f10x.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\bsp\system_stm32f10x.c</FilePath>
+              <FilePath>..\..\BSP\system_stm32f10x.c</FilePath>
             </File>
           </Files>
         </Group>
