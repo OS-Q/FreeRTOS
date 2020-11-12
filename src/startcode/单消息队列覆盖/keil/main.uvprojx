@@ -185,6 +185,7 @@
             <uocXRam>0</uocXRam>
             <RvdsVP>0</RvdsVP>
             <RvdsMve>0</RvdsMve>
+            <RvdsCdeCp>0</RvdsCdeCp>
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -351,7 +352,7 @@
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
             <useXO>0</useXO>
-            <uClangAs>0</uClangAs>
+            <ClangAsOpt>4</ClangAsOpt>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -403,11 +404,6 @@
               <FilePath>..\..\BSP\bsp.c</FilePath>
             </File>
             <File>
-              <FileName>bsp.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\BSP\bsp.h</FilePath>
-            </File>
-            <File>
               <FileName>bsp_key.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\BSP\src\bsp_key.c</FilePath>
@@ -446,6 +442,11 @@
               <FileName>bsp_tim_pwm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\BSP\src\bsp_tim_pwm.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\src\bsp_timer.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -575,21 +576,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Doc</GroupName>
-          <Files>
-            <File>
-              <FileName>01.例程功能说明.txt</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Doc\01.例程功能说明.txt</FilePath>
-            </File>
-            <File>
-              <FileName>02.开发环境说明.txt</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Doc\02.开发环境说明.txt</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>
@@ -608,5 +594,20 @@
     </components>
     <files/>
   </RTE>
+
+  <LayerInfo>
+    <Layers>
+      <Layer>
+        <LayName>&lt;Project Info&gt;</LayName>
+        <LayDesc></LayDesc>
+        <LayUrl></LayUrl>
+        <LayKeys></LayKeys>
+        <LayCat></LayCat>
+        <LayLic></LayLic>
+        <LayTarg>0</LayTarg>
+        <LayPrjMark>1</LayPrjMark>
+      </Layer>
+    </Layers>
+  </LayerInfo>
 
 </Project>
