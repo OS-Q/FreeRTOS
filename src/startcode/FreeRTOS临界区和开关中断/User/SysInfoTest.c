@@ -53,7 +53,7 @@ void vSetupSysInfoTest(void)
 *	形    参: 无
 *	返 回 值: 无
 *********************************************************************************************************
-*/OS-Q
+*/
 void TIM6_IRQHandler( void )
 {
 	if(TIM_GetITStatus(TIM6, TIM_IT_Update) != RESET)
