@@ -15,5 +15,7 @@ FreeRTOS可以在内存不到0.5KB、ROM为5-10KB的设备上运行，不过与T
 * [文档](docs/)
 * [资源](src/)
 
+工程示例 FreeRTOS V10.2.1
+
 ### [OS-Q = Open Solutions | Open Source | Operating System ](http://www.OS-Q.com/FreeRTOS)
 
