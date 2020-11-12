@@ -6,7 +6,7 @@
 *	版    本 : V1.0
 *	说    明 : 头文件
 *
-*	Copyright (C), 2013-2014, 安富莱电子 www.armfly.com
+*	Copyright (C), 2013-2014, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -21,7 +21,7 @@
 
 /* 本模块部分函数用到了软件定时器最后1个ID。 因此主程序调用本模块的函数时，请注意回避定时器 TMR_COUNT - 1。
   bsp_StartTimer(3, _usTimeOut);
-  
+
   TMR_COUNT 在 bsp_timer.h 文件定义
 */
 #define MG323_TMR_ID	(TMR_COUNT - 1)
@@ -51,7 +51,7 @@ enum
 	CREG_REMOTE_OK = 5, /* 5：注册了漫游网络 */
 };
 
-/* 通过 ATI 指令，可以查询模块的硬件信息 
+/* 通过 ATI 指令，可以查询模块的硬件信息
 ATI
 Manufacture: HUAWEI
 Model: MG323
@@ -94,4 +94,4 @@ void MG323_Hangup(void);
 
 #endif
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

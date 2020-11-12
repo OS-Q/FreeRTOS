@@ -1,5 +1,5 @@
 /****************************************************************************
-* Copyright (C), 2009-2010, www.armfly.com  安富莱电子
+* Copyright (C), 2009-2010, www.OS-Q.com
 *
 * 文件名: dm9k_uip.c
 * 内容简述: Davicom DM9000A uP NIC fast Ethernet driver for uIP.

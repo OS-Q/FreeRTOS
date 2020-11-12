@@ -6,7 +6,7 @@
 *	版    本 : V1.0
 *	说    明 : 头文件
 *
-*	Copyright (C), 2010-2011, 安富莱电子 www.armfly.com
+*	Copyright (C), 2010-2011, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -20,7 +20,7 @@
 #define	RA_HARD_8080_16_EN
 
 /* 软件未使用WAIT引脚。可以通过读取寄存器状态寄存器判断芯片忙 */
-#define USE_WAIT_PIN		
+#define USE_WAIT_PIN
 
 #ifdef USE_WAIT_PIN
 	/* RA8875芯片的WAIT引脚 */
@@ -68,7 +68,7 @@
 		PD15/FSMC_D1
 
 		PF0/FSMC_A0		--- 地址 RS
-		
+
 		PE4/FSMC_A20		--- 和主片选一起译码
 		PE5/FSMC_A21		--- 和主片选一起译码
 		PE7/FSMC_D4
@@ -88,7 +88,7 @@
 		---- 下面是 TFT LCD接口其他信号 （FSMC模式不使用）----
 		PB5/LCD_BUSY		--- 触摸芯片忙    未使用   （RA8875屏是RA8875芯片的忙信号)
 		PB1/LCD_PWM			--- LCD背光PWM控制  （RA8875屏无需此脚，背光由RA8875控制)
-		
+
 		PG11/TP_NCS			--- 触摸芯片的片选		(RA8875屏无需SPI接口触摸芯片）
 		PA5/SPI1_SCK		--- 触摸芯片SPI时钟		(RA8875屏无需SPI接口触摸芯片）
 		PA6/SPI1_MISO		--- 触摸芯片SPI数据线MISO(RA8875屏无需SPI接口触摸芯片）
@@ -134,4 +134,4 @@ extern uint8_t g_RA8875_IF;
 
 #endif
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

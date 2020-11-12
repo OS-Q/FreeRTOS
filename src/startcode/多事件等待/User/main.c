@@ -46,7 +46,7 @@
 *                                        2. BSP驱动包V1.2
 *                                        3. FreeRTOS版本V8.2.2
 *
-*	Copyright (C), 2015-2020, 安富莱电子 www.armfly.com
+*	Copyright (C), 2015-2020, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -67,7 +67,7 @@
 #define ITEM_SIZE_QUEUE_2	sizeof(uint8_t)
 
 #define COMBINED_LENGTH (QUEUE_LENGTH_1 + QUEUE_LENGTH_2 + BINARY_SEMAPHORE_LENGTH) /* 添加到Queue Set的总长度 */
-						 
+
 /*
 **********************************************************************************************************
 											函数声明
@@ -103,17 +103,17 @@ static xQueueHandle xQueue2 = NULL;
 int main(void)
 {
 	/* 硬件初始化初始化 */
-	bsp_Init(); 
-	
+	bsp_Init();
+
 	/* 初始化一个定时器中断，精度高于滴答定时器中断，这样才可以获得准确的系统信息 */
 	vSetupSysInfoTest();
-	
+
 	/* 创建任务 */
 	AppTaskCreate();
-	
+
 	/* 创建任务通信机制 */
 	AppObjCreate();
-	
+
     /* 启动调度，开始执行任务 */
     vTaskStartScheduler();
 
@@ -124,7 +124,7 @@ int main(void)
 /*
 *********************************************************************************************************
 *	函 数 名: vTaskTaskUserIF
-*	功能说明: 按键消息处理		
+*	功能说明: 按键消息处理
 *	形    参: pvParameters 是在创建该任务时传递的形参
 *	返 回 值: 无
 *   优 先 级: 1  (数值越小优先级越低，这个跟uCOS相反)
@@ -140,7 +140,7 @@ static void vTaskTaskUserIF(void *pvParameters)
     while(1)
     {
 		ucKeyCode = bsp_GetKey();
-		
+
 		if (ucKeyCode != KEY_NONE)
 		{
 			switch (ucKeyCode)
@@ -151,22 +151,22 @@ static void vTaskTaskUserIF(void *pvParameters)
 					printf("任务名      任务状态 优先级   剩余栈 任务序号\r\n");
 					vTaskList((char *)&pcWriteBuffer);
 					printf("%s\r\n", pcWriteBuffer);
-				
+
 					printf("\r\n任务名       运行计数         使用率\r\n");
 					vTaskGetRunTimeStats((char *)&pcWriteBuffer);
 					printf("%s\r\n", pcWriteBuffer);
 					break;
-				
+
 				/* K2键按下 直接发送同步信号给任务vTaskMsgPro */
 				case KEY_DOWN_K2:
 					printf("K2键按下，直接发送同步信号给任务vTaskMsgPro\r\n");
 					xSemaphoreGive(xSemaphore);
 					break;
-				
+
 				/* K3键按下，向xQueue1发送数据 */
 				case KEY_DOWN_K3:
 					ulCount++;
-				
+
 					/* 向消息队列发数据，如果消息队列满了，等待10个时钟节拍 */
 					if( xQueueSend(xQueue1,
 								   (void *) &ulCount,
@@ -178,14 +178,14 @@ static void vTaskTaskUserIF(void *pvParameters)
 					else
 					{
 						/* 发送成功 */
-						printf("K3键按下，向xQueue1发送数据成功\r\n");						
+						printf("K3键按下，向xQueue1发送数据成功\r\n");
 					}
 					break;
-					
+
 				/* 摇杆OK键按下，向xQueue1发送数据 */
 				case JOY_DOWN_OK:
 					ucCount++;
-				
+
 					/* 向消息队列发数据，如果消息队列满了，等待10个时钟节拍 */
 					if( xQueueSend(xQueue2,
 								   (void *) &ucCount,
@@ -197,16 +197,16 @@ static void vTaskTaskUserIF(void *pvParameters)
 					else
 					{
 						/* 发送成功 */
-						printf("摇杆OK键按下，向xQueue1发送数据成功\r\n");						
+						printf("摇杆OK键按下，向xQueue1发送数据成功\r\n");
 					}
 					break;
-				
+
 				/* 其他的键值不处理 */
-				default:                     
+				default:
 					break;
 			}
 		}
-		
+
 		vTaskDelay(10);
 	}
 }
@@ -217,7 +217,7 @@ static void vTaskTaskUserIF(void *pvParameters)
 *	功能说明: LED闪烁
 *	形    参: pvParameters 是在创建该任务时传递的形参
 *	返 回 值: 无
-*   优 先 级: 2  
+*   优 先 级: 2
 *********************************************************************************************************
 */
 static void vTaskLED(void *pvParameters)
@@ -227,12 +227,12 @@ static void vTaskLED(void *pvParameters)
 
 	/* 获取当前的系统时间 */
     xLastWakeTime = xTaskGetTickCount();
-	
+
     while(1)
     {
        	bsp_LedToggle(2);
 		bsp_LedToggle(3);
-		
+
 		/* vTaskDelayUntil是绝对延迟，vTaskDelay是相对延迟。*/
         vTaskDelayUntil(&xLastWakeTime, xFrequency);
     }
@@ -244,7 +244,7 @@ static void vTaskLED(void *pvParameters)
 *	功能说明: 使用函数xQueueSelectFromSet接收任务vTaskTaskUserIF发送的多个事件，信号量和消息队列
 *	形    参: pvParameters 是在创建该任务时传递的形参
 *	返 回 值: 无
-*   优 先 级: 3  
+*   优 先 级: 3
 *********************************************************************************************************
 */
 static void vTaskMsgPro(void *pvParameters)
@@ -253,7 +253,7 @@ static void vTaskMsgPro(void *pvParameters)
 	uint32_t ulQueueMsgValue;
 	uint8_t  ucQueueMsgValue;
 	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(300); /* 设置最大等待时间为300ms等同300/portTICK_RATE_MS */
-	
+
     while(1)
     {
 		/* 多事件等待，等待二值信号量和消息队列 */
@@ -270,13 +270,13 @@ static void vTaskMsgPro(void *pvParameters)
         {
 			/* 消息队列2接收到消息 */
             xQueueReceive(xActivatedMember, &ucQueueMsgValue, 0);
-			printf("消息队列2接收到消息 ucQueueMsgValue = %d\r\n", ucQueueMsgValue);  
+			printf("消息队列2接收到消息 ucQueueMsgValue = %d\r\n", ucQueueMsgValue);
         }
         else if(xActivatedMember == xSemaphore)
         {
-			/* 接收到信号量 */	
+			/* 接收到信号量 */
 			xSemaphoreTake(xActivatedMember, 0);
-			printf("接收到信号量\r\n");              
+			printf("接收到信号量\r\n");
         }
         else
         {
@@ -293,7 +293,7 @@ static void vTaskMsgPro(void *pvParameters)
 *	功能说明: 启动任务，也就是最高优先级任务。
 *	形    参: pvParameters 是在创建该任务时传递的形参
 *	返 回 值: 无
-*   优 先 级: 4  
+*   优 先 级: 4
 *********************************************************************************************************
 */
 static void vTaskStart(void *pvParameters)
@@ -322,23 +322,23 @@ static void AppTaskCreate (void)
                     NULL,              /* 任务参数  */
                     1,                 /* 任务优先级*/
                     NULL );            /* 任务句柄  */
-	
-	
+
+
 	xTaskCreate(    vTaskLED,    /* 任务函数  */
                     "vTaskLED",  /* 任务名    */
                     512,         /* stack大小，单位word，也就是4字节 */
                     NULL,        /* 任务参数  */
                     2,           /* 任务优先级*/
                     &xHandleTaskLED );   /* 任务句柄  */
-	
+
 	xTaskCreate(    vTaskMsgPro,     /* 任务函数  */
                     "vTaskMsgPro",   /* 任务名    */
                     512,             /* stack大小，单位word，也就是4字节 */
                     NULL,            /* 任务参数  */
                     3,               /* 任务优先级*/
                     &xHandleTaskMsgPro );  /* 任务句柄  */
-	
-	
+
+
 	xTaskCreate(    vTaskStart,     /* 任务函数  */
                     "vTaskStart",   /* 任务名    */
                     512,            /* stack大小，单位word，也就是4字节 */
@@ -359,15 +359,15 @@ static void AppObjCreate (void)
 {
 	/* 创建二值信号量，首次创建信号量计数值是0 */
 	xSemaphore = xSemaphoreCreateBinary();
-	
+
 	if(xSemaphore == NULL)
     {
         /* 没有创建成功，用户可以在这里加入创建失败的处理机制 */
     }
-	
+
 	/* 创建QueuSet */
     xQueueSet = xQueueCreateSet(COMBINED_LENGTH);
-	
+
 	if(xQueueSet == NULL)
     {
         /* 没有创建成功，用户可以在这里加入创建失败的处理机制 */
@@ -375,14 +375,14 @@ static void AppObjCreate (void)
 
     /* 创建消息队列 */
     xQueue1 = xQueueCreate(QUEUE_LENGTH_1, ITEM_SIZE_QUEUE_1);
-	
+
 	if(xQueue1 == NULL)
     {
         /* 没有创建成功，用户可以在这里加入创建失败的处理机制 */
     }
-	
+
     xQueue2 = xQueueCreate(QUEUE_LENGTH_2, ITEM_SIZE_QUEUE_2);
-	
+
 	if(xQueue2 == NULL)
     {
         /* 没有创建成功，用户可以在这里加入创建失败的处理机制 */
@@ -395,4 +395,4 @@ static void AppObjCreate (void)
     xQueueAddToSet(xSemaphore, xQueueSet);
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

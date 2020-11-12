@@ -1,6 +1,6 @@
 /*
 *********************************************************************************************************
-*	                                  
+*
 *	模块名称 : 大容量存储中间层模块  MAL = Middle Access Layer
 *	文件名称 : mass_mal.c
 *	版    本 : V1.0
@@ -8,7 +8,7 @@
 *			访问完全由windows系统控制，板子只需要应答USB Mass相关的命令（读写扇区）即可。
 *			FAT文件系统（含Fat32）扇区大小为512字节。开发板实际使用的Nand Flash扇区大小为2048字节，因
 *			此需要做封装变换处理。
-*				
+*
 *			宏定义  mass_printf_err() 用于打印底层读写存储设备函数执行过程，主要用于跟踪调试。
 *			修改 mass_mal.h文件可以取消或使能调试打印功能
 *				#define  mass_printf_err_EN	1     1表示打印调试信息使能，0禁止
@@ -18,7 +18,7 @@
 *		v1.0    2011-05-25 armfly  由ST原厂 V3.3.0版本的mass_mal.c文件修改而来
 *		V1.1	2015-07-26 armfly  询问容量时，返回格式化后的容量，而不是物理容量. 该驱动只支持4G内的卡。
 *
-*	Copyright (C), 2015-2016, 安富莱电子 www.armfly.com
+*	Copyright (C), 2015-2016, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -47,27 +47,27 @@ uint32_t Max_Lun = 1;	/* 0 表示SD卡， 1表示NAND Flash */
 uint16_t MAL_Init(uint8_t lun)
 {
 	uint16_t status = MAL_OK;
-	
+
 	switch (lun)
 	{
 		case MASS_SD:
 			status = SD_Init();
 			if (status != SD_OK)		/* 初始化SDIO硬件设备（配置时钟、GPIO、中断并启动SD卡) */
 			{
-				mass_printf_err("SD_Init() fail (%d) : file %s on line %d\r\n", status, __FILE__, __LINE__);		
+				mass_printf_err("SD_Init() fail (%d) : file %s on line %d\r\n", status, __FILE__, __LINE__);
 				status = MAL_FAIL;
 			}
 			else
 			{
 				mass_printf_ok("SD_Init() Ok\r\n");
-				status = MAL_OK;			
+				status = MAL_OK;
 			}
 			break;
-		
+
 		case MASS_NAND:
 			if (NAND_Init() != NAND_OK)	/* 初始化NAND Flash 硬件设备（配置时钟、FSMC、GPIO并使能FSMC */
 			{
-				mass_printf_err("NAND_Init() fail : file %s on line %d\r\n", __FILE__, __LINE__);			
+				mass_printf_err("NAND_Init() fail : file %s on line %d\r\n", __FILE__, __LINE__);
 				status = MAL_FAIL;
 			}
 			else
@@ -76,11 +76,11 @@ uint16_t MAL_Init(uint8_t lun)
 				status = MAL_OK;
 			}
 			break;
-		
+
 		default:
 			break;
 	}
-	
+
 	return status;
 }
 
@@ -98,22 +98,22 @@ uint16_t MAL_Init(uint8_t lun)
 uint16_t MAL_Write(uint8_t lun, uint32_t Memory_Offset, uint32_t *Writebuff, uint16_t Transfer_Length)
 {
 	uint16_t status = MAL_OK;
-		
+
 	switch (lun)
 	{
 		case MASS_SD:
 			status = SD_WriteBlock((uint8_t*)Writebuff, Memory_Offset, Transfer_Length);
 			if (status != SD_OK)
 			{
-				mass_printf_err("SD_WriteBlock(, 0x%X, 0x%X) Fail(%d) \r\n", Memory_Offset, Transfer_Length, status);				
+				mass_printf_err("SD_WriteBlock(, 0x%X, 0x%X) Fail(%d) \r\n", Memory_Offset, Transfer_Length, status);
 				status = MAL_FAIL;
 			}
 			else
 			{
-				mass_printf_ok("SD_WriteBlock(, 0x%X, 0x%X) Ok\r\n", Memory_Offset, Transfer_Length);			
+				mass_printf_ok("SD_WriteBlock(, 0x%X, 0x%X) Ok\r\n", Memory_Offset, Transfer_Length);
 			}
 			break;
-		
+
 		case MASS_NAND:
 			if (NAND_Write(Memory_Offset, Writebuff, Transfer_Length) != NAND_OK)
 			{
@@ -122,11 +122,11 @@ uint16_t MAL_Write(uint8_t lun, uint32_t Memory_Offset, uint32_t *Writebuff, uin
 			}
 			else
 			{
-				mass_printf_ok("NAND_Write(0x%X, ,0x%X) Ok\r\n", Memory_Offset, Transfer_Length);			
+				mass_printf_ok("NAND_Write(0x%X, ,0x%X) Ok\r\n", Memory_Offset, Transfer_Length);
 				status = MAL_OK;
 			}
 			break;
-		
+
 		default:
 			break;
 	}
@@ -147,7 +147,7 @@ uint16_t MAL_Write(uint8_t lun, uint32_t Memory_Offset, uint32_t *Writebuff, uin
 uint16_t MAL_Read(uint8_t lun, uint32_t Memory_Offset, uint32_t *Readbuff, uint16_t Transfer_Length)
 {
 	uint16_t status = MAL_OK;
-	
+
 	switch (lun)
 	{
 		case MASS_SD:
@@ -159,11 +159,11 @@ uint16_t MAL_Read(uint8_t lun, uint32_t Memory_Offset, uint32_t *Readbuff, uint1
 			}
 			else
 			{
-				mass_printf_ok("SD_ReadBlock(, 0x%X, 0x%X) Ok\r\n", Memory_Offset, Transfer_Length);			
+				mass_printf_ok("SD_ReadBlock(, 0x%X, 0x%X) Ok\r\n", Memory_Offset, Transfer_Length);
 				status = MAL_OK;
-			}			
+			}
 			break;
-	
+
 		case MASS_NAND:
 			if (NAND_Read(Memory_Offset, Readbuff, Transfer_Length) != NAND_OK)
 			{
@@ -172,11 +172,11 @@ uint16_t MAL_Read(uint8_t lun, uint32_t Memory_Offset, uint32_t *Readbuff, uint1
 			}
 			else
 			{
-				mass_printf_ok("NAND_Read(0x%X, ,0x%X) Ok\r\n", Memory_Offset, Transfer_Length);			
+				mass_printf_ok("NAND_Read(0x%X, ,0x%X) Ok\r\n", Memory_Offset, Transfer_Length);
 				status = MAL_OK;
-			}			
+			}
 			break;
-			
+
 		default:
 			break;
 	}
@@ -194,16 +194,16 @@ uint16_t MAL_Read(uint8_t lun, uint32_t Memory_Offset, uint32_t *Readbuff, uint1
 uint16_t MAL_GetStatus (uint8_t lun)
 {
 	SD_CardInfo mSDCardInfo;	/* 定义SD卡状态信息结构体 */
-	uint32_t DeviceSizeMul = 0, NumberOfBlocks = 0;	
+	uint32_t DeviceSizeMul = 0, NumberOfBlocks = 0;
 	uint32_t nand_id;			/* 保存NAND ID */
 	uint16_t status = MAL_OK;
-	
+
 	switch (lun)
 	{
 		case MASS_SD:
-		{				
+		{
 			status = SD_Init();
-			if (status != SD_OK)	
+			if (status != SD_OK)
 			{
 				mass_printf_err("SD_Init() fail (%d) : file %s on line %d\r\n", status, __FILE__, __LINE__);
 				status = MAL_FAIL;
@@ -213,7 +213,7 @@ uint16_t MAL_GetStatus (uint8_t lun)
 			SD_GetCardInfo(&mSDCardInfo);	/* 读取SD卡的信息 */
 			SD_SelectDeselect((uint32_t) (mSDCardInfo.RCA << 16));
 			DeviceSizeMul = (mSDCardInfo.SD_csd.DeviceSizeMul + 2);
-			
+
 			if (mSDCardInfo.CardType == SDIO_HIGH_CAPACITY_SD_CARD)	/* 高容量SD卡 SDHC */
 			{
 				Mass_Block_Count[0] = (mSDCardInfo.SD_csd.DeviceSize + 1) * 1024;
@@ -226,33 +226,33 @@ uint16_t MAL_GetStatus (uint8_t lun)
 				mass_printf_ok("SD_GetCardInfo() Ok, Normal SD Card\r\n");
 			}
 			Mass_Block_Size[0]  = 512;
-			
-			status = SD_SelectDeselect((uint32_t) (mSDCardInfo.RCA << 16)); 
-			status = SD_EnableWideBusOperation(SDIO_BusWide_4b); 
+
+			status = SD_SelectDeselect((uint32_t) (mSDCardInfo.RCA << 16));
+			status = SD_EnableWideBusOperation(SDIO_BusWide_4b);
 			if (status != SD_OK)
 			{
 				mass_printf_err("SD_EnableWideBusOperation(SDIO_BusWide_4b) Fail (%d)\r\n", status);
 				status = MAL_FAIL;
 				break;
 			}
-			
-			status = SD_SetDeviceMode(SD_DMA_MODE);    /* 设置SD卡工作模式为DMA, 其它模式由中断、轮询 */     
+
+			status = SD_SetDeviceMode(SD_DMA_MODE);    /* 设置SD卡工作模式为DMA, 其它模式由中断、轮询 */
 			if (status != SD_OK)
 			{
-				mass_printf_err("SD_SetDeviceMode(SD_DMA_MODE) Fail (%d)\r\n", status);				
+				mass_printf_err("SD_SetDeviceMode(SD_DMA_MODE) Fail (%d)\r\n", status);
 				status = MAL_FAIL;
 				break;
-			} 
-			
+			}
+
 			Mass_Memory_Size[0] = Mass_Block_Count[0] * Mass_Block_Size[0];
-			
-			mass_printf_ok("MAL_GetStatus(MASS_SD) Ok. Memory Size = %uMB\r\n", Mass_Memory_Size[0]/(1024*1024));		
+
+			mass_printf_ok("MAL_GetStatus(MASS_SD) Ok. Memory Size = %uMB\r\n", Mass_Memory_Size[0]/(1024*1024));
 			status = MAL_OK;
 			break;
 		}
-		
+
 		case MASS_NAND:
-		{	
+		{
 			nand_id = NAND_ReadID();	/* 读取NAND Flash的制造商ID和器件ID */
 
 			/* 判断NAND_ID是否正确 */
@@ -271,22 +271,22 @@ uint16_t MAL_GetStatus (uint8_t lun)
 				Mass_Block_Count[1] = NAND_ZONE_SIZE * NAND_BLOCK_SIZE * NAND_MAX_ZONE;
 				Mass_Block_Size[1]  = NAND_PAGE_SIZE;
 				Mass_Memory_Size[1] = (Mass_Block_Count[1] * Mass_Block_Size[1]);
-			#endif	
-				
+			#endif
+
 				mass_printf_ok("MAL_GetStatus(MASS_NAND) Ok. Memory Size = %uMB\r\n", Mass_Memory_Size[1]/(1024*1024));
 				status = MAL_OK;
 			}
 			else
-			{				
-				mass_printf_err("MAL_GetStatus(MASS_NAND) Fail\r\n");					
+			{
+				mass_printf_err("MAL_GetStatus(MASS_NAND) Fail\r\n");
 				status = MAL_FAIL;
-			}			
+			}
 			break;
 		}
-			
+
 		default:
 			status = MAL_FAIL;
-			break;			
+			break;
 	}
 	return status;
 }

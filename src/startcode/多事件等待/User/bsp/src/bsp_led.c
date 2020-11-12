@@ -10,7 +10,7 @@
 *		版本号  日期        作者     说明
 *		V1.0    2013-02-01 armfly  正式发布
 *
-*	Copyright (C), 2013-2014, 安富莱电子 www.armfly.com
+*	Copyright (C), 2013-2014, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -21,7 +21,7 @@
 	该程序适用于安富莱STM32-V4 开发板
 
 	如果用于其它硬件，请修改GPIO定义
-	
+
 	如果用户的LED指示灯个数小于4个，可以将多余的LED全部定义为和第1个LED一样，并不影响程序功能
 */
 
@@ -68,7 +68,7 @@ void bsp_InitLed(void)
 
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;	/* 推挽输出模式 */
-	
+
 	GPIO_InitStructure.GPIO_Pin = GPIO_PIN_LED1;
 	GPIO_Init(GPIO_PORT_LED1, &GPIO_InitStructure);
 
@@ -216,4 +216,4 @@ uint8_t bsp_IsLedOn(uint8_t _no)
 	return 0;
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

@@ -10,7 +10,7 @@
 *		V1.0    2013-02-01 armfly  正式发布
 *		V1.1    2014-09-04 armfly  同时支持SPI和8080两种接口，自动识别。不采用宏控制。
 *
-*	Copyright (C), 2014-2015, 安富莱电子 www.armfly.com
+*	Copyright (C), 2014-2015, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -31,23 +31,23 @@ uint8_t g_RA8875_IF = RA_HARD_8080_16;	/*　接口类型　*/
 void RA8875_ConfigGPIO(void)
 {
 	static uint8_t s_run_first = 0;
-	
+
 	/* 如果已经运行过，则不再执行 */
 	if (s_run_first == 1)
 	{
 		return;
 	}
-	
+
 	s_run_first = 1;
-	
+
 	/* FSMC在 bsp_tft_lcd.c中已经配置好 */
-	
-	
+
+
 	/* RA8875按照SPI接口设置后，通过总线方式依然可以读到0X75的特征，因此不能用来自动识别SPI模式 */
 	{
 		uint8_t value;
-		
-		g_RA8875_IF = RA_HARD_8080_16;	
+
+		g_RA8875_IF = RA_HARD_8080_16;
 		RA8875_WriteReg(0x60, 0x1A);	/* 60H寄存器背景色寄存器红色[4:0]低5位有效 */
 		value = RA8875_ReadReg(0x60);
 		if (value != 0x1A)
@@ -56,14 +56,14 @@ void RA8875_ConfigGPIO(void)
 			g_RA8875_IF = RA_HARD_SPI;		/* 识别为 SPI总线 */
 		}
 	}
-	
+
 	#ifdef USE_WAIT_PIN
 	{
 		GPIO_InitTypeDef GPIO_InitStructure;
-		
+
 		/* 使能 GPIO时钟 */
 		RCC_APB2PeriphClockCmd(RCC_WAIT, ENABLE);
-		
+
 		/* 连接到RA8875的BUSY引脚，用GPIO 识别芯片内忙 */
 		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;		/*　输入上拉　*/
@@ -84,9 +84,9 @@ void RA8875_ConfigGPIO(void)
 */
 uint8_t RA8875_ReadBusy(void)
 {
-	if ((PORT_WAIT->IDR & PIN_WAIT) == 0) 
+	if ((PORT_WAIT->IDR & PIN_WAIT) == 0)
 		return 1;
-	else 
+	else
 		return 0;
 }
 #endif
@@ -178,7 +178,7 @@ void RA8875_WriteData(uint8_t _ucRegValue)
 uint8_t RA8875_ReadData(void)
 {
 	uint8_t value = 0;
-	
+
 	if (g_RA8875_IF == RA_HARD_SPI)	/* 硬件SPI接口 */
 	{
 		RA8875_CS_0();
@@ -191,7 +191,7 @@ uint8_t RA8875_ReadData(void)
 		value = RA8875_RAM;		/* 读取寄存器值 */
 	}
 
-	return value;	
+	return value;
 }
 
 /*
@@ -210,11 +210,11 @@ void RA8875_WriteData16(uint16_t _usRGB)
 		SPI_ShiftByte(SPI_WRITE_DATA);
 		SPI_ShiftByte(_usRGB >> 8);
 		RA8875_CS_1();
-		
+
 		/* 必须增加一些延迟，否则连续写像素可能出错 */
 		RA8875_CS_1();
 		RA8875_CS_1();
-		
+
 		RA8875_CS_0();
 		SPI_ShiftByte(SPI_WRITE_DATA);
 		SPI_ShiftByte(_usRGB);
@@ -237,7 +237,7 @@ void RA8875_WriteData16(uint16_t _usRGB)
 uint16_t RA8875_ReadData16(void)
 {
 	uint16_t value;
-	
+
 	if (g_RA8875_IF == RA_HARD_SPI)	/* 硬件SPI接口 */
 	{
 		RA8875_CS_0();
@@ -252,7 +252,7 @@ uint16_t RA8875_ReadData16(void)
 		value = RA8875_RAM;		/* 读取寄存器值 */
 	}
 
-	return value;	
+	return value;
 }
 
 /*
@@ -266,7 +266,7 @@ uint16_t RA8875_ReadData16(void)
 uint8_t RA8875_ReadStatus(void)
 {
 	uint8_t value = 0;
-	
+
 	if (g_RA8875_IF == RA_HARD_SPI)	/* 硬件SPI接口 */
 	{
 		RA8875_CS_0();
@@ -278,7 +278,7 @@ uint8_t RA8875_ReadStatus(void)
 	{
 		value = RA8875_REG;
 	}
-	return value;	
+	return value;
 }
 
 /*
@@ -339,7 +339,7 @@ void RA8875_InitSPI(void)
 		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
 		GPIO_Init(GPIOG, &GPIO_InitStructure);
 	}
-	
+
 	RA8875_LowSpeedSPI();
 }
 
@@ -407,19 +407,19 @@ void RA8875_HighSpeedSPI(void)
 	SPI_InitStructure.SPI_CPOL = SPI_CPOL_High;			/* 时钟上升沿采样数据 */
 	SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;		/* 时钟的第2个边沿采样数据 */
 	//SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;			/* 时钟上升沿采样数据 */
-	//SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;		/* 时钟的第2个边沿采样数据 */	
-	
+	//SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;		/* 时钟的第2个边沿采样数据 */
+
 	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;			/* 片选控制方式：软件控制 */
 
 	/*
-	
+
 		示波器实测频率 (STM32F103ZE 上测试)
 		SPI_BaudRatePrescaler_4 时， SCK = 18M  (显示正常，触摸不正常)
 		SPI_BaudRatePrescaler_8 时， SCK = 9M   (显示和触摸都正常)
-		
+
 		F407 的 SP1时钟=84M, 需要 8分频 = 10.5M
 	*/
-	
+
 	/* 设置波特率预分频系数 */
 	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_16;
 
@@ -462,4 +462,4 @@ static uint8_t SPI_ShiftByte(uint8_t _ucByte)
 
 #endif
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

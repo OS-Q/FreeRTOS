@@ -10,7 +10,7 @@
 *		版本号  日期        作者     说明
 *		V1.0    2015-03-27 armfly  正式发布
 *
-*	Copyright (C), 2014-2015, 安富莱电子 www.armfly.com
+*	Copyright (C), 2014-2015, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -76,7 +76,7 @@ uint8_t bsp_GetMsg(MSG_T *_pMsg)
 		{
 			g_tMsg.Read = 0;
 		}
-		
+
 		_pMsg->MsgCode = p->MsgCode;
 		_pMsg->MsgParam = p->MsgParam;
 		return 1;
@@ -108,7 +108,7 @@ uint8_t bsp_GetMsg2(MSG_T *_pMsg)
 		{
 			g_tMsg.Read2 = 0;
 		}
-		
+
 		_pMsg->MsgCode = p->MsgCode;
 		_pMsg->MsgParam = p->MsgParam;
 		return 1;
@@ -128,4 +128,4 @@ void bsp_ClearMsg(void)
 	g_tMsg.Read = g_tMsg.Write;
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

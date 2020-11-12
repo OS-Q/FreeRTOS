@@ -14,7 +14,7 @@
 *		V1.2    2014-06-28 armfly  初始化函数添加 w25_ReadInfo(), 识别串行FLASH。LCD_RA8875.c中的
 *							RA8875_DispBmpInFlash （） 显示图库芯片的图片的函数会用到串行FLASH型号
 *
-*	Copyright (C), 2015-2016, 安富莱电子 www.armfly.com
+*	Copyright (C), 2015-2016, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -27,7 +27,7 @@
 	PA6/SPI1_MISO
 	PA7/SPI1_MOSI
 	PG11/TP_NCS
-	PB1/PWM	
+	PB1/PWM
 
 	由于SPI1的时钟源是84M
 */
@@ -119,14 +119,14 @@ static void w25_ConfigGPIO(void)
 	/* 配置片选口线为推挽输出模式 */
 	w25_SetCS(1);		/* 片选置高，不选中 */
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;	
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Pin = W25_CS_PIN;
 	GPIO_Init(W25_CS_GPIO, &GPIO_InitStructure);
 
 	/* 配置TFT接口中的PWM脚为为推挽输出模式，PWM = 1时 用于写RA8875外挂的串行Flash */
 	/* PF6/LCD_PWM  不用于调节RA8875屏的背光 */
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;	
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Pin = W25_PWM_PIN;
 	GPIO_Init(W25_PWM_GPIO, &GPIO_InitStructure);
 }
@@ -572,4 +572,4 @@ static void w25_WaitForWriteEnd(void)
 	w25_SetCS(1);									/* 禁能片选 */
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

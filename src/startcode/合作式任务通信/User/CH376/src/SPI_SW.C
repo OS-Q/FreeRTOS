@@ -9,9 +9,9 @@
 *	说    明 : CH375T 和CPU间是SPI接口。底层字节读写操作由 bsp_spi_buf.c 实现。
 *	修改记录 :
 *		版本号  日期        作者    说明
-*		V1.1	2015-07-09  armfly  使用bsp_spi_bus.c文件。 
+*		V1.1	2015-07-09  armfly  使用bsp_spi_bus.c文件。
 *
-*	Copyright (C), 2015-2016, 安富莱电子 www.armfly.com
+*	Copyright (C), 2015-2016, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -20,7 +20,7 @@
 #include "bsp.h"
 #include "HAL.H"
 
-/* 安富莱STM32-V4开发板硬件连接方式如下(实际应用电路可以参照修改下述定义及子程序) 
+/* 安富莱STM32-V4开发板硬件连接方式如下(实际应用电路可以参照修改下述定义及子程序)
 	PF10             CH376的SCS引脚
 	PA5/SPI1_SCK     CH376的SCK引脚
 	PA6/SPI1_MISO    CH376的SDO引脚
@@ -34,12 +34,12 @@
 #define CH376_INT_HIGH()	(GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_2) != Bit_RESET)
 
 /* 使用软件模拟SPI读写时序,进行初始化 */
-void CH376_PORT_INIT( void )  
+void CH376_PORT_INIT( void )
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 
 	/* 设置SPI_SCS,SPI_SCK,SPI_SDI为输出方向,SPI_SDO为输入方向 */
-	
+
 	/* 打开CPU的GPIO时钟 */
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOF | RCC_APB2Periph_GPIOE, ENABLE);
 
@@ -47,10 +47,10 @@ void CH376_PORT_INIT( void )
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOF, &GPIO_InitStructure);						
-	
+	GPIO_Init(GPIOF, &GPIO_InitStructure);
+
 	CH376_SCS_1();  /* 禁止SPI片选 */
-		
+
 	/* 如果是硬件SPI接口,那么可使用mode3(CPOL=1&CPHA=1)或mode0(CPOL=0&CPHA=0),
 		CH376在时钟上升沿采样输入,下降沿输出,数据位是高位在前 */
 }
@@ -85,7 +85,7 @@ static void ch376_SetCS(uint8_t _level)
 
 		#ifdef HARD_SPI		/* 硬件SPI */
 			/* 2015-07-09 实测:　SPI_BaudRatePrescaler_16 时，显示一副480*272需要2.4秒　*/
-		
+
 			bsp_SPI_Init(SPI_Direction_2Lines_FullDuplex | SPI_Mode_Master | SPI_DataSize_8b
 				| SPI_CPOL_High | SPI_CPHA_2Edge | SPI_NSS_Soft | SPI_BaudRatePrescaler_16 | SPI_FirstBit_MSB);
 
@@ -110,16 +110,16 @@ void xWriteCH376Cmd( UINT8 mCmd )  /* 向CH376写命令 */
 {
 	CH376_SCS_1();  /* 防止之前未通过xEndCH376Cmd禁止SPI片选 */
 	mDelay0_5uS( );
-	
-	//CH376_SCS_0();  /* SPI片选有效 */	
+
+	//CH376_SCS_0();  /* SPI片选有效 */
 	ch376_SetCS(0);
-	
+
 	bsp_spiWrite1( mCmd );  /* 发出命令码 */
-	
+
 	/* 延时1.5uS确保读写周期大于1.5uS,或者用上面一行的状态查询代替 */
-	mDelay0_5uS( ); 
-	mDelay0_5uS( ); 
-	mDelay0_5uS( );  
+	mDelay0_5uS( );
+	mDelay0_5uS( );
+	mDelay0_5uS( );
 }
 
 void xWriteCH376Data( UINT8 mData )  /* 向CH376写数据 */
@@ -143,11 +143,11 @@ UINT8 Query376Interrupt( void )
 UINT8 mInitCH376Host( void )  /* 初始化CH376 */
 {
 	UINT8	res;
-	
+
 	CH376_PORT_INIT( );  /* 接口硬件初始化 */
 
 	//mDelaymS(200);
-	
+
 	xWriteCH376Cmd( CMD11_CHECK_EXIST );  /* 测试单片机与CH376之间的通讯接口 */
 	xWriteCH376Data( 0x65 );
 	res = xReadCH376Data( );

@@ -12,7 +12,7 @@
 *		V1.0    2013-03-01 armfly   正式发布
 *		V1.1    2015-08-10 Eric2013 增加uCOS-III所需函数
 *
-*	Copyright (C), 2015-2020, 安富莱电子 www.armfly.com
+*	Copyright (C), 2015-2020, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -36,14 +36,14 @@ void bsp_Init(void)
 
 		系统时钟缺省配置为72MHz，如果需要更改，可以修改 system_stm32f10x.c 文件
 	*/
-	
+
 	/* 优先级分组设置为4, 优先配置好NVIC */
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
 
 	bsp_InitUart(); 	/* 初始化串口 */
 	bsp_InitLed(); 		/* 初始LED指示灯端口 */
 	bsp_InitKey();		/* 初始化按键 */
-	
+
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

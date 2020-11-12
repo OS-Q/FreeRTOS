@@ -23,7 +23,7 @@
 *		V1.7    2015-01-02 armfly  计划将触摸扫描由1ms一次修改为10ms一次。未定。
 *				2015-04-21 armfly 修改 TOUCH_InitHard() 函数。GT811_InitHard() 执行后直接return
 *
-*	Copyright (C), 2014-2015, 安富莱电子 www.armfly.com
+*	Copyright (C), 2014-2015, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -108,7 +108,7 @@ int32_t TOUCH_Abs(int32_t x);
 void TOUCH_InitHard(void)
 {
 	uint16_t i;
-	
+
     g_tTP.Enable = 0;
 
 	/* 50ms，等待GT811复位就绪，才能探测GT811芯片 ID */
@@ -121,7 +121,7 @@ void TOUCH_InitHard(void)
 		}
 		bsp_DelayMS(10);
 	}
-		
+
 	if (g_ChipID == IC_8875)
 	{
 		RA8875_TouchInit();
@@ -129,7 +129,7 @@ void TOUCH_InitHard(void)
 		g_tTP.usMaxAdc = 1023;	/* 10位ADC */
 	}
 	else
-	{	
+	{
 		TSC2046_InitHard();
 
 		g_tTP.usMaxAdc = 4095;	/* 12位ADC */
@@ -205,7 +205,7 @@ void TOUCH_PutKey(uint8_t _ucEvent, uint16_t _usX, uint16_t _usY)
 		xx = TOUCH_TransX(_usX, _usY);
 		yy = TOUCH_TransY(_usX, _usY);
 	}
-	
+
 	/* 横屏和竖屏方向识别 */
 	switch (g_tParam.TouchDirection)
 	{
@@ -1117,4 +1117,4 @@ static void TOUCH_LoadParam(void)
 #endif
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

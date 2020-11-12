@@ -6,7 +6,7 @@
 *	版    本 : V1.6
 *	说    明 : 头文件
 *
-*	Copyright (C), 2014-2015, 安富莱电子 www.armfly.com
+*	Copyright (C), 2014-2015, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -29,7 +29,7 @@ typedef struct
 	uint16_t usAdcY3;
 	uint16_t usAdcX4;	/* 右上角 */
 	uint16_t usAdcY4;
-	
+
 	uint16_t usLcdX1;	/* 左上角 */
 	uint16_t usLcdY1;
 	uint16_t usLcdX2;	/* 右下角 */
@@ -37,7 +37,7 @@ typedef struct
 	uint16_t usLcdX3;	/* 左下角 */
 	uint16_t usLcdY3;
 	uint16_t usLcdX4;	/* 右上角 */
-	uint16_t usLcdY4;	
+	uint16_t usLcdY4;
 
 	uint16_t XYChange;	/* X, Y 是否交换  */
 
@@ -87,4 +87,4 @@ extern TOUCH_T g_tTP;
 
 #endif
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

@@ -21,7 +21,7 @@
 *		V1.2	2015-07-23   armfly  增加函数 uint8_t NAND_GetBlockInfo(void); 方便LCD显示。
 *		V1.3	2015-08-04   armfly  增加对 H27U1G8F2BTR 芯片的支持。
 *
-*	Copyright (C), 2015-2016, 安富莱电子 www.armfly.com
+*	Copyright (C), 2015-2016, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -147,49 +147,49 @@ static uint8_t FSMC_NAND_EraseBlock(uint32_t _ulBlockNo);
 */
 static void FSMC_NAND_Init(void)
 {
-	GPIO_InitTypeDef GPIO_InitStructure; 
+	GPIO_InitTypeDef GPIO_InitStructure;
 	FSMC_NANDInitTypeDef FSMC_NANDInitStructure;
 	FSMC_NAND_PCCARDTimingInitTypeDef  p;
-	
+
 	/* 使能 FSMC 时钟 */
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_FSMC, ENABLE);
-	
+
 	/* 使能GPIOD、GPIOE、GPIOF、GPIOG 时钟 */
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD | RCC_APB2Periph_GPIOE | 
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD | RCC_APB2Periph_GPIOE |
 	                     RCC_APB2Periph_GPIOF | RCC_APB2Periph_GPIOG, ENABLE);
-	
+
 	/* GPIO 配置 */
 	/* 控制线CLE, ALE, D0-D3, NOE, NWE 和 NCE2  NAND 引脚配置为复用功能（即用于FSMC)  */
-	GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_11 | GPIO_Pin_12 | GPIO_Pin_14 | GPIO_Pin_15 |  
-	                             GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_4 | GPIO_Pin_5 | 
-	                             GPIO_Pin_7;                                  
+	GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_11 | GPIO_Pin_12 | GPIO_Pin_14 | GPIO_Pin_15 |
+	                             GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_4 | GPIO_Pin_5 |
+	                             GPIO_Pin_7;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-	GPIO_Init(GPIOD, &GPIO_InitStructure); 
-	
-	/* 数据线 D4-D7 引脚配置为复用功能 */  
+	GPIO_Init(GPIOD, &GPIO_InitStructure);
+
+	/* 数据线 D4-D7 引脚配置为复用功能 */
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_10;
 	GPIO_Init(GPIOE, &GPIO_InitStructure);
-	
+
 	/* NWAIT 引脚配置. 安富莱STM32-V4开发板缺省未使用NWAIT引脚作为忙信号，使用的是INT2
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;   							 
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
-	GPIO_Init(GPIOD, &GPIO_InitStructure); 
+	GPIO_Init(GPIOD, &GPIO_InitStructure);
 	*/
-	
-	/* INT2 引脚配置为内部上来输入，用于忙信号 */  
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;   
+
+	/* INT2 引脚配置为内部上来输入，用于忙信号 */
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;								 
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
 	GPIO_Init(GPIOG, &GPIO_InitStructure);
-	
+
 	/* FSMC 配置 */
 	p.FSMC_SetupTime = 0x1;
 	p.FSMC_WaitSetupTime = 0x3;
 	p.FSMC_HoldSetupTime = 0x2;
 	p.FSMC_HiZSetupTime = 0x1;
-	
+
 	FSMC_NANDInitStructure.FSMC_Bank = FSMC_Bank2_NAND;							/* 定义FSMC BANK 号 */
 	FSMC_NANDInitStructure.FSMC_Waitfeature = FSMC_Waitfeature_Enable;			/* 插入等待时序使能 */
 	FSMC_NANDInitStructure.FSMC_MemoryDataWidth = FSMC_MemoryDataWidth_8b;		/* 数据宽度 8bit */
@@ -199,9 +199,9 @@ static void FSMC_NAND_Init(void)
 	FSMC_NANDInitStructure.FSMC_TARSetupTime = 0x00;
 	FSMC_NANDInitStructure.FSMC_CommonSpaceTimingStruct = &p;
 	FSMC_NANDInitStructure.FSMC_AttributeSpaceTimingStruct = &p;
-	
+
 	FSMC_NANDInit(&FSMC_NANDInitStructure);
-	
+
 	/* FSMC NAND Bank 使能 */
 	FSMC_NANDCmd(FSMC_Bank2_NAND, ENABLE);
 }
@@ -345,7 +345,7 @@ static uint8_t FSMC_NAND_PageCopyBack(uint32_t _ulSrcPageNo, uint32_t _ulTarPage
 *
 *********************************************************************************************************
 */
-static uint8_t FSMC_NAND_PageCopyBackEx(uint32_t _ulSrcPageNo, uint32_t _ulTarPageNo, uint8_t *_pBuf, 
+static uint8_t FSMC_NAND_PageCopyBackEx(uint32_t _ulSrcPageNo, uint32_t _ulTarPageNo, uint8_t *_pBuf,
 	uint16_t _usOffset, uint16_t _usSize)
 {
 	uint16_t i;
@@ -497,7 +497,7 @@ static uint8_t FSMC_NAND_WritePage(uint8_t *_pBuffer, uint32_t _ulPageNo, uint16
 	/* WE High to Busy , 100ns */
 	for (i = 0; i < 20; i++);	/* 需要大于 100ns */
 	while( GPIO_ReadInputDataBit(GPIOG, GPIO_Pin_6) == 0 );
-	
+
 	/* 检查操作状态 */
 	if (FSMC_NAND_GetStatus() == NAND_READY)
 	{
@@ -507,17 +507,17 @@ static uint8_t FSMC_NAND_WritePage(uint8_t *_pBuffer, uint32_t _ulPageNo, uint16
 			if (memcmp(s_ucTempBuf,  _pBuffer, _usByteCount) != 0)
 			{
 				printf_err("Error1: FSMC_NAND_WritePage(page=%d, addr=%d, count=%d)\r\n",
-					_ulPageNo, _usAddrInPage, _usByteCount);				
-				return NAND_FAIL;	
-			}			
+					_ulPageNo, _usAddrInPage, _usByteCount);
+				return NAND_FAIL;
+			}
 		#endif
-		
+
 		return NAND_OK;
 	}
 
 	printf_err("Error2: FSMC_NAND_WritePage(page=%d, addr=%d, count=%d)\r\n",
 		_ulPageNo, _usAddrInPage, _usByteCount);
-	
+
 	return NAND_FAIL;
 }
 
@@ -900,7 +900,7 @@ uint8_t NAND_Init(void)
 /*
 *********************************************************************************************************
 *	函 数 名: NAND_WriteToNewBlock
-*	功能说明: 将旧块的数据复制到新块，并将新的数据段写入这个新块. 
+*	功能说明: 将旧块的数据复制到新块，并将新的数据段写入这个新块.
 *	形    参:  	_ulPhyPageNo : 源页号
 *				_pWriteBuf ： 数据缓冲区
 *				_usOffset ： 页内偏移地址
@@ -931,7 +931,7 @@ uint8_t NAND_WriteToNewBlock(uint32_t _ulPhyPageNo, uint8_t *_pWriteBuf, uint16_
 		}
 
 		printf_ok("NAND_WriteToNewBlock(%d -> %d)\r\n", ulSrcBlock, usNewBlock);
-		
+
 		/* 使用page-copy功能，将当前块（usPBN）的数据全部搬移到新块（usNewBlock） */
 		for (i = 0; i < NAND_BLOCK_SIZE; i++)
 		{
@@ -955,7 +955,7 @@ uint8_t NAND_WriteToNewBlock(uint32_t _ulPhyPageNo, uint8_t *_pWriteBuf, uint16_
 					usNewBlock * NAND_BLOCK_SIZE + i) == NAND_FAIL)
 				{
 					printf_err("Error3: NAND_WriteToNewBlock() %d\r\n", ulSrcBlock);
-					
+
 					NAND_MarkBadBlock(usNewBlock);	/* 将新块标记为坏块 */
 					NAND_BuildLUT();				/* 重建LUT表 */
 					break;
@@ -1160,7 +1160,7 @@ uint8_t NAND_WriteMultiSectors(uint8_t *_pBuf, uint32_t _SectorNo, uint16_t _Sec
 		{
 			/* 暂未处理 */
 		}
-		
+
 		memset(s_ucTempBuf, 0xFF, _SectorSize);
 
 		/*　如果是全0xFF, 则可以直接写入，无需擦除 */
@@ -1177,7 +1177,7 @@ uint8_t NAND_WriteMultiSectors(uint8_t *_pBuf, uint32_t _SectorNo, uint16_t _Sec
 					printf_err("Error4: NAND_WriteMultiSectors(), Write Faile\r\n");
 					return NAND_FAIL;	/* 失败 */
 				}
-				
+
 				/* 标记源块为坏块 */
 				NAND_MarkBadBlock(uiPhyPageNo / NAND_BLOCK_SIZE);	/* 将源块标记为坏块 */
 				continue;
@@ -1670,7 +1670,7 @@ void NAND_MarkBadBlock(uint32_t _ulBlockNo)
 void NAND_ScanAllBadBlock(void)
 {
 	uint32_t i;
-	
+
 	for (i = 0; i < NAND_BLOCK_COUNT; i++)
 	{
 		if (NAND_ScanBlock(i) == NAND_OK)
@@ -1802,7 +1802,7 @@ void NAND_DispBadBlockInfo(void)
 	else if (id == H27U1G8F2BTR)
 	{
 		printf("H27U1G8F2BTR\r\n  1024 Blocks, 64 pages per block, 2048 + 64 bytes per page\r\n");
-	}	
+	}
 	else
 	{
 		printf("unkonow\r\n");
@@ -1857,7 +1857,7 @@ void NAND_DispBadBlockInfo(void)
 	{
 		printf("Bad Block Count = %d\r\n", n);
 	}
-	
+
 	/* 打印坏块序号 */
 	if (n > 0)
 	{
@@ -1865,7 +1865,7 @@ void NAND_DispBadBlockInfo(void)
 		{
 			printf("%4d ",  bad_no[i]);
 		}
-		
+
 		printf("\r\n\r\n");
 	}
 }
@@ -1889,7 +1889,7 @@ uint8_t NAND_GetBlockInfo(NAND_BLOCK_INFO_T *_pInfo)
 	FSMC_NAND_Init();	/* 初始化FSMC */
 
 	id = NAND_ReadID();
-	
+
 	_pInfo->ChipID = id;
 	if (id == HY27UF081G2A)
 	{
@@ -1915,9 +1915,9 @@ uint8_t NAND_GetBlockInfo(NAND_BLOCK_INFO_T *_pInfo)
 	{
 		_pInfo->ChipID = H27U1G8F2BTR;
 		strcpy(_pInfo->ChipName, "H27U1G8F2BTR");
-	}	
+	}
 	else
-	{		
+	{
 		return 0;
 	}
 
@@ -1939,7 +1939,7 @@ uint8_t NAND_GetBlockInfo(NAND_BLOCK_INFO_T *_pInfo)
 				free++;
 			}
 			else
-			{	
+			{
 				used++;		/* 已用块 */
 			}
 		}
@@ -2159,4 +2159,4 @@ void NAND_DispParamPage(void)
 }
 
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

@@ -18,7 +18,7 @@
 *		V1.3    2015-04-06 armfly  增加 bsp_CheckRunTime(int32_t _LastTime) 用来计算时间差值
 *		V1.4	2015-05-22 armfly  完善 bsp_InitHardTimer() ，增加条件编译选择TIM2-5
 *
-*	Copyright (C), 2015-2016, 安富莱电子 www.armfly.com
+*	Copyright (C), 2015-2016, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -116,7 +116,7 @@ void bsp_InitTimer(void)
     	对于常规的应用，我们一般取定时周期1ms。对于低速CPU或者低功耗应用，可以设置定时周期为 10ms
     */
 	SysTick_Config(SystemCoreClock / 1000);
-	
+
 #if defined (USE_TIM2) || defined (USE_TIM3)  || defined (USE_TIM4)	|| defined (USE_TIM5)
 	bsp_InitHardTimer();
 #endif
@@ -251,28 +251,28 @@ void bsp_DelayUS(uint32_t n)
     uint32_t tnow;
     uint32_t tcnt = 0;
     uint32_t reload;
-       
-	reload = SysTick->LOAD;                
-    ticks = n * (SystemCoreClock / 1000000);	 /* 需要的节拍数 */  
-    
+
+	reload = SysTick->LOAD;
+    ticks = n * (SystemCoreClock / 1000000);	 /* 需要的节拍数 */
+
     tcnt = 0;
     told = SysTick->VAL;             /* 刚进入时的计数器值 */
 
     while (1)
     {
-        tnow = SysTick->VAL;    
+        tnow = SysTick->VAL;
         if (tnow != told)
-        {    
-            /* SYSTICK是一个递减的计数器 */    
+        {
+            /* SYSTICK是一个递减的计数器 */
             if (tnow < told)
             {
-                tcnt += told - tnow;    
+                tcnt += told - tnow;
             }
             /* 重新装载递减 */
             else
             {
-                tcnt += reload - tnow + told;    
-            }        
+                tcnt += reload - tnow + told;
+            }
             told = tnow;
 
             /* 时间超过/等于要延迟的时间,则退出 */
@@ -280,9 +280,9 @@ void bsp_DelayUS(uint32_t n)
             {
             	break;
             }
-        }  
+        }
     }
-} 
+}
 
 
 /*
@@ -433,7 +433,7 @@ int32_t bsp_CheckRunTime(int32_t _LastTime)
 	now_time = g_iRunTime;	/* 这个变量在Systick中断中被改写，因此需要关中断进行保护 */
 
 	ENABLE_INT();  		/* 开中断 */
-	
+
 	if (now_time >= _LastTime)
 	{
 		time_diff = now_time - _LastTime;
@@ -498,8 +498,8 @@ void bsp_InitHardTimer(void)
 	uiTIMxCLK = SystemCoreClock / 2;
 
 	usPrescaler = uiTIMxCLK / 1000000 ;	/* 分频到周期 1us */
-	
-#if defined (USE_TIM2) || defined (USE_TIM5) 
+
+#if defined (USE_TIM2) || defined (USE_TIM5)
 	//usPeriod = 0xFFFFFFFF;	/* 407支持32位定时器 */
 	usPeriod = 0xFFFF;	/* 103支持16位 */
 #else
@@ -666,4 +666,4 @@ void TIM5_IRQHandler(void)
     }
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

@@ -12,7 +12,7 @@
 *		V1.1    2013-06-12 armfly  解决单独Line 输入不能放音的问题。修改 wm8978_CfgAudioPath() 函数
 *		V1.1    2013-07-14 armfly  增加设置Line输入接口增益的函数： wm8978_SetLineGain()
 *
-*	Copyright (C), 2013-2014, 安富莱电子 www.armfly.com
+*	Copyright (C), 2013-2014, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -83,7 +83,7 @@ uint8_t wm8978_Init(void)
 		re = 0;
 	}
 	wm8978_Reset();			/* 硬件复位WM8978所有寄存器到缺省状态 */
-	wm8978_CtrlGPIO1(1);	/* WM8978的GPIO1引脚输出1，表示缺省是放音(仅针对安富莱开发板硬件需要) */	
+	wm8978_CtrlGPIO1(1);	/* WM8978的GPIO1引脚输出1，表示缺省是放音(仅针对安富莱开发板硬件需要) */
 	return re;
 }
 
@@ -381,12 +381,12 @@ void wm8978_CfgAudioIF(uint16_t _usStandard, uint8_t _ucWordLen, uint16_t _usMod
 	/* 如果是放音则需要设置  WM_GPIO1 = 1 ,如果是录音则需要设置WM_GPIO1 = 0 */
 	if (_usMode == I2S_Mode_MasterTx)
 	{
-		wm8978_CtrlGPIO1(1);	/* 驱动WM8978的GPIO1引脚输出1, 用于放音 */		
+		wm8978_CtrlGPIO1(1);	/* 驱动WM8978的GPIO1引脚输出1, 用于放音 */
 	}
 	else
 	{
-		wm8978_CtrlGPIO1(0);	/* 驱动WM8978的GPIO1引脚输出0, 用于录音 */		
-	}	
+		wm8978_CtrlGPIO1(0);	/* 驱动WM8978的GPIO1引脚输出0, 用于录音 */
+	}
 }
 
 /*
@@ -1031,17 +1031,17 @@ static void I2S_GPIO_Config(void)
 		PC6/I2S2_MCK
 	*/
 	GPIO_InitTypeDef GPIO_InitStructure;
-	
+
 	/* Enable GPIOB, GPIOC and AFIO clock */
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_GPIOC |  
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_GPIOC |
 	                     RCC_APB2Periph_AFIO, ENABLE);
-	
+
 	/* I2S2 SD, CK and WS pins configuration */
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_15;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
-	
+
 	/* I2S2 MCK pin configuration */
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
 	GPIO_Init(GPIOC, &GPIO_InitStructure);
@@ -1075,7 +1075,7 @@ static void I2S_Mode_Config(uint16_t _usStandard, uint16_t _usWordLen, uint32_t 
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE);
 
 	/* 复位 SPI2 外设到缺省状态 */
-	SPI_I2S_DeInit(SPI2); 
+	SPI_I2S_DeInit(SPI2);
 
 	/* I2S2 外设配置 */
 	if (_usMode == I2S_Mode_MasterTx)
@@ -1085,7 +1085,7 @@ static void I2S_Mode_Config(uint16_t _usStandard, uint16_t _usWordLen, uint32_t 
 		I2S_InitStructure.I2S_DataFormat = _usWordLen;			/* 数据格式，16bit */
 		I2S_InitStructure.I2S_MCLKOutput = I2S_MCLKOutput_Enable;	/* 主时钟模式 */
 		I2S_InitStructure.I2S_AudioFreq = _uiAudioFreq;			/* 音频采样频率 */
-		I2S_InitStructure.I2S_CPOL = I2S_CPOL_Low;  			
+		I2S_InitStructure.I2S_CPOL = I2S_CPOL_Low;
 		I2S_Init(SPI2, &I2S_InitStructure);
 	}
 	else if (_usMode == I2S_Mode_MasterRx)
@@ -1095,7 +1095,7 @@ static void I2S_Mode_Config(uint16_t _usStandard, uint16_t _usWordLen, uint32_t 
 		I2S_InitStructure.I2S_DataFormat = _usWordLen;			/* 数据格式，16bit */
 		I2S_InitStructure.I2S_MCLKOutput = I2S_MCLKOutput_Enable;	/* 主时钟模式 */
 		I2S_InitStructure.I2S_AudioFreq = _uiAudioFreq;			/* 音频采样频率 */
-		I2S_InitStructure.I2S_CPOL = I2S_CPOL_Low;  			
+		I2S_InitStructure.I2S_CPOL = I2S_CPOL_Low;
 		I2S_Init(SPI2, &I2S_InitStructure);
 	}
 
@@ -1106,7 +1106,7 @@ static void I2S_Mode_Config(uint16_t _usStandard, uint16_t _usWordLen, uint32_t 
 	SPI_I2S_ITConfig(SPI2, SPI_I2S_IT_RXNE, DISABLE);
 
 	/* 使能 SPI2/I2S2 外设 */
-	I2S_Cmd(SPI2, ENABLE);	
+	I2S_Cmd(SPI2, ENABLE);
 }
 
 /*
@@ -1129,4 +1129,4 @@ static void I2S_NVIC_Config(void)
 	NVIC_Init(&NVIC_InitStructure);
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

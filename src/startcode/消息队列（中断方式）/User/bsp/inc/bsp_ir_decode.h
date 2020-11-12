@@ -4,7 +4,7 @@
 *	模块名称 : 红外遥控接收器驱动模块
 *	文件名称 : bsp_ir_decode.h
 *
-*	Copyright (C), 2013-2014, 安富莱电子 www.armfly.com
+*	Copyright (C), 2013-2014, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -17,7 +17,7 @@ typedef enum
 {
 	IR_KEY_STRAT 	= 0x80,
 	IR_KEY_POWER 	= IR_KEY_STRAT + 0x45,
-	IR_KEY_MENU 	= IR_KEY_STRAT + 0x47, 
+	IR_KEY_MENU 	= IR_KEY_STRAT + 0x47,
 	IR_KEY_TEST 	= IR_KEY_STRAT + 0x44,
 	IR_KEY_UP 		= IR_KEY_STRAT + 0x40,
 	IR_KEY_RETURN	= IR_KEY_STRAT + 0x43,
@@ -35,7 +35,7 @@ typedef enum
 	IR_KEY_6		= IR_KEY_STRAT + 0x5A,
 	IR_KEY_7		= IR_KEY_STRAT + 0x42,
 	IR_KEY_8		= IR_KEY_STRAT + 0x52,
-	IR_KEY_9		= IR_KEY_STRAT + 0x4A,	
+	IR_KEY_9		= IR_KEY_STRAT + 0x4A,
 }IR_KEY_E;
 
 typedef struct
@@ -44,7 +44,7 @@ typedef struct
 	uint8_t Status;
 	uint8_t RxBuf[4];
 	uint8_t RepeatCount;
-	
+
 	uint8_t WaitFallEdge;	/* 0 表示等待上升沿，1表示等待下降沿，用于切换输入捕获极性 */
 	uint16_t TimeOut;
 }IRD_T;
@@ -57,4 +57,4 @@ extern IRD_T g_tIR;
 
 #endif
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

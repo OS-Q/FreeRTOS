@@ -10,7 +10,7 @@
 *		版本号  日期        作者     说明
 *		V1.0    2013-02-01 armfly  正式发布
 *
-*	Copyright (C), 2013-2014, 安富莱电子 www.armfly.com
+*	Copyright (C), 2013-2014, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -115,14 +115,14 @@ void MPU6050_ReadData(void)
 	ack = i2c_WaitAck();
 	if (ack != 0)
 	{
-		i2c_Stop(); 
+		i2c_Stop();
 		return;
 	}
 	i2c_SendByte(ACCEL_XOUT_H);     		/* 发送存储单元地址  */
 	ack = i2c_WaitAck();
 	if (ack != 0)
 	{
-		i2c_Stop(); 
+		i2c_Stop();
 		return;
 	}
 
@@ -132,7 +132,7 @@ void MPU6050_ReadData(void)
 	ack = i2c_WaitAck();
 	if (ack != 0)
 	{
-		i2c_Stop(); 
+		i2c_Stop();
 		return;
 	}
 
@@ -167,4 +167,4 @@ void MPU6050_ReadData(void)
 	g_tMPU6050.GYRO_Z = (ucReadBuf[12] << 8) + ucReadBuf[13];
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

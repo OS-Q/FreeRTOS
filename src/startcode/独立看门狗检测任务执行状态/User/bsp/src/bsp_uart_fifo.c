@@ -11,11 +11,11 @@
 *		V1.1    2013-06-09 armfly  FiFo结构增加TxCount成员变量，方便判断缓冲区满; 增加 清FiFo的函数
 *		V1.2	2014-09-29 armfly  增加RS485 MODBUS接口。接收到新字节后，直接执行回调函数。
 *
-*	修改补充 : 
+*	修改补充 :
 *		版本号    日期       作者                  说明
 *		V1.0    2015-08-19  Eric2013       临界区处理采用FreeRTOS方案
 *
-*	Copyright (C), 2013-2014, 安富莱电子 www.armfly.com
+*	Copyright (C), 2013-2014, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -556,7 +556,7 @@ static void InitHardUart(void)
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
-	
+
 	/* 第4步： 配置串口硬件参数 */
 	USART_InitStructure.USART_BaudRate = UART1_BAUD;	/* 波特率 */
 	USART_InitStructure.USART_WordLength = USART_WordLength_8b;
@@ -1138,4 +1138,4 @@ int fgetc(FILE *f)
 #endif
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

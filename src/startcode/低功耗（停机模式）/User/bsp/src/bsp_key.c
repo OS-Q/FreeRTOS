@@ -15,11 +15,11 @@
 *		V1.0    2013-02-01 armfly  正式发布
 *		V1.1    2013-06-29 armfly  增加1个读指针，用于bsp_Idle() 函数读取系统控制组合键（截屏）
 *								   增加 K1 K2 组合键 和 K2 K3 组合键，用于系统控制
-*	修改补充 : 
+*	修改补充 :
 *		版本号   日期       作者                 说明
 *		V1.0    2015-08-03 Eric2013      配置K2按键用于唤醒停机模式
 *
-*	Copyright (C), 2013-2014, 安富莱电子 www.armfly.com
+*	Copyright (C), 2013-2014, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -116,16 +116,16 @@ void bsp_InitKey(void)
 {
 	bsp_InitKeyVar();		/* 初始化按键变量 */
 	bsp_InitKeyHard();		/* 初始化按键硬件 */
-	
+
 	bsp_InitKeyStopMODE();
 }
 
 /*
 *********************************************************************************************************
 *	函 数 名: TouchInterrupt_Configuration
-*	功能说明: 停机模式唤醒按键 
+*	功能说明: 停机模式唤醒按键
 *	形    参：无
-*	返 回 值: 无		        
+*	返 回 值: 无
 *********************************************************************************************************
 */
 static void bsp_InitKeyStopMODE(void)
@@ -295,7 +295,7 @@ static void bsp_InitKeyHard(void)
 	/* 第2步：配置所有的按键GPIO为浮动输入模式(实际上CPU复位后就是输入状态) */
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;	/* 输入浮空模式 */
-	
+
 	GPIO_InitStructure.GPIO_Pin = GPIO_PIN_K1;
 	GPIO_Init(GPIO_PORT_K1, &GPIO_InitStructure);
 
@@ -491,4 +491,4 @@ void bsp_KeyScan(void)
 	}
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

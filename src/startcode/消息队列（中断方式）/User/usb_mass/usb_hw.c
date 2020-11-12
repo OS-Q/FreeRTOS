@@ -1,6 +1,6 @@
 /*
 *********************************************************************************************************
-*	                                  
+*
 *	模块名称 : USB Mass例程相关的硬件配置。
 *	文件名称 : usb_hw.c
 *	版    本 : V1.0
@@ -10,7 +10,7 @@
 *		v1.0    2011-05-13 armfly  ST固件库V3.5.0版本。
 *		V1.1	2015-07-26 armfly  删除LED指示灯的相关语句
 *
-*	Copyright (C), 2015-2016, 安富莱电子 www.armfly.com
+*	Copyright (C), 2015-2016, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -53,7 +53,7 @@ void MAL_Config(void)
 *********************************************************************************************************
 */
 void InitUsbDev(void)
-{	
+{
 	USB_Disconnect_Config();/* 配置控制USB连接和断开的GPIO */
 
 	MAL_Config();			/* MAL configuration */
@@ -126,13 +126,13 @@ void USB_NotConfigured_LED(void)
 void Get_SerialNum(void)
 {
 	uint32_t Device_Serial0, Device_Serial1, Device_Serial2;
-	
+
 	Device_Serial0 = *(__IO uint32_t*)(0x1FFFF7E8);
 	Device_Serial1 = *(__IO uint32_t*)(0x1FFFF7EC);
 	Device_Serial2 = *(__IO uint32_t*)(0x1FFFF7F0);
-	
+
 	Device_Serial0 += Device_Serial2;
-	
+
 	if (Device_Serial0 != 0)
 	{
 		IntToUnicode (Device_Serial0, &MASS_StringSerial[2] , 8);
@@ -153,7 +153,7 @@ void USB_Cable_Config (uint8_t NewState)
 	/* 安富莱开发板使用PB14控制USB数据线上上拉电阻。PB14=0是USB电缆连接到总线 */
 	if (NewState != DISABLE)
 	{
-		GPIO_ResetBits(GPIOB, GPIO_Pin_14);	
+		GPIO_ResetBits(GPIOB, GPIO_Pin_14);
 	}
 	else
 	{
@@ -184,9 +184,9 @@ void Enter_LowPowerMode(void)
 *********************************************************************************************************
 */
 void Leave_LowPowerMode(void)
-{	
+{
 	DEVICE_INFO *pInfo = &Device_Info;
-	
+
 	/* 更新设备状态 */
 	if (pInfo->Current_Configuration != 0)
 	{
@@ -210,17 +210,17 @@ void Leave_LowPowerMode(void)
 static void USB_Disconnect_Config(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
-		
+
 	/* 使能USB disconnect GPIO时钟 */
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
 
-	USB_Cable_Config(DISABLE);	/* 断开USB总线的上拉电阻 */ 
-		
+	USB_Cable_Config(DISABLE);	/* 断开USB总线的上拉电阻 */
+
 	/* 配置PB14为推挽输出，PB14 = 0时，USB设备连接，PB14=1时，USB设备断开 */
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
-	GPIO_Init(GPIOB, &GPIO_InitStructure);  
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
 }
 
 /*
@@ -235,7 +235,7 @@ static void Set_USBClock(void)
 {
 	/* 选择USBCLK时钟源 */
 	RCC_USBCLKConfig(RCC_USBCLKSource_PLLCLK_1Div5);
-	
+
 	/* 使能USB时钟 */
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USB, ENABLE);
 }
@@ -251,15 +251,15 @@ static void Set_USBClock(void)
 static void USB_Interrupts_Config(void)
 {
 	NVIC_InitTypeDef NVIC_InitStructure;
-	
+
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
-	
+
 	NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
-	
+
 	NVIC_InitStructure.NVIC_IRQChannel = USB_HP_CAN1_TX_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
@@ -267,7 +267,7 @@ static void USB_Interrupts_Config(void)
 	NVIC_Init(&NVIC_InitStructure);
 
   	/* 配置SDIO中断 */
-  	{		  
+  	{
 		NVIC_InitStructure.NVIC_IRQChannel = SDIO_IRQn;
 		NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
 		NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
@@ -287,7 +287,7 @@ static void USB_Interrupts_Config(void)
 static void IntToUnicode (uint32_t value , uint8_t *pbuf , uint8_t len)
 {
 	uint8_t idx = 0;
-	
+
 	for( idx = 0 ; idx < len ; idx ++)
 	{
 		if( ((value >> 28)) < 0xA )
@@ -296,11 +296,11 @@ static void IntToUnicode (uint32_t value , uint8_t *pbuf , uint8_t len)
 		}
 		else
 		{
-			pbuf[2* idx] = (value >> 28) + 'A' - 10; 
+			pbuf[2* idx] = (value >> 28) + 'A' - 10;
 		}
-		
+
 		value = value << 4;
-		
+
 		pbuf[ 2* idx + 1] = 0;
 	}
 }
@@ -312,7 +312,7 @@ static void IntToUnicode (uint32_t value , uint8_t *pbuf , uint8_t len)
 *	形    参：无
 *	返 回 值: 无
 *********************************************************************************************************
-*/ 
+*/
 void USB_HP_CAN1_TX_IRQHandler(void)
 {
 	CTR_HP();
@@ -325,10 +325,10 @@ void USB_HP_CAN1_TX_IRQHandler(void)
 *	形    参：无
 *	返 回 值: 无
 *********************************************************************************************************
-*/ 
+*/
 void USB_LP_CAN1_RX0_IRQHandler(void)
 {
 	USB_Istr();
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

@@ -10,7 +10,7 @@
 *		版本号  日期         作者     说明
 *		V1.0    2014-01-24  armfly  正式发布
 *
-*	Copyright (C), 2013-2014, 安富莱电子 www.armfly.com
+*	Copyright (C), 2013-2014, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -228,7 +228,7 @@ int16_t DS18B20_ReadTempReg(void)
 	if (DS18B20_Reset() == 0)
 	{
 		return 0;
-	}		
+	}
 
 	DS18B20_WriteByte(0xcc);	/* 发命令 */
 	DS18B20_WriteByte(0x44);	/* 发转换命令 */
@@ -269,7 +269,7 @@ uint8_t DS18B20_ReadID(uint8_t *_id)
 	}
 
 	DS18B20_Reset();		/* 总线复位 */
-	
+
 	return 1;
 }
 
@@ -301,7 +301,7 @@ int16_t DS18B20_ReadTempByID(uint8_t *_id)
 	for (i = 0; i < 8; i++)
 	{
 		DS18B20_WriteByte(_id[i]);
-	}	
+	}
 	DS18B20_WriteByte(0xbe);
 
 	temp1 = DS18B20_ReadByte();	/* 读温度值低字节 */
@@ -310,4 +310,4 @@ int16_t DS18B20_ReadTempByID(uint8_t *_id)
 	return ((temp2 << 8) | temp1);	/* 返回16位寄存器值 */
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

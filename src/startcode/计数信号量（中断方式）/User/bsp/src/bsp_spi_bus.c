@@ -11,7 +11,7 @@
 *									和收发数据的函数进行汇总分类。并解决不同速度的设备间的共享问题。
 *		V1.1	2015-05-21 armfly  硬件SPI时，没有开启GPIOB时钟，已解决。
 *
-*	Copyright (C), 2015-2016, 安富莱电子 www.armfly.com
+*	Copyright (C), 2015-2016, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -53,11 +53,11 @@
 #ifdef HARD_SPI
 	#define SPI_HARD	SPI1
 	#define RCC_SPI		RCC_APB2Periph_SPI1
-	
+
 	/* SPI or I2S mode selection masks */
 	#define SPI_Mode_Select      ((uint16_t)0xF7FF)
-	#define I2S_Mode_Select      ((uint16_t)0x0800) 
-	
+	#define I2S_Mode_Select      ((uint16_t)0x0800)
+
 	/* SPI registers Masks */
 	#define CR1_CLEAR_Mask       ((uint16_t)0x3040)
 	#define I2SCFGR_CLEAR_Mask   ((uint16_t)0xF040)
@@ -83,7 +83,7 @@ void bsp_InitSPIBus(void)
 	GPIO_InitTypeDef  GPIO_InitStructure;
 
 	/* 打开GPIO时钟 */
-	RCC_APB2PeriphClockCmd(RCC_SCK | RCC_MOSI | RCC_MISO, ENABLE);	
+	RCC_APB2PeriphClockCmd(RCC_SCK | RCC_MOSI | RCC_MISO, ENABLE);
 
 	/* 配置SPI引脚SCK、MISO 和 MOSI为复用推挽模式 */
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -92,7 +92,7 @@ void bsp_InitSPIBus(void)
 	GPIO_Init(PORT_SCK, &GPIO_InitStructure);
 
 	GPIO_InitStructure.GPIO_Pin = PIN_MOSI;
-	GPIO_Init(PORT_MOSI, &GPIO_InitStructure);	
+	GPIO_Init(PORT_MOSI, &GPIO_InitStructure);
 
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;		/* MISO 设置为输入上拉 */
 	GPIO_InitStructure.GPIO_Pin = PIN_MISO;
@@ -104,27 +104,27 @@ void bsp_InitSPIBus(void)
 
 	/* 开启 SPI 时钟 */
 	//RCC_APB2PeriphClockCmd(RCC_SPI, ENABLE);
-	
+
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
-	
+
 	/* 使能 GPIO 时钟 */
-	RCC_APB2PeriphClockCmd(RCC_SCK | RCC_MOSI | RCC_MISO, ENABLE);	
+	RCC_APB2PeriphClockCmd(RCC_SCK | RCC_MOSI | RCC_MISO, ENABLE);
 
 	/* 配置 SPI引脚SCK、MISO 和 MOSI为复用推挽模式 */
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Pin = PIN_SCK;	
+	GPIO_InitStructure.GPIO_Pin = PIN_SCK;
 	GPIO_Init(PORT_SCK, &GPIO_InitStructure);
-	
-	GPIO_InitStructure.GPIO_Pin = PIN_MISO;	
+
+	GPIO_InitStructure.GPIO_Pin = PIN_MISO;
 	GPIO_Init(PORT_MISO, &GPIO_InitStructure);
 
-	GPIO_InitStructure.GPIO_Pin = PIN_MOSI;	
+	GPIO_InitStructure.GPIO_Pin = PIN_MOSI;
 	GPIO_Init(PORT_MOSI, &GPIO_InitStructure);
-		
+
 	bsp_SPI_Init(SPI_Direction_2Lines_FullDuplex | SPI_Mode_Master | SPI_DataSize_8b
-		| SPI_CPOL_Low | SPI_CPHA_1Edge | SPI_NSS_Soft | SPI_BaudRatePrescaler_64 | SPI_FirstBit_MSB);	
-	
+		| SPI_CPOL_Low | SPI_CPHA_1Edge | SPI_NSS_Soft | SPI_BaudRatePrescaler_64 | SPI_FirstBit_MSB);
+
 	/* Activate the SPI mode (Reset I2SMOD bit in I2SCFGR register) */
 	SPI_HARD->I2SCFGR &= SPI_Mode_Select;		/* 选择SPI模式，不是I2S模式 */
 
@@ -151,11 +151,11 @@ void bsp_InitSPIBus(void)
 void bsp_SPI_Init(uint16_t _cr1)
 {
 	SPI_HARD->CR1 = ((SPI_HARD->CR1 & CR1_CLEAR_Mask) | _cr1);
-	  
-	//SPI_Cmd(SPI_HARD, DISABLE);			/* 先禁止SPI  */	    
+
+	//SPI_Cmd(SPI_HARD, DISABLE);			/* 先禁止SPI  */
     SPI_HARD->CR1 &= CR1_SPE_Reset;	/* Disable the selected SPI peripheral */
 
-	//SPI_Cmd(SPI_HARD, ENABLE);			/* 使能SPI  */		    
+	//SPI_Cmd(SPI_HARD, ENABLE);			/* 使能SPI  */
     SPI_HARD->CR1 |= CR1_SPE_Set;	  /* Enable the selected SPI peripheral */
 }
 #endif
@@ -431,4 +431,4 @@ void bsp_SetSpiSck(uint8_t _data)
 #endif
 
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

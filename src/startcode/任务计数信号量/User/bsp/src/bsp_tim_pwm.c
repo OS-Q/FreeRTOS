@@ -12,7 +12,7 @@
 *		V1.2	2015-05-08 armfly  解决TIM8不能输出PWM的问题。
 *		V1.3	2015-07-30 armfly  增加反相引脚输出PWM函数 bsp_SetTIMOutPWM_N();
 *
-*	Copyright (C), 2015-2016, 安富莱电子 www.armfly.com
+*	Copyright (C), 2015-2016, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -26,10 +26,10 @@
 	PA0  TIM5_CH2  TIM2_CH2
 	PA2  TIM5_CH3  TIM2_CH3
 	PA3  TIM5_CH4  TIM2_CH4
-	
+
 	PA6  TIM3_CH1
 	PA7  TIM3_CH2
-	
+
 	PB0  TIM3_CH3
 	PB1  TIM3_CH4
 
@@ -38,30 +38,30 @@
 	PE13  TIM1_CH3
 
 	PE14  TIM1_CH4
-	
+
 	PD12	TIM4_CH1
 	PD13	TIM4_CH2
 	PD14	TIM4_CH3
-	PD15	TIM4_CH4	
-	
+	PD15	TIM4_CH4
+
 	PC6		TIM8_CH1
 	PC7		TIM8_CH2
 	PC8		TIM8_CH3
-	PC9		TIM8_CH4	
-	
+	PC9		TIM8_CH4
+
 	PA8		TIM1_CH1
 	PA9		TIM1_CH2
 	PA10	TIM1_CH3
-	PA11	TIM1_CH4	
+	PA11	TIM1_CH4
 
 	PB3		TIM2_CH2
 	PB4		TIM3_CH1
 	PB5		TIM3_CH2
-	
+
 	PB6		TIM4_CH1
-	PB7		TIM4_CH2	
+	PB7		TIM4_CH2
 	PB8		TIM4_CH3
-	PB9		TIM4_CH4		
+	PB9		TIM4_CH4
 
 	APB1 定时器有 TIM2, TIM3 ,TIM4, TIM5, TIM6, TIM7        --- 36M
 	APB2 定时器有 TIM1, TIM8                    ---- 72M
@@ -220,7 +220,7 @@ void bsp_ConfigTimGpio(GPIO_TypeDef* GPIOx, uint16_t GPIO_PinX, TIM_TypeDef* TIM
 	GPIO_InitStructure.GPIO_Pin = GPIO_PinX;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;		/* 复用功能 */
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOx, &GPIO_InitStructure); 
+	GPIO_Init(GPIOx, &GPIO_InitStructure);
 }
 
 /*
@@ -266,24 +266,24 @@ void bsp_SetTIMOutPWM(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, TIM_TypeDef* TIMx,
 	uint32_t uiTIMxCLK;
 
 	if (_ulDutyCycle == 0)
-	{		
+	{
 		TIM_Cmd(TIMx, DISABLE);		/* 关闭PWM输出 */
-		bsp_ConfigGpioOut(GPIOx, GPIO_Pin);	/* 配置GPIO为推挽输出 */		
-		GPIO_WriteBit(GPIOx, GPIO_Pin, Bit_RESET);	/* PWM = 0 */		
+		bsp_ConfigGpioOut(GPIOx, GPIO_Pin);	/* 配置GPIO为推挽输出 */
+		GPIO_WriteBit(GPIOx, GPIO_Pin, Bit_RESET);	/* PWM = 0 */
 		return;
 	}
 	else if (_ulDutyCycle == 10000)
 	{
 		TIM_Cmd(TIMx, DISABLE);		/* 关闭PWM输出 */
 
-		bsp_ConfigGpioOut(GPIOx, GPIO_Pin);	/* 配置GPIO为推挽输出 */		
-		GPIO_WriteBit(GPIOx, GPIO_Pin, Bit_SET);	/* PWM = 1 */	
+		bsp_ConfigGpioOut(GPIOx, GPIO_Pin);	/* 配置GPIO为推挽输出 */
+		GPIO_WriteBit(GPIOx, GPIO_Pin, Bit_SET);	/* PWM = 1 */
 		return;
 	}
-	
+
 
 	bsp_ConfigTimGpio(GPIOx, GPIO_Pin, TIMx, _ucChannel);	/* 使能GPIO和TIM时钟，并连接TIM通道到GPIO */
-	
+
     /*-----------------------------------------------------------------------
 		system_stm32f4xx.c 文件中 void SetSysClock(void) 函数对时钟的配置如下：
 
@@ -329,22 +329,22 @@ void bsp_SetTIMOutPWM(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, TIM_TypeDef* TIMx,
 	TIM_TimeBaseStructure.TIM_Prescaler = usPrescaler;
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
-	TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;	
+	TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
 	TIM_TimeBaseInit(TIMx, &TIM_TimeBaseStructure);
 
 	/* PWM1 Mode configuration: Channel1 */
 	TIM_OCStructInit(&TIM_OCInitStructure);		/* 初始化结构体成员 */
-	
+
 	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
 	TIM_OCInitStructure.TIM_Pulse = (_ulDutyCycle * usPeriod) / 10000;
 	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
-	
-	TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Disable;	/* only for TIM1 and TIM8. */	
-	TIM_OCInitStructure.TIM_OCNPolarity = TIM_OCNPolarity_High;			/* only for TIM1 and TIM8. */		
+
+	TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Disable;	/* only for TIM1 and TIM8. */
+	TIM_OCInitStructure.TIM_OCNPolarity = TIM_OCNPolarity_High;			/* only for TIM1 and TIM8. */
 	TIM_OCInitStructure.TIM_OCIdleState = TIM_OCIdleState_Reset;		/* only for TIM1 and TIM8. */
 	TIM_OCInitStructure.TIM_OCNIdleState = TIM_OCNIdleState_Reset;		/* only for TIM1 and TIM8. */
-	
+
 	if (_ucChannel == 1)
 	{
 		TIM_OC1Init(TIMx, &TIM_OCInitStructure);
@@ -398,24 +398,24 @@ void bsp_SetTIMOutPWM_N(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, TIM_TypeDef* TIM
 	uint32_t uiTIMxCLK;
 
 	if (_ulDutyCycle == 0)
-	{		
+	{
 		TIM_Cmd(TIMx, DISABLE);		/* 关闭PWM输出 */
-		bsp_ConfigGpioOut(GPIOx, GPIO_Pin);	/* 配置GPIO为推挽输出 */		
-		GPIO_WriteBit(GPIOx, GPIO_Pin, Bit_RESET);	/* PWM = 0 */		
+		bsp_ConfigGpioOut(GPIOx, GPIO_Pin);	/* 配置GPIO为推挽输出 */
+		GPIO_WriteBit(GPIOx, GPIO_Pin, Bit_RESET);	/* PWM = 0 */
 		return;
 	}
 	else if (_ulDutyCycle == 10000)
 	{
 		TIM_Cmd(TIMx, DISABLE);		/* 关闭PWM输出 */
 
-		bsp_ConfigGpioOut(GPIOx, GPIO_Pin);	/* 配置GPIO为推挽输出 */		
-		GPIO_WriteBit(GPIOx, GPIO_Pin, Bit_SET);	/* PWM = 1 */	
+		bsp_ConfigGpioOut(GPIOx, GPIO_Pin);	/* 配置GPIO为推挽输出 */
+		GPIO_WriteBit(GPIOx, GPIO_Pin, Bit_SET);	/* PWM = 1 */
 		return;
 	}
-	
+
 
 	bsp_ConfigTimGpio(GPIOx, GPIO_Pin, TIMx, _ucChannel);	/* 使能GPIO和TIM时钟，并连接TIM通道到GPIO */
-	
+
     /*-----------------------------------------------------------------------
 		system_stm32f4xx.c 文件中 void SetSysClock(void) 函数对时钟的配置如下：
 
@@ -461,22 +461,22 @@ void bsp_SetTIMOutPWM_N(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, TIM_TypeDef* TIM
 	TIM_TimeBaseStructure.TIM_Prescaler = usPrescaler;
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
-	TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;	
+	TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
 	TIM_TimeBaseInit(TIMx, &TIM_TimeBaseStructure);
 
 	/* PWM1 Mode configuration: Channel1 */
 	TIM_OCStructInit(&TIM_OCInitStructure);		/* 初始化结构体成员 */
-	
+
 	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Disable;		/* 和 bsp_SetTIMOutPWM_N() 不同 */
 	TIM_OCInitStructure.TIM_Pulse = (_ulDutyCycle * usPeriod) / 10000;
 	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
-	
-	TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Enable;		/* only for TIM1 and TIM8. */	
-	TIM_OCInitStructure.TIM_OCNPolarity = TIM_OCNPolarity_High;			/* only for TIM1 and TIM8. */		
+
+	TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Enable;		/* only for TIM1 and TIM8. */
+	TIM_OCInitStructure.TIM_OCNPolarity = TIM_OCNPolarity_High;			/* only for TIM1 and TIM8. */
 	TIM_OCInitStructure.TIM_OCIdleState = TIM_OCIdleState_Reset;		/* only for TIM1 and TIM8. */
 	TIM_OCInitStructure.TIM_OCNIdleState = TIM_OCNIdleState_Reset;		/* only for TIM1 and TIM8. */
-	
+
 	if (_ucChannel == 1)
 	{
 		TIM_OC1Init(TIMx, &TIM_OCInitStructure);
@@ -570,19 +570,19 @@ void bsp_SetTIMforInt(TIM_TypeDef* TIMx, uint32_t _ulFreq, uint8_t _PreemptionPr
 			NVIC_InitStructure.NVIC_IRQChannelSubPriority = _SubPriority;
 			NVIC_InitStructure.NVIC_IRQChannelCmd = DISABLE;
 			NVIC_Init(&NVIC_InitStructure);
-		}		
+		}
 		return;
 	}
 
     /*-----------------------------------------------------------------------
 		system_stm32f4xx.c 文件中 static void SetSysClockToHSE(void) 函数对时钟的配置如下：
 
-			//HCLK = SYSCLK 
+			//HCLK = SYSCLK
 			RCC->CFGR |= (uint32_t)RCC_CFGR_HPRE_DIV1;
-			  
+
 			//PCLK2 = HCLK
 			RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE2_DIV1;
-			
+
 			//PCLK1 = HCLK
 			RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE1_DIV1;
 
@@ -663,4 +663,4 @@ void bsp_SetTIMforInt(TIM_TypeDef* TIMx, uint32_t _ulFreq, uint8_t _PreemptionPr
 	}
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

@@ -10,7 +10,7 @@
 *		版本号  日期       作者    说明
 *		v1.0    2015-08-08 armfly  首版
 *
-*	Copyright (C), 2015-2016, 安富莱电子 www.armfly.com
+*	Copyright (C), 2015-2016, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -23,11 +23,11 @@ typedef struct
 {
 	uint16_t Year;
 	uint8_t Mon;
-	uint8_t Day;	
-	uint8_t Hour;		
-	uint8_t Min;				
-	uint8_t Sec;					
-	uint8_t Week;	
+	uint8_t Day;
+	uint8_t Hour;
+	uint8_t Min;
+	uint8_t Sec;
+	uint8_t Week;
 }RTC_T;
 
 void bsp_InitRTC(void);
@@ -39,5 +39,5 @@ extern RTC_T g_tRTC;
 
 #endif
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/
 

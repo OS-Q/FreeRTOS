@@ -10,7 +10,7 @@
 *		版本号  日期         作者     说明
 *		V1.0    2014-02-12   armfly  正式发布
 *
-*	Copyright (C), 2013-2014, 安富莱电子 www.armfly.com
+*	Copyright (C), 2013-2014, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -20,10 +20,10 @@
 	1. 开机执行1次 bsp_InitPS2() 配置GPIO
 	2. 执行 PS2_StartWork() 打开PS2中断
 	3. 每ms调用 PS2_Timer().  在bsp.c 中bsp_RunPer10ms() 函数中增加调用即可。
-	4. 不需要PS2功能时, 调用 PS2_StopWork() 关闭中断。	
-	
+	4. 不需要PS2功能时, 调用 PS2_StopWork() 关闭中断。
+
 	PC13 启用了EXIT 下降沿中断。
-	
+
 	RCC_APB2Periph_SYSCFG时钟忘记打开，导致PC、PE端口中断混乱（目前测试发现PC、PE有这个问题）
 */
 
@@ -57,8 +57,8 @@ typedef struct
 	char * str;
 }KB_STR_T;
 
-static const KB_STR_T s_KeyNameTab[] = 
-{	
+static const KB_STR_T s_KeyNameTab[] =
+{
 	{0xEEEEEEEE, ""},
 
     {KB_A, "A"},
@@ -165,7 +165,7 @@ static const KB_STR_T s_KeyNameTab[] =
     {KB_COMMA, ","},	/* 逗号 */
     {KB_DOT, "."},		/* 小数点 */
     {KB_DIV, "/"},		/* 除号 */
-	
+
 	{0, ""}		/* 查表结束标志 */
 };
 
@@ -202,7 +202,7 @@ void bsp_InitPS2(void)
 
 	GPIO_InitStructure.GPIO_Pin = PIN_PS2_DATA;
 	GPIO_Init(PORT_PS2_DATA, &GPIO_InitStructure);
-	
+
 	g_tPS2.TxTimeOut = 0;
 	g_tPS2.RxTimeOut = 0;
 }
@@ -224,7 +224,7 @@ void PS2_StartWork(void)
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);  /* Enable AFIO clock */
 
 	/* Connect EXTI13 Line to PC13 pin */
-	GPIO_EXTILineConfig(GPIO_PortSourceGPIOC, GPIO_PinSource13);	
+	GPIO_EXTILineConfig(GPIO_PortSourceGPIOC, GPIO_PinSource13);
 
 	/* 配置 EXTI LineXXX */
 	EXTI_InitStructure.EXTI_Line = EXTI_Line13;
@@ -334,26 +334,26 @@ void PS2_Timer(void)
 				if (PS2_HookKeyboard(value))
 				{
 					if (g_tPS2.LedReq < 2)	/* 主机给键盘发送命令阶段 不将键盘的应答消息送往应用层 */
-					{					
+					{
 						PS2_PutMsg(value);	/* 将按键代码放入FIFO, 交给应用层处理 */
 					}
 				}
 			}
 		}
 	}
-	
+
 	/* 给键盘发送命令，控制键盘的指示灯 */
 	if (g_tPS2.LedReq > 0)
 	{
 		g_tPS2.LedReq++;
 		if (g_tPS2.LedReq == 2)
-		{			
+		{
 			PS2_SendCmd(0xED);				/* 发送指令第1字节 -- 修改LED状态  */
 		}
 		else if (g_tPS2.LedReq == 7)
 		{
 			PS2_SendCmd(g_tPS2.LedData);	/* 延迟5ms 发送指令第2字节 -- 指示灯状态 */
-		}		
+		}
 		else if (g_tPS2.LedReq == 17)		/* 再延迟10ms, 等键盘的应答完成后退出 */
 		{
 			g_tPS2.LedReq = 0;
@@ -468,21 +468,21 @@ const char * GetNameOfKey(uint32_t _code)
 {
 	uint16_t i = 0;
 
-	
+
 	while (1)
-	{		
+	{
 		if (s_KeyNameTab[i].code == 0)
 		{
 			break;
 		}
-		
+
 		if (_code == s_KeyNameTab[i].code)
 		{
 			return s_KeyNameTab[i].str;
 		}
 		i++;
 	}
-	
+
 	return "";
 }
 
@@ -594,7 +594,7 @@ static void PS2_SendCmd(uint8_t _byte)
 	PS2_CLK_1();		/* 释放Clock线 */
 
 	/* 后面的过程有CLK下降沿中断服务程序完成 */
-	
+
 }
 
 /*
@@ -652,12 +652,12 @@ uint8_t PS2_GetDevceType(void)
 
 	for (i = 0; i < 3; i++)
 	{
-		/* 主板和PS2设备同时上电时，设备内部可能正在初始化，因此需要等待 */		
+		/* 主板和PS2设备同时上电时，设备内部可能正在初始化，因此需要等待 */
 		PS2_SendCmd(0xFF);
 		ps2_printf("   Host   : %X\r\n", 0xFF);
 		if (PS2_WaitMsg(&Rsp, 20))	/* 20ms 超时 */
 		{
-			ps2_printf("   Device : %X\r\n", Rsp);			
+			ps2_printf("   Device : %X\r\n", Rsp);
 			if (Rsp == 0xFA)
 			{
 				if (PS2_WaitMsg(&Rsp, 1000))
@@ -732,10 +732,10 @@ void PS2_SetKeyboardLed(uint8_t _id, uint8_t _on)
 		data |= (1 << 0);
 	}
 
-#if 1	/* 在 systick ms中断服务程序中被执行 */	
+#if 1	/* 在 systick ms中断服务程序中被执行 */
 	g_tPS2.LedReq = 1;
 	g_tPS2.LedData = data;
-#else	
+#else
 	ps2_printf("Host : %02X",0xED);
 	PS2_SendCmd(0xED);
 	if (PS2_WaitMsg(&Rsp, 20))
@@ -748,7 +748,7 @@ void PS2_SetKeyboardLed(uint8_t _id, uint8_t _on)
 	{
 		ps2_printf("   KeyBoard : %X\r\n",Rsp);
 	}
-#endif	
+#endif
 }
 
 /*
@@ -1132,7 +1132,7 @@ void PS2_ISR(void)
 		{
 			case 0:					/* 起始位 */
 				g_tPS2.TxTimeOut = 0;
-			
+
 				g_tPS2.Status = 2;
 				s_1Bits = 0;
 				s_Pos = 0;
@@ -1205,11 +1205,11 @@ void EXTI15_10_IRQHandler(void)
 	if (EXTI_GetITStatus(EXTI_Line13) != RESET)
 	{
 		PS2_ISR();	/* PS2键盘中断服务程序 */
-		
+
 		EXTI_ClearFlag(EXTI_Line13);
 		EXTI_ClearITPendingBit(EXTI_Line13);		/* 清除中断标志位 */
 	}
 }
 #endif
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

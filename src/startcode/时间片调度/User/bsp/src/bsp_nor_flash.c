@@ -11,7 +11,7 @@
 *		V1.0    2013-02-01  armfly  正式发布
 *		V1.1	2015-08-03  armfly  修改NOR_ReadBuffer()的BUG
 *
-*	Copyright (C), 2015-2016, 安富莱电子 www.armfly.com
+*	Copyright (C), 2015-2016, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -54,7 +54,7 @@ void bsp_InitNorFlash(void)
 	FSMC_NORSRAMTimingInitTypeDef  p;
 	GPIO_InitTypeDef GPIO_InitStructure;
 
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD | RCC_APB2Periph_GPIOE | 
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD | RCC_APB2Periph_GPIOE |
 						 RCC_APB2Periph_GPIOF | RCC_APB2Periph_GPIOG, ENABLE);
 
 	/*-- GPIO Configuration ------------------------------------------------------*/
@@ -77,7 +77,7 @@ void bsp_InitNorFlash(void)
 	GPIO_Init(GPIOF, &GPIO_InitStructure);
 
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 |
-								GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5;                            
+								GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5;
 	GPIO_Init(GPIOG, &GPIO_InitStructure);
 
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_12 | GPIO_Pin_13;
@@ -288,7 +288,7 @@ void NOR_StartEraseChip(void)
 	NOR_WRITE(ADDR_SHIFT(0x0555), 0x00AA);
 	NOR_WRITE(ADDR_SHIFT(0x02AA), 0x0055);
 	NOR_WRITE(ADDR_SHIFT(0x0555), 0x0010);
-	
+
 	NOR_GetStatus(1000);
 }
 
@@ -306,7 +306,7 @@ uint8_t NOR_CheckStatus(void)
 	uint16_t val2 = 0x00;
 	uint8_t status = NOR_ONGOING;
 	uint32_t timeout = 10;
-	
+
 	/*
 		- DQ 6 编程时跳变
 		- DQ 6 和 DQ 2 在擦除时跳变
@@ -502,7 +502,7 @@ uint8_t NOR_WriteByte(uint32_t _uiWriteAddr, uint8_t _ucByte)
 
 /*
 *********************************************************************************************************
-*	函 数 名: NOR_WriteInPage.    
+*	函 数 名: NOR_WriteInPage.
 *	功能说明: 页面内编程（64字节一个页面）. 编程前需要保证存储单元是全0xFF状态。可以重复编程相同的数据。
 *	形    参: 	pBuffer : 数据存放在此缓冲区
 *				_uiWriteAddr : 偏移地址, 必须是偶数开始
@@ -522,17 +522,17 @@ uint8_t NOR_WriteInPage(uint16_t *pBuffer, uint32_t _uiWriteAddr,  uint16_t _usN
 		写入缓冲器编程允许系统在一个编程操作中写入最多32 个字。与标准的“ 字” 编程算法相比，这可以有效地
 		加快字编程速度。
 	*/
-	
+
 	if (_usNumHalfword > 32)
 	{
 		return NOR_ERROR;
 	}
-	
+
 	if ((_uiWriteAddr % 2) != 0)
 	{
 		return NOR_ERROR;
 	}
-	
+
 	_uiWriteAddr = _uiWriteAddr / 2;
 
 	currentaddress = _uiWriteAddr;
@@ -633,4 +633,4 @@ err_quit:
 	return 	ucStatus;
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

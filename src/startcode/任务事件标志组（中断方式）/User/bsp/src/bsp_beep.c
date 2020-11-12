@@ -10,7 +10,7 @@
 *		版本号  日期        作者     说明
 *		V1.0    2014-10-20 armfly  正式发布
 *
-*	Copyright (C), 2014-2015, 安富莱电子 www.armfly.com
+*	Copyright (C), 2014-2015, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -59,7 +59,7 @@ void BEEP_InitHard(void)
 	BEEP_DISABLE();
 
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;	/* 推挽输出模式 */	
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;	/* 推挽输出模式 */
 	GPIO_InitStructure.GPIO_Pin = GPIO_PIN_BEEP;
 	GPIO_Init(GPIO_PORT_BEEP, &GPIO_InitStructure);
 #endif
@@ -180,4 +180,4 @@ void BEEP_Pro(void)
 	}
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

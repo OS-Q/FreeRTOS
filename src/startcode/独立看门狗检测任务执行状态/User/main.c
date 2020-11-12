@@ -43,12 +43,12 @@
 *                   (3). 简单的说就是为了检测任务的执行转态，我们设置每个任务10s内必须发一
 *                        次事件标志以此来表示任务在执行。如果10s内有一个任务没有发来消息
 *                        ，系统会被复位。
-*                   (4). 等待事件标志的任务：	
-*		                 uxBits = xEventGroupWaitBits(xCreatedEventGroup, 
-*							                          TASK_BIT_ALL,       
-*							                          pdTRUE,             
-*							                          pdTRUE,            
-*							                          xTicksToWait); 	             
+*                   (4). 等待事件标志的任务：
+*		                 uxBits = xEventGroupWaitBits(xCreatedEventGroup,
+*							                          TASK_BIT_ALL,
+*							                          pdTRUE,
+*							                          pdTRUE,
+*							                          xTicksToWait);
 *				    其它四个发送事件标志的任务：
 *		            xEventGroupSetBits(xCreatedEventGroup, TASK_BIT_0);
 *		            xEventGroupSetBits(xCreatedEventGroup, TASK_BIT_1);
@@ -67,7 +67,7 @@
 *                                        2. BSP驱动包V1.2
 *                                        3. FreeRTOS版本V8.2.2
 *
-*	Copyright (C), 2015-2020, 安富莱电子 www.armfly.com
+*	Copyright (C), 2015-2020, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -117,17 +117,17 @@ static EventGroupHandle_t xCreatedEventGroup = NULL;
 int main(void)
 {
 	/* 硬件初始化初始化 */
-	bsp_Init(); 
+	bsp_Init();
 
 	/* 初始化一个定时器中断，精度高于滴答定时器中断，这样才可以获得准确的系统信息 */
 	vSetupSysInfoTest();
-	
+
 	/* 创建任务 */
 	AppTaskCreate();
-	
+
 	/* 创建任务通信机制 */
 	AppObjCreate();
-	
+
     /* 启动调度，开始执行任务 */
     vTaskStartScheduler();
 
@@ -138,7 +138,7 @@ int main(void)
 /*
 *********************************************************************************************************
 *	函 数 名: vTaskTaskUserIF
-*	功能说明: 按键消息处理		
+*	功能说明: 按键消息处理
 *	形    参: pvParameters 是在创建该任务时传递的形参
 *	返 回 值: 无
 *   优 先 级: 1  (数值越小优先级越低，这个跟uCOS相反)
@@ -153,7 +153,7 @@ static void vTaskTaskUserIF(void *pvParameters)
     while(1)
     {
 		ucKeyCode = bsp_GetKey();
-		
+
 		if (ucKeyCode != KEY_NONE)
 		{
 			switch (ucKeyCode)
@@ -164,12 +164,12 @@ static void vTaskTaskUserIF(void *pvParameters)
 					printf("任务名      任务状态 优先级   剩余栈 任务序号\r\n");
 					vTaskList((char *)&pcWriteBuffer);
 					printf("%s\r\n", pcWriteBuffer);
-				
+
 					printf("\r\n任务名       运行计数         使用率\r\n");
 					vTaskGetRunTimeStats((char *)&pcWriteBuffer);
 					printf("%s\r\n", pcWriteBuffer);
 					break;
-				
+
 				/* K2按键按下，让vTaskTaskUserIF任务延迟20s，以实现看门狗复位情况 */
 				case KEY_DOWN_K2:
 					printf("K2按键按下，让vTaskTaskUserIF任务延迟20s，以实现看门狗复位情况\r\n");
@@ -177,14 +177,14 @@ static void vTaskTaskUserIF(void *pvParameters)
 					break;
 
 				/* 其他的键值不处理 */
-				default:                     
+				default:
 					break;
 			}
 		}
-		
+
 		/* 发送事件标志，表示任务正常运行 */
 		xEventGroupSetBits(xCreatedEventGroup, TASK_BIT_0);
-		
+
 		vTaskDelay(10);
 	}
 }
@@ -195,7 +195,7 @@ static void vTaskTaskUserIF(void *pvParameters)
 *	功能说明: LED闪烁
 *	形    参: pvParameters 是在创建该任务时传递的形参
 *	返 回 值: 无
-*   优 先 级: 2  
+*   优 先 级: 2
 *********************************************************************************************************
 */
 static void vTaskLED(void *pvParameters)
@@ -205,15 +205,15 @@ static void vTaskLED(void *pvParameters)
 
 	/* 获取当前的系统时间 */
     xLastWakeTime = xTaskGetTickCount();
-	
+
     while(1)
     {
        	bsp_LedToggle(2);
 		bsp_LedToggle(3);
-		
+
 		/* 发送事件标志，表示任务正常运行 */
 		xEventGroupSetBits(xCreatedEventGroup, TASK_BIT_1);
-		
+
 		/* vTaskDelayUntil是绝对延迟，vTaskDelay是相对延迟。*/
         vTaskDelayUntil(&xLastWakeTime, xFrequency);
     }
@@ -225,7 +225,7 @@ static void vTaskLED(void *pvParameters)
 *	功能说明: LED闪烁
 *	形    参: pvParameters 是在创建该任务时传递的形参
 *	返 回 值: 无
-*   优 先 级: 3  
+*   优 先 级: 3
 *********************************************************************************************************
 */
 static void vTaskMsgPro(void *pvParameters)
@@ -235,15 +235,15 @@ static void vTaskMsgPro(void *pvParameters)
 
 	/* 获取当前的系统时间 */
     xLastWakeTime = xTaskGetTickCount();
-	
+
     while(1)
     {
        	bsp_LedToggle(1);
 		bsp_LedToggle(4);
-		
+
 		/* 发送事件标志，表示任务正常运行 */
 		xEventGroupSetBits(xCreatedEventGroup, TASK_BIT_2);
-		
+
 		/* vTaskDelayUntil是绝对延迟，vTaskDelay是相对延迟。*/
         vTaskDelayUntil(&xLastWakeTime, xFrequency);
     }
@@ -255,7 +255,7 @@ static void vTaskMsgPro(void *pvParameters)
 *	功能说明: 按键扫描
 *	形    参: pvParameters 是在创建该任务时传递的形参
 *	返 回 值: 无
-*   优 先 级: 4  
+*   优 先 级: 4
 *********************************************************************************************************
 */
 static void vTaskScan(void *pvParameters)
@@ -264,7 +264,7 @@ static void vTaskScan(void *pvParameters)
     {
 		/* 按键扫描 */
 		bsp_KeyScan();
-		
+
 		/* 发送事件标志，表示任务正常运行 */
 		xEventGroupSetBits(xCreatedEventGroup, TASK_BIT_3);
         vTaskDelay(10);
@@ -277,26 +277,26 @@ static void vTaskScan(void *pvParameters)
 *	功能说明: 启动任务，也就是最高优先级任务。
 *	形    参: pvParameters 是在创建该任务时传递的形参
 *	返 回 值: 无
-*   优 先 级: 5  
+*   优 先 级: 5
 *********************************************************************************************************
 */
 static void vTaskStart(void *pvParameters)
 {
 	EventBits_t uxBits;
 	const TickType_t xTicksToWait = 100 / portTICK_PERIOD_MS; /* 最大延迟100ms */
-	
-	/* 
+
+	/*
 	  开始执行启动任务主函数前使能独立看门狗。
 	  设置LSI是128分频，下面函数参数范围0-0xFFF，分别代表最小值3.2ms和最大值13107.2ms
 	  下面设置的是10s，如果10s内没有喂狗，系统复位。
 	*/
 	bsp_InitIwdg(0xC35);
-	
+
 	/* 打印系统开机状态，方便查看系统是否复位 */
 	printf("=====================================================\r\n");
 	printf("=系统开机执行\r\n");
 	printf("=====================================================\r\n");
-	
+
     while(1)
     {
 		/* 等待所有任务发来事件标志 */
@@ -305,7 +305,7 @@ static void vTaskStart(void *pvParameters)
 							         pdTRUE,             /* 退出前TASK_BIT_ALL被清除，这里是TASK_BIT_ALL都被设置才表示“退出”*/
 							         pdTRUE,             /* 设置为pdTRUE表示等待TASK_BIT_ALL都被设置*/
 							         xTicksToWait); 	 /* 等待延迟时间 */
-		
+
 		if((uxBits & TASK_BIT_ALL) == TASK_BIT_ALL)
 		{
 			IWDG_Feed();
@@ -336,30 +336,30 @@ static void AppTaskCreate (void)
                     NULL,              /* 任务参数  */
                     1,                 /* 任务优先级*/
                     NULL );            /* 任务句柄  */
-	
-	
+
+
 	xTaskCreate(    vTaskLED,    /* 任务函数  */
                     "vTaskLED",  /* 任务名    */
                     512,         /* stack大小，单位word，也就是4字节 */
                     NULL,        /* 任务参数  */
                     2,           /* 任务优先级*/
                     &xHandleTaskLED );   /* 任务句柄  */
-	
+
 	xTaskCreate(    vTaskMsgPro,     /* 任务函数  */
                     "vTaskMsgPro",   /* 任务名    */
                     512,             /* stack大小，单位word，也就是4字节 */
                     NULL,            /* 任务参数  */
                     3,               /* 任务优先级*/
                     &xHandleTaskMsgPro );  /* 任务句柄  */
-	
-	
+
+
 	xTaskCreate(    vTaskScan,      /* 任务函数  */
                     "vTaskScan",    /* 任务名    */
                     512,            /* stack大小，单位word，也就是4字节 */
                     NULL,           /* 任务参数  */
                     4,              /* 任务优先级*/
                     NULL );         /* 任务句柄  */
-					
+
 	xTaskCreate(    vTaskStart,     /* 任务函数  */
                     "vTaskStart",   /* 任务名    */
                     512,            /* stack大小，单位word，也就是4字节 */
@@ -380,11 +380,11 @@ static void AppObjCreate (void)
 {
 	/* 创建事件标志组 */
 	xCreatedEventGroup = xEventGroupCreate();
-	
+
 	if(xCreatedEventGroup == NULL)
     {
         /* 没有创建成功，用户可以在这里加入创建失败的处理机制 */
     }
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

@@ -11,7 +11,7 @@
 *		版本号  日期        作者     说明
 *		V1.0    2013-02-01 armfly  正式发布
 *
-*	Copyright (C), 2013-2014, 安富莱电子 www.armfly.com
+*	Copyright (C), 2013-2014, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -515,10 +515,10 @@ uint8_t SI4730_GetRevision(uint8_t *_ReadBuf)
 */
 uint8_t SI4704_SetFMIntput(uint8_t _ch)
 {
-	/* AN332 - PAGE 91 
+	/* AN332 - PAGE 91
 		Property 0x1107. FM_ANTENNA_INPUT */
 
-	return SI4730_SetProperty(0x1107, _ch);	
+	return SI4730_SetProperty(0x1107, _ch);
 }
 
 /*
@@ -755,8 +755,8 @@ uint8_t SI4730_GetAMTuneStatus(uint8_t *_ReadBuf)
 		RESP5     ?0x1A          SNR = 0x1A = 26d = 26 dB
 		RESP6     ?0x0D          Value the antenna tuning capacitor is set to.
 		RESP7     ?0x95          0x0D95 = 3477 dec.
-	
-		电容计算 The tuning capacitance is 95 fF x READANTCAP + 7 pF	
+
+		电容计算 The tuning capacitance is 95 fF x READANTCAP + 7 pF
 	*/
 	uint8_t ucCmdBuf[32];
 	uint32_t uiTimeOut;
@@ -960,4 +960,4 @@ uint8_t SI4730_SetOutVolume(uint8_t _ucVolume)
 	return SI4730_SetProperty(0x4000, _ucVolume);
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

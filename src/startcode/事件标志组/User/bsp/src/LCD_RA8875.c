@@ -26,14 +26,14 @@
 *		V2.3    2014-06-27 armfly  修改 RA8875_DispBmpInFlash() , 增加对 W25Q128 (16MB) 的支持。
 *								   初始化7寸屏的分支代码中，降低RA8875的主频到75M，提高稳定性。
 *		V2.4    2014-07-05 armfly  增加屏幕旋转和镜像的函数
-*		V2.5 	2014-09-06 armfly  
+*		V2.5 	2014-09-06 armfly
 *					(1) RA8875_FillRect() 函数处理宽度和高度为0的情况.
 *					(2) RA8875_WriteReg(); RA8875_ReadReg()函数取消static限制，可供其他模块使用
 *					(3) 增加横屏、竖屏切换函数. g_LcdDirection 变量保存方向参数0-3。
 *					(4) SPI 模式，RA8875_DispStr() 增加 while(RA8875_ReadBusy()); 8080模式不能用这种方式
 *					(5) bsp_touch.c 中需要同步更改方向处理。param.c中参数结构体增加方向变量。
 *					(6) 解决 RA8875_DispBmpInFlash(), s_ucRA8875Busy 标志处理冲突的问题。
-*		V2.6 	2014-10-21 armfly  
+*		V2.6 	2014-10-21 armfly
 *					(1) g_LcdDirection 变量移到 bsp_tft_lcd.c ，因为添加了3.5寸驱动。
 *		V2.7	2014-11-09
 *					(1) 优化 RA8875_PutPixel函数
@@ -42,7 +42,7 @@
 *					  (某个批次的串行FLASH速度低), 降低PLL速度，由 81.25M修改为75MHz。
 *		V3.0	2015-04-21 armfly  修改 RA8875_SetDirection(uint8_t _ucDir)；reg_40H改为01 解决emwin下的显示问题。
 *
-*	Copyright (C), 2011-2012, 安富莱电子 www.armfly.com
+*	Copyright (C), 2011-2012, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -85,7 +85,7 @@ static void BTE_Start(void);
 uint16_t RA8875_ReadID(void)
 {
 	RA8875_ConfigGPIO();
-	
+
 	return RA8875_ReadReg(0x00);
 }
 
@@ -118,14 +118,14 @@ void RA8875_WriteReg(uint8_t _ucRegAddr, uint8_t _ucRegValue)
 uint8_t RA8875_ReadReg(uint8_t _ucRegAddr)
 {
 	uint8_t value;
-	
+
 	s_ucRA8875Busy = 1;
-	
+
 	RA8875_WriteCmd(_ucRegAddr);
 	value = RA8875_ReadData();
-	
+
 	s_ucRA8875Busy = 0;
-	return value;	
+	return value;
 }
 
 /*
@@ -153,7 +153,7 @@ uint8_t RA8875_ReadReg_Int(uint8_t _ucRegAddr)
 void RA8875_InitHard(void)
 {
 	uint8_t ucGPIX;
-	
+
 	RA8875_ConfigGPIO();	/* 配置GPIO FSMC等 */
 
 	/* 读取 RA8875 芯片额GPIX引脚的电平状态；1表示4.3寸屏；0表示7寸屏
@@ -302,7 +302,7 @@ void RA8875_InitHard(void)
 					  = 81.25MHz
 			*/
 		#endif
-		
+
 
 		/* REG[88h]或REG[89h]被设定后，为保证PLL 输出稳定，须等待一段「锁频时间」(< 100us)。*/
 	    RA8875_Delaly1ms();
@@ -442,7 +442,7 @@ void RA8875_InitHard(void)
 			0 : 当内存读取时光标位置自动加一。
 			1 : 当内存读取时光标位置不会自动加一。
 	*/
-	//RA8875_WriteReg(0x40, 0x00);	/* 选择绘图模式 */	
+	//RA8875_WriteReg(0x40, 0x00);	/* 选择绘图模式 */
 	RA8875_SetDirection(0);
 
 	/* 	REG[41h] Memory Write Control Register1 (MWCR1)
@@ -459,8 +459,8 @@ void RA8875_InitHard(void)
 	else
 	{
 		#ifdef WRTIE_SF_EN		/* 使能了字库图片芯片写功能，配置CPU的SPI接口和PWM-GPIO */
-			bsp_InitRA8875Flash();		
-		#endif	
+			bsp_InitRA8875Flash();
+		#endif
 	}
 }
 
@@ -475,9 +475,9 @@ void RA8875_InitHard(void)
 void RA8875_SetDirection(uint8_t _ucDir)
 {
 	uint8_t reg20H = 0;
-	
+
 	s_reg_40H = 0x01;
-	
+
 	if (_ucDir == 0)
 	{
 		s_reg_40H = 0x01;
@@ -498,39 +498,39 @@ void RA8875_SetDirection(uint8_t _ucDir)
 		s_reg_40H = 0x09;
 		reg20H = (1 << 3) | (0 << 2);
 	}
-	RA8875_WriteReg(0x40, s_reg_40H);	
+	RA8875_WriteReg(0x40, s_reg_40H);
 
-	/* 
-		REG[20h] Display Configuration Register (DPCR) 
+	/*
+		REG[20h] Display Configuration Register (DPCR)
 		Bit  说  明  初始值  Access
-		Bit7 
-			图层设定(Layer Control) 
+		Bit7
+			图层设定(Layer Control)
 			0 : 单图层。
 			1 : 双图层。
-		Bit3  HDIR 水平扫描方向设定(n = SEG number) 
+		Bit3  HDIR 水平扫描方向设定(n = SEG number)
 			0 : 由SEG0 到SEG(n-1)。
 			1 : 由SEG(n-1) 到SEG0。
-		Bit2 VDIR 垂直扫描方向设定(n = COM number) 
+		Bit2 VDIR 垂直扫描方向设定(n = COM number)
 			0 : 由COM0 到COM(n-1)。
 			1 : 由COM(n-1) 到COM0。
 	*/
-	RA8875_WriteReg(0x20, reg20H);	
+	RA8875_WriteReg(0x20, reg20H);
 
 	if (_ucDir > 1)	/* 竖屏  */
 	{
 		uint16_t temp;
-		
+
 		if (g_LcdHeight < g_LcdWidth)
 		{
 			temp = g_LcdHeight;
 			g_LcdHeight = g_LcdWidth;
 			g_LcdWidth = temp;
 		}
-	}		
+	}
 	else	/* 横屏 */
 	{
 		uint16_t temp;
-		
+
 		if (g_LcdHeight > g_LcdWidth)
 		{
 			temp = g_LcdHeight;
@@ -650,7 +650,7 @@ static void BTE_Start(void)
 static void BTE_Wait(void)
 {
 	uint32_t i;
-	
+
 	//while ((RA8875_ReadStatus() & 0x40) == 0x40);
 	for (i = 0; i < 100000; i++)
 	{
@@ -938,12 +938,12 @@ void RA8875_Sleep(void)
 *********************************************************************************************************
 */
 void RA8875_PutPixel(uint16_t _usX, uint16_t _usY, uint16_t _usColor)
-{	
+{
 	if (g_RA8875_IF == RA_HARD_8080_16)	/* 8080硬件总线16bit */
 	{
 		// 优化 RA8875_SetCursor(_usX, _usY);
 		s_ucRA8875Busy = 1;
-		{	
+		{
 			if (g_LcdDirection > 1)	/* 竖屏  */
 			{
 				RA8875_REG = 0x46; RA8875_RAM = _usY;
@@ -956,13 +956,13 @@ void RA8875_PutPixel(uint16_t _usX, uint16_t _usY, uint16_t _usColor)
 				RA8875_REG = 0x46; RA8875_RAM = _usX;
 				RA8875_REG = 0x47; RA8875_RAM = _usX >> 8;
 				RA8875_REG = 0x48; RA8875_RAM = _usY;
-				RA8875_REG = 0x49; RA8875_RAM = _usY >> 8;	
+				RA8875_REG = 0x49; RA8875_RAM = _usY >> 8;
 			}
 		}
-		
+
 		// 优化 RA8875_WriteCmd(0x02); 		/* 用于设定RA8875 进入内存(DDRAM或CGRAM)读取/写入模式 */
 		// 优化 RA8875_WriteData16(_usColor);
-		
+
 		RA8875_REG = 0x02;
 		RA8875_RAM = _usColor;
 
@@ -1091,24 +1091,24 @@ void RA8875_DispBmpInFlash(uint16_t _usX, uint16_t _usY, uint16_t _usHeight, uin
 			10b: 双倍模式0。
 			11b: 双倍模式1。
 	*/
-	
+
 	/* 对于铁框屏，一片 W25Q128，前面2MB是字库。后面14MB是图片 */
 	if (g_tW25.ChipID == W25Q128)
 	{
-		_uiFlashAddr += PIC_OFFSET;	/* 前面2MB分配给字库 */	
+		_uiFlashAddr += PIC_OFFSET;	/* 前面2MB分配给字库 */
 		#ifdef FLASH_DUAL_SPEED_EN			/* 双速模式， MOSI和MISO同时读取数据 */
 			RA8875_WriteReg(0x05, (0 << 7) | (0 << 6) | (1 << 5) | (0 << 3) | (1 << 2) | (2 << 0));
 		#else				/* 普通模式，仅 MISO 读取数据 */
 			RA8875_WriteReg(0x05, (0 << 7) | (0 << 6) | (1 << 5) | (0 << 3) | (1 << 2) | (0 << 0));
-		#endif		
-	}	
+		#endif
+	}
 	else	/* 增强型屏，1片W25Q64(8MB)做字库，1片W25Q64(8MB)做图库 */
 	{
 		#ifdef FLASH_DUAL_SPEED_EN			/* 双速模式， MOSI和MISO同时读取数据 */
 			RA8875_WriteReg(0x05, (1 << 7) | (0 << 6) | (1 << 5) | (0 << 3) | (1 << 2) | (2 << 0));
 		#else				/* 普通模式，仅 MISO 读取数据 */
 			RA8875_WriteReg(0x05, (1 << 7) | (0 << 6) | (1 << 5) | (0 << 3) | (1 << 2) | (0 << 0));
-		#endif	
+		#endif
 	}
 
 	/*
@@ -1276,16 +1276,16 @@ void RA8875_DrawLine(uint16_t _usX1 , uint16_t _usY1 , uint16_t _usX2 , uint16_t
 	if (g_LcdDirection > 1)	/* 竖屏  */
 	{
 		uint16_t temp;
-		
+
 		temp = _usX1;
 		_usX1 = _usY1;
 		_usY1 = temp;
 
 		temp = _usX2;
 		_usX2 = _usY2;
-		_usY2 = temp;		
+		_usY2 = temp;
 	}
-	
+
 	/* 设置起点坐标 */
 	RA8875_WriteReg(0x91, _usX1);
 	RA8875_WriteReg(0x92, _usX1 >> 8);
@@ -1341,14 +1341,14 @@ void RA8875_DrawRect(uint16_t _usX, uint16_t _usY, uint16_t _usHeight, uint16_t 
 	if (g_LcdDirection > 1)	/* 竖屏  */
 	{
 		uint16_t temp;
-		
+
 		temp = _usX;
 		_usX = _usY;
 		_usY = temp;
 
 		temp = _usHeight;
 		_usHeight = _usWidth;
-		_usWidth = temp;		
+		_usWidth = temp;
 	}
 
 	/* 设置起点坐标 */
@@ -1411,16 +1411,16 @@ void RA8875_FillRect(uint16_t _usX, uint16_t _usY, uint16_t _usHeight, uint16_t 
 	if (g_LcdDirection > 1)	/* 竖屏  */
 	{
 		uint16_t temp;
-		
+
 		temp = _usX;
 		_usX = _usY;
 		_usY = temp;
-		
+
 		temp = _usHeight;
 		_usHeight = _usWidth;
 		_usWidth = temp;
 	}
-	
+
 	/* 设置起点坐标 */
 	RA8875_WriteReg(0x91, _usX);
 	RA8875_WriteReg(0x92, _usX >> 8);
@@ -1473,12 +1473,12 @@ void RA8875_DrawCircle(uint16_t _usX, uint16_t _usY, uint16_t _usRadius, uint16_
 	if (g_LcdDirection > 1)	/* 竖屏  */
 	{
 		uint16_t temp;
-		
+
 		temp = _usX;
 		_usX = _usY;
 		_usY = temp;
 	}
-	
+
 	/* 设置圆心坐标 */
 	RA8875_WriteReg(0x99, _usX);
 	RA8875_WriteReg(0x9A, _usX >> 8);
@@ -1527,12 +1527,12 @@ void RA8875_FillCircle(uint16_t _usX, uint16_t _usY, uint16_t _usRadius, uint16_
 	if (g_LcdDirection > 1)	/* 竖屏  */
 	{
 		uint16_t temp;
-		
+
 		temp = _usX;
 		_usX = _usY;
 		_usY = temp;
 	}
-	
+
 	/* 设置圆心坐标 */
 	RA8875_WriteReg(0x99, _usX);
 	RA8875_WriteReg(0x9A, _usX >> 8);
@@ -1654,7 +1654,7 @@ void RA8875_DispAscii(uint16_t _usX, uint16_t _usY, char *_ptr)
 	(3) Font foreground and background color Select  REG[63h~65h], REG[60h~62h]
 	(4) Write the font Code  CMD_WR[02h]    DATA_WR[font_code]
 	*/
-	
+
 	RA8875_SetTextCursor(_usX, _usY);
 
 	s_reg_40H |= (1 << 7);
@@ -1712,7 +1712,7 @@ void RA8875_DispStr(uint16_t _usX, uint16_t _usY, char *_ptr)
 	RA8875_SetTextCursor(_usX, _usY);
 
 	//RA8875_SetTextZoom(0, 0);	/* for test */
-	
+
 	s_reg_40H |= (1 << 7);
 	RA8875_WriteReg(0x40, s_reg_40H);	/* 设置为文本模式 */
 
@@ -1777,7 +1777,7 @@ void RA8875_DispStr(uint16_t _usX, uint16_t _usY, char *_ptr)
 	{
 		RA8875_WriteData(*_ptr);
 		while ((RA8875_ReadStatus() & 0x80) == 0x80);
-		//while ((RA8875_ReadStatus() & 0x01) != 0);	
+		//while ((RA8875_ReadStatus() & 0x01) != 0);
 		//while(RA8875_ReadBusy());
 		_ptr++;
 	}
@@ -1883,12 +1883,12 @@ static void RA8875_SetReadCursor(uint16_t _usX, uint16_t _usY)
 	if (g_LcdDirection > 1)	/* 竖屏  */
 	{
 		uint16_t temp;
-		
+
 		temp = _usX;
 		_usX = _usY;
 		_usY = temp;
 	}
-		
+
 	/* 设置内存读光标的坐标 */
 	RA8875_WriteReg(0x4A, _usX);
 	RA8875_WriteReg(0x4B, _usX >> 8);
@@ -1909,12 +1909,12 @@ static void RA8875_SetTextCursor(uint16_t _usX, uint16_t _usY)
 	if (g_LcdDirection > 1)	/* 竖屏  */
 	{
 		uint16_t temp;
-		
+
 		temp = _usX;
 		_usX = _usY;
 		_usY = temp;
 	}
-			
+
 	/* 设置内存读光标的坐标 */
 	RA8875_WriteReg(0x2A, _usX);
 	RA8875_WriteReg(0x2B, _usX >> 8);
@@ -2016,7 +2016,7 @@ void RA8875_SetBackLight(uint8_t _bright)
 		*/
 
 		// 5寸和7寸新屏可以用 3 ，高频PWM, 4.3寸不行
-		RA8875_WriteReg(0x8A, (1 << 7) | 3);   
+		RA8875_WriteReg(0x8A, (1 << 7) | 3);
 		// RA8875_WriteReg(0x8A, (1 << 7) | 12);
 
 		/* REG[8Bh] PWM1 Duty Cycle Register (P1DCR) */
@@ -2025,4 +2025,4 @@ void RA8875_SetBackLight(uint8_t _bright)
 }
 
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

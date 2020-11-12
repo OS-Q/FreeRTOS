@@ -388,7 +388,7 @@ char BcdToChar(uint8_t _bcd)
 void HexToAscll(uint8_t * _pHex, char *_pAscii, uint16_t _BinBytes)
 {
 	uint16_t i;
-	
+
 	for (i = 0; i < _BinBytes; i++)
 	{
 		_pAscii[3 * i] = BcdToChar(_pHex[i] >> 4);
@@ -508,4 +508,4 @@ uint32_t AsciiToUint32(char *pAscii)
 	return lResult;
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

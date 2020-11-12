@@ -11,7 +11,7 @@
 *		版本号  日期         作者     说明
 *		V1.0    2014-01-17  armfly  正式发布
 *
-*	Copyright (C), 2013-2014, 安富莱电子 www.armfly.com
+*	Copyright (C), 2013-2014, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -193,7 +193,7 @@ static void DAC8501_ConfigGPIO(void)
 
 	/* 配置几个推挽输出IO */
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;	/* 推挽输出模式 */
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;	
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 
 	GPIO_InitStructure.GPIO_Pin = DAC8501_PIN_CS1;
 	GPIO_Init(DAC8501_PORT_CS1, &GPIO_InitStructure);
@@ -294,4 +294,4 @@ uint32_t DAC8501_VoltageToDac(int32_t _volt)
 
 
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

@@ -48,7 +48,7 @@
 *                                        2. BSP驱动包V1.2
 *                                        3. FreeRTOS版本V8.2.2
 *
-*	Copyright (C), 2015-2020, 安富莱电子 www.armfly.com
+*	Copyright (C), 2015-2020, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -97,17 +97,17 @@ static EventGroupHandle_t xCreatedEventGroup = NULL;
 int main(void)
 {
 	/* 硬件初始化初始化 */
-	bsp_Init(); 
-	
+	bsp_Init();
+
 	/* 初始化一个定时器中断，精度高于滴答定时器中断，这样才可以获得准确的系统信息 */
 	vSetupSysInfoTest();
-	
+
 	/* 创建任务 */
 	AppTaskCreate();
-	
+
 	/* 创建任务通信机制 */
 	AppObjCreate();
-	
+
     /* 启动调度，开始执行任务 */
     vTaskStartScheduler();
 
@@ -118,7 +118,7 @@ int main(void)
 /*
 *********************************************************************************************************
 *	函 数 名: vTaskTaskUserIF
-*	功能说明: 按键消息处理		
+*	功能说明: 按键消息处理
 *	形    参: pvParameters 是在创建该任务时传递的形参
 *	返 回 值: 无
 *   优 先 级: 1  (数值越小优先级越低，这个跟uCOS相反)
@@ -132,7 +132,7 @@ static void vTaskTaskUserIF(void *pvParameters)
     while(1)
     {
 		ucKeyCode = bsp_GetKey();
-		
+
 		if (ucKeyCode != KEY_NONE)
 		{
 			switch (ucKeyCode)
@@ -143,7 +143,7 @@ static void vTaskTaskUserIF(void *pvParameters)
 					printf("任务名      任务状态 优先级   剩余栈 任务序号\r\n");
 					vTaskList((char *)&pcWriteBuffer);
 					printf("%s\r\n", pcWriteBuffer);
-				
+
 					printf("\r\n任务名       运行计数         使用率\r\n");
 					vTaskGetRunTimeStats((char *)&pcWriteBuffer);
 					printf("%s\r\n", pcWriteBuffer);
@@ -154,20 +154,20 @@ static void vTaskTaskUserIF(void *pvParameters)
 					printf("K2键按下，启动单次定时器中断，50ms后在定时器中断给任务vTaskMsgPro发送事件标志\r\n");
 					bsp_StartHardTimer(1 ,50000, (void *)TIM_CallBack1);
 					break;
-				
+
 				/* K3键按下，启动单次定时器中断，50ms后在定时器中断给任务vTaskMsgPro发送事件标志 */
 				case KEY_DOWN_K3:
 					printf("K3键按下，启动单次定时器中断，50ms后在定时器中断给任务vTaskMsgPro发送事件标志\r\n");
 					bsp_StartHardTimer(2 ,50000, (void *)TIM_CallBack2);
-					break;				
-				
-				
+					break;
+
+
 				/* 其他的键值不处理 */
-				default:                     
+				default:
 					break;
 			}
 		}
-		
+
 		vTaskDelay(10);
 	}
 }
@@ -178,7 +178,7 @@ static void vTaskTaskUserIF(void *pvParameters)
 *	功能说明: LED闪烁
 *	形    参: pvParameters 是在创建该任务时传递的形参
 *	返 回 值: 无
-*   优 先 级: 2  
+*   优 先 级: 2
 *********************************************************************************************************
 */
 static void vTaskLED(void *pvParameters)
@@ -188,12 +188,12 @@ static void vTaskLED(void *pvParameters)
 
 	/* 获取当前的系统时间 */
     xLastWakeTime = xTaskGetTickCount();
-	
+
     while(1)
     {
        	bsp_LedToggle(2);
 		bsp_LedToggle(3);
-		
+
 		/* vTaskDelayUntil是绝对延迟，vTaskDelay是相对延迟。*/
         vTaskDelayUntil(&xLastWakeTime, xFrequency);
     }
@@ -205,14 +205,14 @@ static void vTaskLED(void *pvParameters)
 *	功能说明: 使用函数xEventGroupWaitBits接收定时器中断发送的事件标志
 *	形    参: pvParameters 是在创建该任务时传递的形参
 *	返 回 值: 无
-*   优 先 级: 3  
+*   优 先 级: 3
 *********************************************************************************************************
 */
 static void vTaskMsgPro(void *pvParameters)
 {
 	EventBits_t uxBits;
 	const TickType_t xTicksToWait = 100 / portTICK_PERIOD_MS; /* 最大延迟100ms */
-	
+
     while(1)
     {
 		/* 等K2按键按下设置bit0和K3按键按下设置bit1 */
@@ -221,7 +221,7 @@ static void vTaskMsgPro(void *pvParameters)
 							         pdTRUE,             /* 退出前bit0和bit1被清除 */
 							         pdTRUE,             /* 设置为pdTRUE表示等待bit1和bit0都被设置*/
 							         xTicksToWait); 	 /* 等待延迟时间 */
-		
+
 		if((uxBits & BIT_ALL) == BIT_ALL)
 		{
 			/* 接收到bit1和bit0都被设置的消息 */
@@ -242,7 +242,7 @@ static void vTaskMsgPro(void *pvParameters)
 *	功能说明: 启动任务，也就是最高优先级任务。
 *	形    参: pvParameters 是在创建该任务时传递的形参
 *	返 回 值: 无
-*   优 先 级: 4  
+*   优 先 级: 4
 *********************************************************************************************************
 */
 static void vTaskStart(void *pvParameters)
@@ -258,7 +258,7 @@ static void vTaskStart(void *pvParameters)
 /*
 *********************************************************************************************************
 *	函 数 名: TIM_CallBack1和TIM_CallBack2
-*	功能说明: 定时器中断的回调函数，此函数被bsp_StartHardTimer所调用。		  			  
+*	功能说明: 定时器中断的回调函数，此函数被bsp_StartHardTimer所调用。
 *	形    参: 无
 *	返 回 值: 无
 *********************************************************************************************************
@@ -267,7 +267,7 @@ static void TIM_CallBack1(void)
 {
 	BaseType_t xResult;
 	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-	
+
 	/* 向任务vTaskMsgPro发送事件标志 */
 	xResult = xEventGroupSetBitsFromISR(xCreatedEventGroup, /* 事件标志组句柄 */
 									    BIT_0 ,             /* 设置bit0 */
@@ -285,7 +285,7 @@ static void TIM_CallBack2(void)
 {
 	BaseType_t xResult;
 	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-	
+
 	/* 向任务vTaskMsgPro发送事件标志 */
 	xResult = xEventGroupSetBitsFromISR(xCreatedEventGroup, /* 事件标志组句柄 */
 									    BIT_1,              /* 设置bit1 */
@@ -315,23 +315,23 @@ static void AppTaskCreate (void)
                     NULL,              /* 任务参数  */
                     1,                 /* 任务优先级*/
                     NULL );            /* 任务句柄  */
-	
-	
+
+
 	xTaskCreate(    vTaskLED,    /* 任务函数  */
                     "vTaskLED",  /* 任务名    */
                     512,         /* stack大小，单位word，也就是4字节 */
                     NULL,        /* 任务参数  */
                     2,           /* 任务优先级*/
                     &xHandleTaskLED );   /* 任务句柄  */
-	
+
 	xTaskCreate(    vTaskMsgPro,     /* 任务函数  */
                     "vTaskMsgPro",   /* 任务名    */
                     512,             /* stack大小，单位word，也就是4字节 */
                     NULL,            /* 任务参数  */
                     3,               /* 任务优先级*/
                     &xHandleTaskMsgPro );  /* 任务句柄  */
-	
-	
+
+
 	xTaskCreate(    vTaskStart,     /* 任务函数  */
                     "vTaskStart",   /* 任务名    */
                     512,            /* stack大小，单位word，也就是4字节 */
@@ -352,11 +352,11 @@ static void AppObjCreate (void)
 {
 	/* 创建事件标志组 */
 	xCreatedEventGroup = xEventGroupCreate();
-	
+
 	if(xCreatedEventGroup == NULL)
     {
         /* 没有创建成功，用户可以在这里加入创建失败的处理机制 */
     }
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

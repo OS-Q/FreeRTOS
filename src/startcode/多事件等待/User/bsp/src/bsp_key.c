@@ -17,7 +17,7 @@
 *								   增加 K1 K2 组合键 和 K2 K3 组合键，用于系统控制
 *		V1.2    2015-08-08 armfly  K1，K2，K3独立按键进行排他判断，修改  IsKeyDown1()等函数
 *
-*	Copyright (C), 2015-2016, 安富莱电子 www.armfly.com
+*	Copyright (C), 2015-2016, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -94,7 +94,7 @@ static uint8_t IsKeyDown1(void)
 	if ((GPIO_PORT_K1->IDR & GPIO_PIN_K1) == 0 && (GPIO_PORT_K2->IDR & GPIO_PIN_K2) == 0
 		&& (GPIO_PORT_K3->IDR & GPIO_PIN_K3) != 0)
 		return 1;
-	else 
+	else
 		return 0;
 }
 static uint8_t IsKeyDown2(void)
@@ -102,7 +102,7 @@ static uint8_t IsKeyDown2(void)
 	if ((GPIO_PORT_K1->IDR & GPIO_PIN_K1) != 0 && (GPIO_PORT_K2->IDR & GPIO_PIN_K2) != 0
 		&& (GPIO_PORT_K3->IDR & GPIO_PIN_K3) != 0)
 		return 1;
-	else 
+	else
 		return 0;
 }
 static uint8_t IsKeyDown3(void)
@@ -110,7 +110,7 @@ static uint8_t IsKeyDown3(void)
 	if ((GPIO_PORT_K1->IDR & GPIO_PIN_K1) != 0 && (GPIO_PORT_K2->IDR & GPIO_PIN_K2) == 0
 		&& (GPIO_PORT_K3->IDR & GPIO_PIN_K3) == 0)
 		return 1;
-	else 
+	else
 		return 0;
 }
 static uint8_t IsKeyDown9(void)	/* K1 K2组合键 */
@@ -118,7 +118,7 @@ static uint8_t IsKeyDown9(void)	/* K1 K2组合键 */
 	if ((GPIO_PORT_K1->IDR & GPIO_PIN_K1) == 0 && (GPIO_PORT_K2->IDR & GPIO_PIN_K2) != 0
 		&& (GPIO_PORT_K3->IDR & GPIO_PIN_K3) != 0)
 		return 1;
-	else 
+	else
 		return 0;
 }
 static uint8_t IsKeyDown10(void)	/* K2 K3组合键 */
@@ -126,10 +126,10 @@ static uint8_t IsKeyDown10(void)	/* K2 K3组合键 */
 	if ((GPIO_PORT_K1->IDR & GPIO_PIN_K1) != 0 && (GPIO_PORT_K2->IDR & GPIO_PIN_K2) != 0
 		&& (GPIO_PORT_K3->IDR & GPIO_PIN_K3) == 0)
 		return 1;
-	else 
+	else
 		return 0;
 }
-#else	
+#else
 static uint8_t IsKeyDown1(void) {if ((GPIO_PORT_K1->IDR & GPIO_PIN_K1) == 0) return 1;else return 0;}
 static uint8_t IsKeyDown2(void) {if ((GPIO_PORT_K2->IDR & GPIO_PIN_K2) != 0) return 1;else return 0;}
 static uint8_t IsKeyDown3(void) {if ((GPIO_PORT_K3->IDR & GPIO_PIN_K3) == 0) return 1;else return 0;}
@@ -298,7 +298,7 @@ static void bsp_InitKeyHard(void)
 	/* 第2步：配置所有的按键GPIO为浮动输入模式(实际上CPU复位后就是输入状态) */
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;	/* 输入浮空模式 */
-	
+
 	GPIO_InitStructure.GPIO_Pin = GPIO_PIN_K1;
 	GPIO_Init(GPIO_PORT_K1, &GPIO_InitStructure);
 
@@ -494,4 +494,4 @@ void bsp_KeyScan(void)
 	}
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

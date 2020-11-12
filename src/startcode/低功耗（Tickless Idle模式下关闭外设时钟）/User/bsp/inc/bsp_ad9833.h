@@ -4,7 +4,7 @@
 *	模块名称 : AD9833 驱动模块(单通道带16位DAC)
 *	文件名称 : bsp_adc9833.c
 *
-*	Copyright (C), 2013-2014, 安富莱电子 www.armfly.com
+*	Copyright (C), 2013-2014, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -20,7 +20,7 @@ typedef  enum
 	NONE_WAVE = 0,	/* 无输出 */
 	TRI_WAVE,		/* 输出三角波 */
 	SINE_WAVE,		/* 输出正弦波 */
-	SQU_WAVE		/* 输出方波 */	
+	SQU_WAVE		/* 输出方波 */
 }AD9833_WAVE_E;
 
 void bsp_InitAD9833(void);
@@ -34,4 +34,4 @@ void AD9833_WritePhaseReg(uint8_t _mode, uint32_t _phase_reg);
 #endif
 
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

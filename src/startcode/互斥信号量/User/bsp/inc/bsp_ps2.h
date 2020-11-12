@@ -4,7 +4,7 @@
 *	模块名称 : PS/2键盘和鼠标驱动模块
 *	文件名称 : bsp_ps2.h
 *
-*	Copyright (C), 2013-2014, 安富莱电子 www.armfly.com
+*	Copyright (C), 2013-2014, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -170,7 +170,7 @@ typedef struct
 	uint8_t CodeBuf[PS2_MAX_LEN];	/* 原始数据缓冲区 */
 	uint8_t Len;					/* 数据长度 */
 	uint8_t TxTimeOut;				/* 主机发送命令超时 */
-	uint8_t RxTimeOut;				/* 主机接收PS2设备数据包超时 */	
+	uint8_t RxTimeOut;				/* 主机接收PS2设备数据包超时 */
 
 	uint8_t Sending;				/* 1表示 主机向鼠标和键盘发送数据状态 */
 	uint8_t Cmd;
@@ -183,10 +183,10 @@ typedef struct
 	uint8_t ksCapsLock;				/* 1表示 CapsLock 状态指示灯亮 */
 	uint8_t KsNumLock;				/* 1表示 NumLock 状态指示灯亮 */
 	uint8_t KsScrollLock;			/* 1表示 ScrollLock 状态指示灯亮 */
-	
+
 	/* 修改键盘灯状态用到的变量 */
 	uint8_t LedReq;					/* 主程序检测到 1 时, 发送命令控制键盘灯状态 */
-	uint8_t LedData;				
+	uint8_t LedData;
 }PS2_T;
 
 /* 鼠标数据结构体 */
@@ -226,4 +226,4 @@ extern PS2_T g_tPS2;
 
 #endif
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

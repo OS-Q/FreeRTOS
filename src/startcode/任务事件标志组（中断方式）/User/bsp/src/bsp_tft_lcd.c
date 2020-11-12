@@ -29,19 +29,19 @@
 *					(1) 增加 LCD_ButtonTouchDown() LCD_ButtonTouchRelease 判断触摸坐标并重绘按钮
 *					(2) 增加3.5寸LCD驱动
 *					(3) 增加 LCD_SetDirection() 函数，设置显示屏方向（横屏 竖屏动态切换）
-*		V4.0   2015-04-04 
-*				(1) 按钮、编辑框控件增加RA8875字体，内嵌字库和RA8875字库统一编码。字体代码增加 
+*		V4.0   2015-04-04
+*				(1) 按钮、编辑框控件增加RA8875字体，内嵌字库和RA8875字库统一编码。字体代码增加
 *				    FC_RA8875_16, FC_RA8875_24,	FC_RA8875_32
 *				(2) FONT_T结构体成员FontCode的类型由 uint16_t 修改为 FONT_CODE_E枚举，便于编译器查错;
 *				(3) 修改 LCD_DispStrEx(), 将读点阵的语句独立到函数：_LCD_ReadAsciiDot(), _LCD_ReadHZDot()
 *				(4) LCD_DispStr() 函数简化，直接调用 LCD_DispStrEx() 实现。
 *				(5) LCD_DispStrEx() 函数支持 RA8875字体。
 *				(6) LCD_ButtonTouchDown() 增加按键提示音
-*		V4.1   2015-04-18 
+*		V4.1   2015-04-18
 *				(1) 添加RA885 ASCII字体的宽度表。LCD_DispStrEx() 函数可以支持RA8875 ASCII变长宽度计算。
 *				(2) 添加 LCD_HardReset(）函数，支持LCD复位由GPIO控制的产品。STM32-V5 不需要GPIO控制。
 *
-*	Copyright (C), 2015-2016, 安富莱电子 www.armfly.com
+*	Copyright (C), 2015-2016, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -82,7 +82,7 @@ void LCD_InitHard(void)
 	LCD_FSMCConfig();
 
 	LCD_HardReset();	/* 硬件复位 （STM32-V5 无需），针对其他GPIO控制LCD复位的产品 */
-	
+
 	/* FSMC重置后必须加延迟才能访问总线设备  */
 	bsp_DelayMS(20);
 
@@ -124,12 +124,12 @@ void LCD_InitHard(void)
 */
 void LCD_HardReset(void)
 {
-#if 0	
+#if 0
 	GPIO_InitTypeDef GPIO_InitStructure;
 
 	/* 使能 GPIO时钟 */
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
-	
+
 	/* 配置背光GPIO为推挽输出模式 */
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
@@ -141,7 +141,7 @@ void LCD_HardReset(void)
 	GPIO_ResetBits(GPIOB, GPIO_Pin_1);
 	bsp_DelayMS(20);
 	GPIO_SetBits(GPIOB, GPIO_Pin_1);
-#endif	
+#endif
 }
 
 /*
@@ -317,19 +317,19 @@ uint16_t LCD_GetFontWidth(FONT_T *_tFont)
 			break;
 
 		case FC_ST_16:
-		case FC_RA8875_16:			
+		case FC_RA8875_16:
 			font_width = 16;
 			break;
-			
-		case FC_RA8875_24:			
+
+		case FC_RA8875_24:
 		case FC_ST_24:
 			font_width = 24;
 			break;
-			
+
 		case FC_ST_32:
-		case FC_RA8875_32:	
+		case FC_RA8875_32:
 			font_width = 32;
-			break;			
+			break;
 	}
 	return font_width;
 }
@@ -354,19 +354,19 @@ uint16_t LCD_GetFontHeight(FONT_T *_tFont)
 			break;
 
 		case FC_ST_16:
-		case FC_RA8875_16:			
+		case FC_RA8875_16:
 			height = 16;
 			break;
-			
-		case FC_RA8875_24:			
+
+		case FC_RA8875_24:
 		case FC_ST_24:
 			height = 24;
 			break;
-			
+
 		case FC_ST_32:
-		case FC_RA8875_32:	
+		case FC_RA8875_32:
 			height = 32;
-			break;			
+			break;
 	}
 	return height;
 }
@@ -400,36 +400,36 @@ uint16_t LCD_GetStrWidth(char *_ptr, FONT_T *_tFont)
 				case FC_RA8875_16:
 					font_width = g_RA8875_Ascii16_width[code1 - 0x20];
 					break;
-				
+
 				case FC_RA8875_24:
 					font_width = g_RA8875_Ascii24_width[code1 - 0x20];
 					break;
-				
+
 				case FC_RA8875_32:
 					font_width = g_RA8875_Ascii32_width[code1 - 0x20];
 					break;
-				
+
 				case FC_ST_12:
 					font_width = 6;
 					break;
 
-				case FC_ST_16:		
+				case FC_ST_16:
 					font_width = 8;
 					break;
-					
-				case FC_ST_24:			
+
+				case FC_ST_24:
 					font_width = 12;
 					break;
-					
+
 				case FC_ST_32:
 					font_width = 16;
 					break;
-				
+
 				default:
 					font_width = 8;
-					break;					
+					break;
 			}
-			
+
 		}
 		else	/* 汉字 */
 		{
@@ -439,7 +439,7 @@ uint16_t LCD_GetStrWidth(char *_ptr, FONT_T *_tFont)
 				break;
 			}
 			font_width = LCD_GetFontWidth(_tFont);
-			
+
 		}
 		width += font_width;
 		p++;
@@ -469,9 +469,9 @@ static void _LCD_ReadAsciiDot(uint8_t _code, uint8_t _fontcode, uint8_t *_pBuf)
 	{
 		case FC_ST_12:		/* 12点阵 */
 			font_bytes = 24;
-			pAscDot = g_Ascii12;	
+			pAscDot = g_Ascii12;
 			break;
-		
+
 		case FC_ST_24:
 		case FC_ST_32:
 		case FC_ST_16:
@@ -479,15 +479,15 @@ static void _LCD_ReadAsciiDot(uint8_t _code, uint8_t _fontcode, uint8_t *_pBuf)
 			font_bytes = 32;
 			pAscDot = g_Ascii16;
 			break;
-		
+
 		case FC_RA8875_16:
 		case FC_RA8875_24:
 		case FC_RA8875_32:
 			return;
-	}	
+	}
 
 	/* 将CPU内部Flash中的ascii字符点阵复制到buf */
-	memcpy(_pBuf, &pAscDot[_code * (font_bytes / 2)], (font_bytes / 2));	
+	memcpy(_pBuf, &pAscDot[_code * (font_bytes / 2)], (font_bytes / 2));
 }
 
 /*
@@ -514,29 +514,29 @@ static void _LCD_ReadHZDot(uint8_t _code1, uint8_t _code2,  uint8_t _fontcode, u
 		{
 			case FC_ST_12:		/* 12点阵 */
 				font_bytes = 24;
-				pDot = (uint8_t *)g_Hz12;	
+				pDot = (uint8_t *)g_Hz12;
 				break;
-			
+
 			case FC_ST_16:
 				font_bytes = 32;
 				pDot = (uint8_t *)g_Hz16;
 				break;
-	
+
 			case FC_ST_24:
 				font_bytes = 72;
 				pDot = (uint8_t *)g_Hz24;
-				break;			
-				
-			case FC_ST_32:	
+				break;
+
+			case FC_ST_32:
 				font_bytes = 128;
 				pDot = (uint8_t *)g_Hz32;
-				break;						
-			
+				break;
+
 			case FC_RA8875_16:
 			case FC_RA8875_24:
 			case FC_RA8875_32:
 				return;
-		}	
+		}
 
 		m = 0;
 		while(1)
@@ -559,35 +559,35 @@ static void _LCD_ReadHZDot(uint8_t _code1, uint8_t _code2,  uint8_t _fontcode, u
 	#else	/* 用全字库 */
 		uint8_t *pDot = 0;
 		uint8_t font_bytes = 0;
-			
+
 		switch (_fontcode)
 		{
 			case FC_ST_12:		/* 12点阵 */
 				font_bytes = 24;
-				pDot = (uint8_t *)HZK12_ADDR;	
+				pDot = (uint8_t *)HZK12_ADDR;
 				break;
-			
+
 			case FC_ST_16:
 				font_bytes = 32;
 				pDot = (uint8_t *)HZK16_ADDR;
 				break;
-	
+
 			case FC_ST_24:
 				font_bytes = 72;
 				pDot = (uint8_t *)HZK24_ADDR;
-				break;			
-				
-			case FC_ST_32:	
+				break;
+
+			case FC_ST_32:
 				font_bytes = 128;
 				pDot = (uint8_t *)HZK32_ADDR;
-				break;						
-			
+				break;
+
 			case FC_RA8875_16:
 			case FC_RA8875_24:
 			case FC_RA8875_32:
 				return;
-		}			
-	
+		}
+
 		/* 此处需要根据字库文件存放位置进行修改 */
 		if (_code1 >=0xA1 && _code1 <= 0xA9 && _code2 >=0xA1)
 		{
@@ -600,7 +600,7 @@ static void _LCD_ReadHZDot(uint8_t _code1, uint8_t _code2,  uint8_t _fontcode, u
 		memcpy(_pBuf, pDot, font_bytes);
 	#endif
 }
-			
+
 /*
 *********************************************************************************************************
 *	函 数 名: LCD_DispStrEx
@@ -641,7 +641,7 @@ void LCD_DispStrEx(uint16_t _usX, uint16_t _usY, char *_ptr, FONT_T *_tFont, uin
 			font_height = 12;
 			font_width = 12;
 			break;
-		
+
 		case FC_ST_16:
 			font_height = 16;
 			font_width = 16;
@@ -651,31 +651,31 @@ void LCD_DispStrEx(uint16_t _usX, uint16_t _usY, char *_ptr, FONT_T *_tFont, uin
 			font_height = 24;
 			font_width = 24;
 			break;
-						
-		case FC_ST_32:	
+
+		case FC_ST_32:
 			font_height = 32;
 			font_width = 32;
-			break;					
-		
+			break;
+
 		case FC_RA8875_16:
 			ra8875_font_code = RA_FONT_16;
 			ra8875_use = 1;	/* 表示用RA8875字库 */
 			break;
-			
+
 		case FC_RA8875_24:
 			ra8875_font_code = RA_FONT_24;
 			ra8875_use = 1;	/* 表示用RA8875字库 */
 			break;
-						
+
 		case FC_RA8875_32:
 			ra8875_font_code = RA_FONT_32;
 			ra8875_use = 1;	/* 表示用RA8875字库 */
 			break;
-		
+
 		default:
 			return;
 	}
-	
+
 	str_width = LCD_GetStrWidth(_ptr, _tFont);	/* 计算字符串实际宽度(RA8875内部ASCII点阵宽度为变长 */
 	offset = 0;
 	if (_Width > str_width)
@@ -700,13 +700,13 @@ void LCD_DispStrEx(uint16_t _usX, uint16_t _usY, char *_ptr, FONT_T *_tFont, uin
 		LCD_Fill_Rect(_usX, _usY, LCD_GetFontHeight(_tFont), offset,  _tFont->BackColor);
 		_usX += offset;
 	}
-	
+
 	/* 右侧填背景色 */
 	if (_Width > str_width)
 	{
 		LCD_Fill_Rect(_usX + str_width, _usY, LCD_GetFontHeight(_tFont), _Width - str_width - offset,  _tFont->BackColor);
 	}
-	
+
 	if (ra8875_use == 1)	/* 使用RA8875外挂的字库芯片 */
 	{
 		RA8875_SetFrontColor(_tFont->FrontColor);			/* 设置字体前景色 */
@@ -738,7 +738,7 @@ void LCD_DispStrEx(uint16_t _usX, uint16_t _usY, char *_ptr, FONT_T *_tFont, uin
 				_LCD_ReadHZDot(code1, code2, _tFont->FontCode, buf);
 				width = font_width;
 			}
-	
+
 			y = _usY;
 			/* 开始刷LCD */
 			for (m = 0; m < font_height; m++)	/* 字符高度 */
@@ -757,12 +757,12 @@ void LCD_DispStrEx(uint16_t _usX, uint16_t _usY, char *_ptr, FONT_T *_tFont, uin
 							LCD_PutPixel(x, y, _tFont->BackColor);	/* 设置像素颜色为文字背景色 */
 						}
 					}
-	
+
 					x++;
 				}
 				y++;
 			}
-	
+
 			if (_tFont->Space > 0)
 			{
 				/* 如果文字底色按_tFont->usBackColor，并且字间距大于点阵的宽度，那么需要在文字之间填充(暂时未实现) */
@@ -1546,8 +1546,8 @@ void LCD_DrawButton(BUTTON_T *_pBtn)
 	font.FontCode = _pBtn->Font->FontCode;
 	font.FrontColor = _pBtn->Font->FrontColor;
 	font.BackColor = _pBtn->Font->BackColor;
-	font.Space = _pBtn->Font->Space;	
-			
+	font.Space = _pBtn->Font->Space;
+
 	if (_pBtn->Focus == 1)
 	{
 		font.BackColor = BUTTON_ACTIVE_COLOR;
@@ -1557,7 +1557,7 @@ void LCD_DrawButton(BUTTON_T *_pBtn)
 		/* 按钮的背景色统一管理，不能单独指定 */
 		font.BackColor = BUTTON_BACK_COLOR;
 	}
-	
+
 	/* 仿XP风格，平面编辑框 */
 	LCD_DrawRect(_pBtn->Left, _pBtn->Top, _pBtn->Height, _pBtn->Width, BUTTON_BORDER_COLOR);
 	LCD_DrawRect(_pBtn->Left + 1, _pBtn->Top + 1, _pBtn->Height - 2, _pBtn->Width - 2, BUTTON_BORDER1_COLOR);
@@ -1565,10 +1565,10 @@ void LCD_DrawButton(BUTTON_T *_pBtn)
 
 	h =  LCD_GetFontHeight(&font);
 	x = _pBtn->Left + 3;
-	y = _pBtn->Top + _pBtn->Height / 2 - h / 2;		
-	
+	y = _pBtn->Top + _pBtn->Height / 2 - h / 2;
+
 	LCD_Fill_Rect(_pBtn->Left + 3, _pBtn->Top + 3, _pBtn->Height - 6, _pBtn->Width - 6, font.BackColor);	/* 选中后的底色 */
-	LCD_DispStrEx(x, y, _pBtn->pCaption, &font, _pBtn->Width - 6, ALIGN_CENTER);	/* 水平居中 */		
+	LCD_DispStrEx(x, y, _pBtn->pCaption, &font, _pBtn->Width - 6, ALIGN_CENTER);	/* 水平居中 */
 
 #else
 	if (g_ChipID == IC_8875)
@@ -1961,9 +1961,9 @@ void LCD_InitButton(BUTTON_T *_btn, uint16_t _x, uint16_t _y, uint16_t _h, uint1
 	_btn->Top = _y;
 	_btn->Height = _h;
 	_btn->Width = _w;
-	_btn->pCaption = _pCaption;	
+	_btn->pCaption = _pCaption;
 	_btn->Font = _pFont;
 	_btn->Focus = 0;
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

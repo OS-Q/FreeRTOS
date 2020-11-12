@@ -6,7 +6,7 @@
 *	版    本 : V1.0
 *	说    明 : 头文件
 *
-*	Copyright (C), 2014-2015, 安富莱电子 www.armfly.com
+*	Copyright (C), 2014-2015, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -20,7 +20,7 @@ typedef struct
 {
 	uint8_t Enable;
 	uint8_t TimerCount;
-	
+
 	uint8_t TouchpointFlag;
 	uint8_t Touchkeystate;
 

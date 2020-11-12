@@ -10,7 +10,7 @@
 *		版本号  日期        作者     说明
 *		V1.0    2013-02-01 armfly  正式发布
 *
-*	Copyright (C), 2013-2014, 安富莱电子 www.armfly.com
+*	Copyright (C), 2013-2014, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -58,7 +58,7 @@ void bsp_InitBH1750(void)
 	BH1750_WriteCmd(BHOP_POWER_ON);		/* 芯片上电 */
 
 	BH1750_ChageMode(2);			/* 高分辨率连续测量 */
-	
+
 	BH1750_AdjustSensitivity(69);	/* 芯片缺省灵敏度倍率 = 69 */
 }
 
@@ -101,12 +101,12 @@ void BH1750_AdjustSensitivity(uint8_t _ucMTReg)
 	{
 		_ucMTReg = 254;
 	}
-	
+
 	s_MTReg = _ucMTReg;
-	
+
 	BH1750_WriteCmd(0x40 + (s_MTReg >> 5));		/* 更改高3bit */
 	BH1750_WriteCmd(0x60 + (s_MTReg & 0x1F));	/* 更改低5bit */
-	
+
 	/*　更改量程范围后，需要重新发送命令设置测量模式　*/
 	BH1750_ChageMode(s_Mode);
 }
@@ -114,7 +114,7 @@ void BH1750_AdjustSensitivity(uint8_t _ucMTReg)
 /*
 *********************************************************************************************************
 *	函 数 名: BH1750_ChageMode
-*	功能说明: 修改BH1750测量模式，决定测量分辨率 
+*	功能说明: 修改BH1750测量模式，决定测量分辨率
 *	形    参: __ucMode : 测量模式 值域(1，2，3)
 *	返 回 值: 无
 *********************************************************************************************************
@@ -123,19 +123,19 @@ void BH1750_ChageMode(uint8_t _ucMode)
 {
 	if (_ucMode == 1)		/* 连续高分测量模式1 */
 	{
-		BH1750_WriteCmd(BHOP_CON_H_RES);	
+		BH1750_WriteCmd(BHOP_CON_H_RES);
 		s_Mode = 1;			/* 测量模式1，分辨率 1 lux*/
 	}
 	else if (_ucMode == 2)	/* 连续高分测量模式2 */
 	{
-		BH1750_WriteCmd(BHOP_CON_H_RES2);	
-		s_Mode = 2;			/* 测量模式2, 分辨率 0.5 lux */		
+		BH1750_WriteCmd(BHOP_CON_H_RES2);
+		s_Mode = 2;			/* 测量模式2, 分辨率 0.5 lux */
 	}
 	else if (_ucMode == 3)	/* 连续低分测量模式 */
 	{
-		BH1750_WriteCmd(BHOP_CON_L_RES);	
-		s_Mode = 3;			/* 测量模式3，低分辨率 4 lux*/		
-	}	
+		BH1750_WriteCmd(BHOP_CON_L_RES);
+		s_Mode = 3;			/* 测量模式3，低分辨率 4 lux*/
+	}
 }
 
 /*
@@ -162,7 +162,7 @@ uint16_t BH1750_ReadData(void)
 	ucData2 = i2c_ReadByte();       		/* 读出低字节数据 */
 	i2c_NAck();
 	i2c_Stop();                  			/* 总线停止信号 */
-	
+
 	usLight = (ucData1 << 8) + ucData2;
 
 	return usLight;
@@ -180,14 +180,14 @@ float BH1750_GetLux(void)
 {
 	uint16_t usLight;
 	float lux;
-	
+
 	usLight = BH1750_ReadData();
-	
+
 	/* 计算光强度 = 16位寄存器值 / 1.2  * (69 / X) */
 
 	//lux = usLight * (((float)1 / 1.2) * ((float)69 / s_MTReg));
 	lux = (float)(usLight * 5 * 69) / (6 * s_MTReg);
-	
+
 	if (s_Mode == 2)	/* 高分辨率测量模式2 */
 	{
 		lux = lux / 2;
@@ -196,8 +196,8 @@ float BH1750_GetLux(void)
 	{
 		;	/* 不必除2 */
 	}
-	
+
 	return lux;
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

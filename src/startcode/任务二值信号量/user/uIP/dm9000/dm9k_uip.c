@@ -1,6 +1,6 @@
 
 /****************************************************************************
-* Copyright (C), 2009-2010, www.armfly.com  安富莱电子
+* Copyright (C), 2009-2010, www.OS-Q.com  安富莱电子
 *
 * 【本驱动在安富莱STM32F103ZE-EK开发板上调试通过             】
 * 【QQ: 1295744630, 旺旺：armfly, Email: armfly@qq.com       】
@@ -412,7 +412,7 @@ void dm9k_send_packet(uint8_t *p_char, uint16_t length)
 */
 void  dm9k_interrupt(void)
 {
-#if 0  /* armfly */	
+#if 0  /* armfly */
 	uint8_t  save_reg;
 	uint8_t  isr_status;
 

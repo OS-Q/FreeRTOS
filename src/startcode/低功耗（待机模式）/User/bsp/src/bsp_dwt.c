@@ -11,7 +11,7 @@
 *		版本号    日期        作者     说明
 *		V1.0    2015-08-18   Eric2013 正式发布
 *
-*	Copyright (C), 2015-2020, 安富莱电子 www.armfly.com
+*	Copyright (C), 2015-2020, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -71,7 +71,7 @@ void bsp_DelayMS(uint32_t _ulDelayTime)
 *	形    参: _ulDelayTime  延迟长度，单位1 us
 *	返 回 值: 无
 *   说    明: 1. 主频168MHz的情况下，32位计数器计满是2^32/168000000 = 25.565秒
-*                建议使用本函数做延迟的话，延迟在1秒以下。  
+*                建议使用本函数做延迟的话，延迟在1秒以下。
 *             2. 实际通过示波器测试，微妙延迟函数比实际设置实际多运行0.25us左右的时间。
 *             下面数据测试条件：
 *             （1）. MDK5.15，优化等级0, 不同的MDK优化等级对其没有影响。
@@ -102,15 +102,15 @@ void bsp_DelayUS(uint32_t _ulDelayTime)
 {
     uint32_t tCnt, tDelayCnt;
 	uint32_t tStart;
-		
+
 	tStart = DWT_CYCCNT;                                     /* 刚进入时的计数器值 */
 	tCnt = 0;
-	tDelayCnt = _ulDelayTime * (SystemCoreClock / 1000000);	 /* 需要的节拍数 */ 		      
+	tDelayCnt = _ulDelayTime * (SystemCoreClock / 1000000);	 /* 需要的节拍数 */
 
 	while(tCnt < tDelayCnt)
 	{
-		tCnt = DWT_CYCCNT - tStart; /* 求减过程中，如果发生第一次32位计数器重新计数，依然可以正确计算 */	
+		tCnt = DWT_CYCCNT - tStart; /* 求减过程中，如果发生第一次32位计数器重新计数，依然可以正确计算 */
 	}
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

@@ -10,7 +10,7 @@
 *		版本号  日期        作者     说明
 *		V1.0    2015-05-21 armfly  正式发布
 *
-*	Copyright (C), 2015-2016, 安富莱电子 www.armfly.com
+*	Copyright (C), 2015-2016, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -67,7 +67,7 @@ void bsp_InitI2C(void)
 
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;	/* 开漏输出模式 */
-	
+
 	GPIO_InitStructure.GPIO_Pin = PIN_I2C_SCL;
 	GPIO_Init(PORT_I2C_SCL, &GPIO_InitStructure);
 
@@ -119,7 +119,7 @@ void i2c_Start(void)
 	i2c_Delay();
 	I2C_SDA_0();
 	i2c_Delay();
-	
+
 	I2C_SCL_0();
 	i2c_Delay();
 }
@@ -302,4 +302,4 @@ uint8_t i2c_CheckDevice(uint8_t _Address)
 }
 
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

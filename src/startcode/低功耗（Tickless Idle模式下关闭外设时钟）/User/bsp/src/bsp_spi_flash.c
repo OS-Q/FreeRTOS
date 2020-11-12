@@ -13,8 +13,8 @@
 *		版本号  日期        作者     说明
 *		V1.0    2013-02-01 armfly  正式发布
 *		V1.1    2015-08-07 armfly  4K的缓冲区放到函数内部，使用堆栈空间，解决全局变量
-*		
-*	Copyright (C), 2015-2016 安富莱电子 www.armfly.com
+*
+*	Copyright (C), 2015-2016 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -162,7 +162,7 @@ static void sf_SetCS(uint8_t _level)
 void bsp_InitSFlash(void)
 {
 	sf_ConfigGPIO();			/* 配置GPIO */
-	
+
 	//sf_CfgSpiHard();
 
 	sf_ReadInfo();				/* 自动识别芯片型号 */
@@ -442,7 +442,7 @@ static uint8_t sf_AutoWritePage(uint8_t *_ucpSrc, uint32_t _uiWrAddr, uint16_t _
 	uint32_t uiFirstAddr;		/* 扇区首址 */
 	uint8_t ucNeedErase;		/* 1表示需要擦除 */
 	uint8_t cRet;
-	uint8_t s_spiBuf[4*1024];	/* 用于写函数，先读出整个page，修改缓冲区后，再整个page回写 */	
+	uint8_t s_spiBuf[4*1024];	/* 用于写函数，先读出整个page，修改缓冲区后，再整个page回写 */
 
 	/* 长度为0时不继续操作,直接认为成功 */
 	if (_usWrLen == 0)
@@ -705,7 +705,7 @@ void sf_ReadInfo(void)
 				strcpy(g_tSF.ChipName, "W25Q128");
 				g_tSF.TotalSize = 16 * 1024 * 1024;	/* 总容量 = 16M */
 				g_tSF.PageSize = 4 * 1024;			/* 页面大小 = 4K */
-				break;			
+				break;
 
 			default:
 				strcpy(g_tSF.ChipName, "Unknow Flash");
@@ -780,4 +780,4 @@ static void sf_WaitForWriteEnd(void)
 	sf_SetCS(1);									/* 禁能片选 */
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

@@ -9,7 +9,7 @@
 *		版本号  日期       作者    说明
 *		v1.0    2014-07-26 armfly  首版
 *
-*	Copyright (C), 2014-2015, 安富莱电子 www.armfly.com
+*	Copyright (C), 2014-2015, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -78,7 +78,7 @@ void ILI9488_InitHard(void)
 */
 void ILI9488_SetDirection(uint8_t _ucDir)
 {
-	
+
 	/*
 		Memory Access Control (36h)
 		This command defines read/write scanning direction of the frame memory.
@@ -787,4 +787,4 @@ void ILI9488_DrawBMP(uint16_t _usX, uint16_t _usY, uint16_t _usHeight, uint16_t 
 }
 
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

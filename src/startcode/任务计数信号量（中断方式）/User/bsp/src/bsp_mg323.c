@@ -10,7 +10,7 @@
 *		版本号  日期        作者     说明
 *		V1.0    2013-02-01 armfly  正式发布
 *
-*	Copyright (C), 2013-2014, 安富莱电子 www.armfly.com
+*	Copyright (C), 2013-2014, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -21,7 +21,7 @@
 	安富莱STM32-V4 开发板口线分配：
 	GPRS_TERM_ON   :  PB4/TRST/GPRS_TERM_ON
 	GPRS_RESET     :  PC2/ADC123_IN12/GPRS_RESET
-	
+
 	GPRS_TX        :  PA2/USART2_TX
 	GPRS_RX        :  PA3/USART2_RX
 
@@ -91,7 +91,7 @@ void bsp_InitMG323(void)
 	GPIO_Init(PORT_RESET, &GPIO_InitStructure);
 
 	/* CPU的串口配置已经由 bsp_uart_fifo.c 中的 bsp_InitUart() 做了 */
-	
+
 	TERM_ON_0();
 	MG_RESET_1();
 }
@@ -122,7 +122,7 @@ void MG323_PrintRxData(uint8_t _ch)
 void MG323_PowerOn(void)
 {
 	comClearRxFifo(COM_MG323);	/* 清零串口接收缓冲区 */
-	
+
 	MG323_Reset();
 
 	/*
@@ -133,7 +133,7 @@ void MG323_PowerOn(void)
 
 	TERM_ON_0();
 	bsp_DelayMS(750);
-	TERM_ON_1();	
+	TERM_ON_1();
 
 	/* 等待模块完成上电，判断是否接收到 ^SYSSTART */
 	MG323_WaitResponse("^SYSSTART", 5000);
@@ -157,7 +157,7 @@ void MG323_Reset(void)
 	MG_RESET_0();
 	bsp_DelayMS(20);
 	MG_RESET_1();
-	
+
 	bsp_DelayMS(10);
 }
 
@@ -305,9 +305,9 @@ uint16_t MG323_ReadResponse(char *_pBuf, uint16_t _usBufSize, uint16_t _usTimeOu
 				}
 			}
 		}
-		
+
 		if (comGetChar(COM_MG323, &ucData))
-		{			
+		{
 			MG323_PrintRxData(ucData);		/* 将接收到数据打印到调试串口1 */
 
 			switch (status)
@@ -323,14 +323,14 @@ uint16_t MG323_ReadResponse(char *_pBuf, uint16_t _usBufSize, uint16_t _usTimeOu
 						status = 1;	 /* 这是主机发送的AT命令字符串，不保存应答数据，直到遇到 CR字符 */
 					}
 					break;
-					
+
 				case 1:			/* AT命令回显阶段, 不保存数据. 继续等待 */
 					if (ucData == AT_CR)
 					{
 						status = 2;
 					}
 					break;
-					
+
 				case 2:			/* 开始接收模块应答结果 */
 					/* 只要收到模块的应答字符，则采用字符间超时判断结束，此时命令总超时不起作用 */
 					bsp_StartTimer(MG323_TMR_ID, 5);
@@ -471,28 +471,28 @@ uint8_t MG323_GetHardInfo(MG_HARD_INFO_T *_pInfo)
 		Revision: 12.210.10.05.00
 		IMEI: 351869045435933
 		+GCAP: +CGSM
-		
-		OK	
-	*/	
+
+		OK
+	*/
 	char buf[255];
 	uint16_t len, i, begin = 0, num;
-	uint8_t status = 0;	
-	
-	comClearRxFifo(COM_MG323);	/* 清零串口接收缓冲区 */	
-	
+	uint8_t status = 0;
+
+	comClearRxFifo(COM_MG323);	/* 清零串口接收缓冲区 */
+
 	MG323_SendAT("ATI");		/* 发送 ATI 命令 */
-	
+
 	len = MG323_ReadResponse(buf, sizeof(buf), 300);	/* 超时 300ms */
 	if (len == 0)
 	{
-		return 0;		
+		return 0;
 	}
-	
+
 	_pInfo->Manfacture[0] = 0;
 	_pInfo->Model[0] = 0;
 	_pInfo->Revision[0] = 0;
 	_pInfo->IMEI[0] = 0;
-	
+
 	for (i = 2; i < len; i++)
 	{
 		if (buf[i] == ':')
@@ -503,7 +503,7 @@ uint8_t MG323_GetHardInfo(MG_HARD_INFO_T *_pInfo)
 		if (buf[i] == AT_CR)
 		{
 			num = i - begin;
-			
+
 			if (status == 0)
 			{
 				if (num >= sizeof(_pInfo->Manfacture))
@@ -518,7 +518,7 @@ uint8_t MG323_GetHardInfo(MG_HARD_INFO_T *_pInfo)
 				if (num >= sizeof(_pInfo->Model))
 				{
 					num = sizeof(_pInfo->Model) - 1;
-				}				
+				}
 				memcpy(_pInfo->Model, &buf[begin], num);
 				_pInfo->Model[num] = 0;
 			}
@@ -527,7 +527,7 @@ uint8_t MG323_GetHardInfo(MG_HARD_INFO_T *_pInfo)
 				if (num >= sizeof(_pInfo->Revision))
 				{
 					num = sizeof(_pInfo->Revision) - 1;
-				}				
+				}
 				memcpy(_pInfo->Revision, &buf[begin], num);
 				_pInfo->Revision[num] = 0;
 			}
@@ -536,12 +536,12 @@ uint8_t MG323_GetHardInfo(MG_HARD_INFO_T *_pInfo)
 				if (num >= sizeof(_pInfo->IMEI))
 				{
 					num = sizeof(_pInfo->IMEI) - 1;
-				}					
+				}
 				memcpy(_pInfo->IMEI, &buf[begin], num);
 				_pInfo->IMEI[num] = 0;
 				break;
 			}
-			status++;	
+			status++;
 		}
 	}
 	return 1;
@@ -560,29 +560,29 @@ uint8_t MG323_GetNetStatus(void)
 	/*
 		AT+CREG?
 		+CREG: 0,1
-		
-		OK				
-	*/	
+
+		OK
+	*/
 	char buf[128];
 	uint16_t len, i;
 	uint8_t status = 0;
-	
-	comClearRxFifo(COM_MG323);	/* 清零串口接收缓冲区 */	
-	
+
+	comClearRxFifo(COM_MG323);	/* 清零串口接收缓冲区 */
+
 	MG323_SendAT("AT+CREG?");	/* 发送 AT 命令 */
-	
+
 	len = MG323_ReadResponse(buf, sizeof(buf), 200);	/* 超时 200ms */
 	if (len == 0)
 	{
-		return 0;		
+		return 0;
 	}
-	
+
 	for (i = 2; i < len; i++)
 	{
 		if (buf[i] == ',')
 		{
 			i++;
-			
+
 			status = buf[i] - '0';
 		}
 	}
@@ -590,4 +590,4 @@ uint8_t MG323_GetNetStatus(void)
 }
 
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

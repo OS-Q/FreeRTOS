@@ -11,11 +11,11 @@
 *		V1.0    2014-11-29  armfly  正式发布
 *		V1.1    2014-12-11  armfly  修改 ESP8266_WaitResponse() 函数, 实现任意字符判断。增加TCP数据发送函数.
 *		V1.2    2014-12-22  armfly  增加GPIO2， GPIO0 引脚的配置。适应新版硬件。
-*		V1.3	2015-07-24  armfly	
+*		V1.3	2015-07-24  armfly
 *					(1) 增加函数 uint8_t ESP8266_CreateTCPServer(void);
 *					(2) 修改ESP8266_JoinAP() 增加返回值
 *
-*	Copyright (C), 2015-2016, 安富莱电子 www.armfly.com
+*	Copyright (C), 2015-2016, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -144,10 +144,10 @@ void bsp_InitESP8266(void)
 	/* 打开GPIO时钟 */
 	RCC_APB2PeriphClockCmd(RCC_CH_PD | RCC_RESET | RCC_GPIO2 | RCC_GPIO0, ENABLE);
 
-	
-	/* Disable the Serial Wire Jtag Debug Port SWJ-DP 
-		JTAG-DP Disabled and SW-DP Enabled 
-	 PB4/TRST/GPRS_TERM_ON 缺省用于JTAG信号，需要重新映射为	
+
+	/* Disable the Serial Wire Jtag Debug Port SWJ-DP
+		JTAG-DP Disabled and SW-DP Enabled
+	 PB4/TRST/GPRS_TERM_ON 缺省用于JTAG信号，需要重新映射为
 	*/
     GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
 
@@ -438,16 +438,16 @@ void ESP8266_SendAT(char *_Cmd)
 uint8_t ESP8266_CreateTCPServer(uint16_t _TcpPort)
 {
 	char cmd_buf[30];
-	
+
 	ESP8266_SendAT("AT+CIPMUX=1");	/* 启动多连接 */
 	if (ESP8266_WaitResponse("OK", 2000) == 0)
 	{
 		return 0;
 	}
-	
+
 	/* 开启TCP server, 端口为 _TcpPort */
 	sprintf(cmd_buf, "AT+CIPSERVER=1,%d", _TcpPort);
-	ESP8266_SendAT(cmd_buf);	
+	ESP8266_SendAT(cmd_buf);
 	if (ESP8266_WaitResponse("OK", 2000) == 0)
 	{
 		return 0;
@@ -458,7 +458,7 @@ uint8_t ESP8266_CreateTCPServer(uint16_t _TcpPort)
 	{
 		return 0;
 	}
-	
+
 	return 1;
 }
 
@@ -505,7 +505,7 @@ void ESP8266_CloseTcpUdp(uint8_t _id)
 
 	ESP8266_SendAT("ATE0");		/* 打开回显功能 */
 	ESP8266_WaitResponse("SEND OK", 50);
-	
+
 	sprintf(buf, "AT+CIPCLOSE=%d", _id);
 	ESP8266_SendAT(buf);
 }
@@ -525,17 +525,17 @@ uint8_t ESP8266_GetLocalIP(char *_ip, char *_mac)
 	uint8_t i, m;
 	uint8_t ret = 0;
 	uint8_t temp;
-	
+
 	ESP8266_SendAT("AT+CIFSR");
-	
+
 	/*　模块将应答:
-		
+
 	+CIFSR:STAIP,"192.168.1.18"
 	+CIFSR:STAMAC,"18:fe:34:a6:44:75"
-	
-	OK	
+
+	OK
 	*/
-	
+
 	_ip[0] = 0;
 	_mac[0] = 0;
 	for (i = 0; i < 4; i++)
@@ -543,7 +543,7 @@ uint8_t ESP8266_GetLocalIP(char *_ip, char *_mac)
 		ESP8266_ReadLine(buf, sizeof(buf), 500);
 		if (memcmp(buf, "+CIFSR:STAIP", 12) == 0)
 		{
-			
+
 			for (m = 0; m < 20; m++)
 			{
 				temp = buf[14 + m];
@@ -592,19 +592,19 @@ uint8_t ESP8266_JoinAP(char *_ssid, char *_pwd, uint16_t _timeout)
 
 	sprintf(buf, "AT+CWJAP=\"%s\",\"%s\"", _ssid, _pwd);
 	ESP8266_SendAT(buf);
-	
+
 	if (ESP8266_ReadLine(buf, 64, _timeout))
 	{
 		if (memcmp(buf, "AT+CWJAP", 8) == 0)		/* 第1次读到的是 命令本身 */
 		{
 			ESP8266_ReadLine(buf, 64, _timeout);	/* 这个是回车 */
 			ESP8266_ReadLine(buf, 64, _timeout);	/* 这次是读应答的OK */
-		}		
+		}
 		if (memcmp(buf, "OK", 2) == 0)
 		{
 			return 1;
 		}
-	}	
+	}
 	return 0;
 }
 
@@ -694,7 +694,7 @@ int16_t ESP8266_ScanAP(WIFI_AP_T *_pList, uint16_t _MaxNum)
 			count++;
 
 			p++;
-			
+
 			timeout = 2000;
 		}
 	}
@@ -718,7 +718,7 @@ uint16_t ESP8266_RxNew(uint8_t *_pRxBuf)
 	static uint8_t s_flag = 0;
 	static uint16_t s_data_len = 0;
 	char *p1;
-	
+
 	/* +IPD,0,7:ledon 1 */
 
 	if (comGetChar(COM_ESP8266, &ucData))
@@ -730,7 +730,7 @@ uint16_t ESP8266_RxNew(uint8_t *_pRxBuf)
 			if (s_len < sizeof(s_buf))
 			{
 				s_buf[s_len++] = ucData;		/* 保存接收到的数据 */
-			}			
+			}
 			if (ucData == '+')
 			{
 				s_len = 1;
@@ -740,8 +740,8 @@ uint16_t ESP8266_RxNew(uint8_t *_pRxBuf)
 			if (s_len > 7 && ucData == ':')
 			{
 				p1 = (char *)&s_buf[7];
-				s_data_len = str_to_int(p1);	
-				s_flag = 1;	
+				s_data_len = str_to_int(p1);
+				s_flag = 1;
 				s_len = 0;
 			}
 		}
@@ -750,17 +750,17 @@ uint16_t ESP8266_RxNew(uint8_t *_pRxBuf)
 			if (s_len < sizeof(s_buf))
 			{
 				s_buf[s_len++] = ucData;		/* 保存接收到的数据 */
-				
+
 				if (s_len == s_data_len)
 				{
 					s_flag = 0;
 					s_len = 0;
-					
+
 					memcpy(_pRxBuf, s_buf, s_data_len);
-					
+
 					return s_data_len;
 				}
-			}	
+			}
 			else
 			{
 				s_flag = 0;
@@ -771,4 +771,4 @@ uint16_t ESP8266_RxNew(uint8_t *_pRxBuf)
 	return 0;
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

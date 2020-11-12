@@ -95,17 +95,17 @@ static SemaphoreHandle_t  xSemaphore = NULL;
 int main(void)
 {
 	/* 硬件初始化初始化 */
-	bsp_Init(); 
-	
+	bsp_Init();
+
 	/* 初始化一个定时器中断，精度高于滴答定时器中断，这样才可以获得准确的系统信息 */
 	vSetupSysInfoTest();
-	
+
 	/* 创建任务 */
 	AppTaskCreate();
-	
+
 	/* 创建任务通信机制 */
 	AppObjCreate();
-	
+
     /* 启动调度，开始执行任务 */
     vTaskStartScheduler();
 
@@ -116,7 +116,7 @@ int main(void)
 /*
 *********************************************************************************************************
 *	函 数 名: vTaskTaskUserIF
-*	功能说明: 按键消息处理		
+*	功能说明: 按键消息处理
 *	形    参: pvParameters 是在创建该任务时传递的形参
 *	返 回 值: 无
 *   优 先 级: 1  (数值越小优先级越低，这个跟uCOS相反)
@@ -130,7 +130,7 @@ static void vTaskTaskUserIF(void *pvParameters)
     while(1)
     {
 		ucKeyCode = bsp_GetKey();
-		
+
 		if (ucKeyCode != KEY_NONE)
 		{
 			switch (ucKeyCode)
@@ -141,30 +141,30 @@ static void vTaskTaskUserIF(void *pvParameters)
 					printf("任务名      任务状态 优先级   剩余栈 任务序号\r\n");
 					vTaskList((char *)&pcWriteBuffer);
 					printf("%s\r\n", pcWriteBuffer);
-				
+
 					printf("\r\n任务名       运行计数         使用率\r\n");
 					vTaskGetRunTimeStats((char *)&pcWriteBuffer);
 					printf("%s\r\n", pcWriteBuffer);
 					break;
-				
+
 				/* K2键按下 直接发送同步信号给任务vTaskMsgPro，K2按键还有一个功能就是将系统从待机模式唤醒*/
 				case KEY_DOWN_K2:
 					printf("K2键按下，直接发送同步信号给任务vTaskMsgPro\r\n");
 					xSemaphoreGive(xSemaphore);
 					break;
-				
+
 				/* K3键按下 进入到待机模式 */
-				case KEY_DOWN_K3:			  
+				case KEY_DOWN_K3:
 					printf("K3按键按下，系统进入待机模式，按K2按键将唤醒\r\n");
-					PWR_EnterSTANDBYMode();     
+					PWR_EnterSTANDBYMode();
 					break;
-				
+
 				/* 其他的键值不处理 */
-				default:                     
+				default:
 					break;
 			}
 		}
-		
+
 		vTaskDelay(10);
 	}
 }
@@ -175,7 +175,7 @@ static void vTaskTaskUserIF(void *pvParameters)
 *	功能说明: LED闪烁
 *	形    参: pvParameters 是在创建该任务时传递的形参
 *	返 回 值: 无
-*   优 先 级: 2  
+*   优 先 级: 2
 *********************************************************************************************************
 */
 static void vTaskLED(void *pvParameters)
@@ -185,12 +185,12 @@ static void vTaskLED(void *pvParameters)
 
 	/* 获取当前的系统时间 */
     xLastWakeTime = xTaskGetTickCount();
-	
+
     while(1)
     {
        	bsp_LedToggle(2);
 		bsp_LedToggle(3);
-		
+
 		/* vTaskDelayUntil是绝对延迟，vTaskDelay是相对延迟。*/
         vTaskDelayUntil(&xLastWakeTime, xFrequency);
     }
@@ -202,18 +202,18 @@ static void vTaskLED(void *pvParameters)
 *	功能说明: 使用函数xSemaphoreTake接收任务vTaskTaskUserIF发送的同步信号
 *	形    参: pvParameters 是在创建该任务时传递的形参
 *	返 回 值: 无
-*   优 先 级: 3  
+*   优 先 级: 3
 *********************************************************************************************************
 */
 static void vTaskMsgPro(void *pvParameters)
 {
 	BaseType_t xResult;
 	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(300); /* 设置最大等待时间为300ms */
-	
+
     while(1)
     {
 		xResult = xSemaphoreTake(xSemaphore, (TickType_t)xMaxBlockTime);
-		
+
 		if(xResult == pdTRUE)
 		{
 			/* 接收到同步信号 */
@@ -234,7 +234,7 @@ static void vTaskMsgPro(void *pvParameters)
 *	功能说明: 启动任务，也就是最高优先级任务。
 *	形    参: pvParameters 是在创建该任务时传递的形参
 *	返 回 值: 无
-*   优 先 级: 4  
+*   优 先 级: 4
 *********************************************************************************************************
 */
 static void vTaskStart(void *pvParameters)
@@ -263,23 +263,23 @@ static void AppTaskCreate (void)
                     NULL,              /* 任务参数  */
                     1,                 /* 任务优先级*/
                     NULL );            /* 任务句柄  */
-	
-	
+
+
 	xTaskCreate(    vTaskLED,    /* 任务函数  */
                     "vTaskLED",  /* 任务名    */
                     512,         /* stack大小，单位word，也就是4字节 */
                     NULL,        /* 任务参数  */
                     2,           /* 任务优先级*/
                     &xHandleTaskLED );   /* 任务句柄  */
-	
+
 	xTaskCreate(    vTaskMsgPro,     /* 任务函数  */
                     "vTaskMsgPro",   /* 任务名    */
                     512,             /* stack大小，单位word，也就是4字节 */
                     NULL,            /* 任务参数  */
                     3,               /* 任务优先级*/
                     &xHandleTaskMsgPro );  /* 任务句柄  */
-	
-	
+
+
 	xTaskCreate(    vTaskStart,     /* 任务函数  */
                     "vTaskStart",   /* 任务名    */
                     512,            /* stack大小，单位word，也就是4字节 */
@@ -300,11 +300,11 @@ static void AppObjCreate (void)
 {
 	/* 创建二值信号量，首次创建信号量计数值是0 */
 	xSemaphore = xSemaphoreCreateBinary();
-	
+
 	if(xSemaphore == NULL)
     {
         /* 没有创建成功，用户可以在这里加入创建失败的处理机制 */
     }
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

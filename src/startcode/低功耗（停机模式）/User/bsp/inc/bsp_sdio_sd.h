@@ -4,13 +4,13 @@
 *	模块名称 : SDIO 卡底层驱动
 *	文件名称 : bsp_sdio_sd.h
 *	版    本 : V1.0
-*	说    明 : 根据ST的资料整合并改编。原始文件为: stm3210e_eval_sdio_sd.h  ,  stm3210e_eval.h 
+*	说    明 : 根据ST的资料整合并改编。原始文件为: stm3210e_eval_sdio_sd.h  ,  stm3210e_eval.h
 *
 *	修改记录 :
 *		版本号  日期        作者     说明
 *		V1.0    2015-08-02 armfly  正式发布
 *
-*	Copyright (C), 2015-2016, 安富莱电子 www.armfly.com
+*	Copyright (C), 2015-2016, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -22,12 +22,12 @@
 #define SD_DETECT_GPIO_CLK               RCC_APB2Periph_GPIOC
 
 #define SDIO_FIFO_ADDRESS                ((uint32_t)0x40018080)
-/** 
+/**
   * @brief  SDIO Intialization Frequency (400KHz max)
   */
 #define SDIO_INIT_CLK_DIV                ((uint8_t)0xB2)
-/** 
-  * @brief  SDIO Data Transfer Frequency (25MHz max) 
+/**
+  * @brief  SDIO Data Transfer Frequency (25MHz max)
   */
 #define SDIO_TRANSFER_CLK_DIV            ((uint8_t)0x01)
 
@@ -47,7 +47,7 @@
   * @author  MCD Application Team
   * @version V5.1.0
   * @date    18-January-2013
-  * @brief   This file contains all the functions prototypes for the SD Card 
+  * @brief   This file contains all the functions prototypes for the SD Card
   *          stm3210e_eval_sdio_sd driver firmware library.
   ******************************************************************************
   * @attention
@@ -60,8 +60,8 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
@@ -83,27 +83,27 @@
 /** @addtogroup Utilities
   * @{
   */
-  
+
 /** @addtogroup STM32_EVAL
   * @{
-  */ 
+  */
 
 /** @addtogroup STM3210E_EVAL
   * @{
   */
-  
+
 /** @addtogroup STM3210E_EVAL_SDIO_SD
   * @{
-  */  
+  */
 
 /** @defgroup STM3210E_EVAL_SDIO_SD_Exported_Types
   * @{
-  */ 
+  */
 typedef enum
 {
-/** 
-  * @brief  SDIO specific error defines  
-  */   
+/**
+  * @brief  SDIO specific error defines
+  */
   SD_CMD_CRC_FAIL                    = (1), /*!< Command response received (but CRC check failed) */
   SD_DATA_CRC_FAIL                   = (2), /*!< Data bock sent/received (CRC check Failed) */
   SD_CMD_RSP_TIMEOUT                 = (3), /*!< Command response timeout */
@@ -138,23 +138,23 @@ typedef enum
   SD_SDIO_FUNCTION_FAILED            = (32),
   SD_SDIO_UNKNOWN_FUNCTION           = (33),
 
-/** 
-  * @brief  Standard error defines   
-  */ 
-  SD_INTERNAL_ERROR, 
+/**
+  * @brief  Standard error defines
+  */
+  SD_INTERNAL_ERROR,
   SD_NOT_CONFIGURED,
-  SD_REQUEST_PENDING, 
-  SD_REQUEST_NOT_APPLICABLE, 
-  SD_INVALID_PARAMETER,  
-  SD_UNSUPPORTED_FEATURE,  
-  SD_UNSUPPORTED_HW,  
-  SD_ERROR,  
-  SD_OK = 0 
+  SD_REQUEST_PENDING,
+  SD_REQUEST_NOT_APPLICABLE,
+  SD_INVALID_PARAMETER,
+  SD_UNSUPPORTED_FEATURE,
+  SD_UNSUPPORTED_HW,
+  SD_ERROR,
+  SD_OK = 0
 } SD_Error;
 
-/** 
-  * @brief  SDIO Transfer state  
-  */   
+/**
+  * @brief  SDIO Transfer state
+  */
 typedef enum
 {
   SD_TRANSFER_OK  = 0,
@@ -162,9 +162,9 @@ typedef enum
   SD_TRANSFER_ERROR
 } SDTransferState;
 
-/** 
-  * @brief  SD Card States 
-  */   
+/**
+  * @brief  SD Card States
+  */
 typedef enum
 {
   SD_CARD_READY                  = ((uint32_t)0x00000001),
@@ -179,9 +179,9 @@ typedef enum
 }SDCardState;
 
 
-/** 
-  * @brief  Card Specific Data: CSD Register   
-  */ 
+/**
+  * @brief  Card Specific Data: CSD Register
+  */
 typedef struct
 {
   __IO uint8_t  CSDStruct;            /*!< CSD structure */
@@ -223,8 +223,8 @@ typedef struct
   __IO uint8_t  Reserved4;            /*!< always 1*/
 } SD_CSD;
 
-/** 
-  * @brief  Card Identification Data: CID Register   
+/**
+  * @brief  Card Identification Data: CID Register
   */
 typedef struct
 {
@@ -240,8 +240,8 @@ typedef struct
   __IO uint8_t  Reserved2;            /*!< always 1 */
 } SD_CID;
 
-/** 
-  * @brief SD Card Status 
+/**
+  * @brief SD Card Status
   */
 typedef struct
 {
@@ -258,8 +258,8 @@ typedef struct
 } SD_CardStatus;
 
 
-/** 
-  * @brief SD Card information 
+/**
+  * @brief SD Card information
   */
 typedef struct
 {
@@ -274,13 +274,13 @@ typedef struct
 /**
   * @}
   */
-  
+
 /** @defgroup STM3210E_EVAL_SDIO_SD_Exported_Constants
   * @{
-  */ 
+  */
 
-/** 
-  * @brief SDIO Commands  Index 
+/**
+  * @brief SDIO Commands  Index
   */
 #define SD_CMD_GO_IDLE_STATE                       ((uint8_t)0)
 #define SD_CMD_SEND_OP_COND                        ((uint8_t)1)
@@ -329,9 +329,9 @@ typedef struct
 #define SD_CMD_GEN_CMD                             ((uint8_t)56)
 #define SD_CMD_NO_CMD                              ((uint8_t)64)
 
-/** 
+/**
   * @brief Following commands are SD Card Specific commands.
-  *        SDIO_APP_CMD should be sent before sending these commands. 
+  *        SDIO_APP_CMD should be sent before sending these commands.
   */
 #define SD_CMD_APP_SD_SET_BUSWIDTH                 ((uint8_t)6)  /*!< For SD Card only */
 #define SD_CMD_SD_APP_STAUS                        ((uint8_t)13) /*!< For SD Card only */
@@ -342,9 +342,9 @@ typedef struct
 #define SD_CMD_SDIO_RW_DIRECT                      ((uint8_t)52) /*!< For SD I/O Card only */
 #define SD_CMD_SDIO_RW_EXTENDED                    ((uint8_t)53) /*!< For SD I/O Card only */
 
-/** 
+/**
   * @brief Following commands are SD Card Specific security commands.
-  *        SDIO_APP_CMD should be sent before sending these commands. 
+  *        SDIO_APP_CMD should be sent before sending these commands.
   */
 #define SD_CMD_SD_APP_GET_MKB                      ((uint8_t)43) /*!< For SD Card only */
 #define SD_CMD_SD_APP_GET_MID                      ((uint8_t)44) /*!< For SD Card only */
@@ -357,8 +357,8 @@ typedef struct
 #define SD_CMD_SD_APP_SECURE_ERASE                 ((uint8_t)38) /*!< For SD Card only */
 #define SD_CMD_SD_APP_CHANGE_SECURE_AREA           ((uint8_t)49) /*!< For SD Card only */
 #define SD_CMD_SD_APP_SECURE_WRITE_MKB             ((uint8_t)48) /*!< For SD Card only */
-  
-/* Uncomment the following line to select the SDIO Data transfer mode */  
+
+/* Uncomment the following line to select the SDIO Data transfer mode */
 #if !defined (SD_DMA_MODE) && !defined (SD_POLLING_MODE)
 #define SD_DMA_MODE                                ((uint32_t)0x00000000)
 /*#define SD_POLLING_MODE                            ((uint32_t)0x00000002)*/
@@ -370,8 +370,8 @@ typedef struct
 #define SD_PRESENT                                 ((uint8_t)0x01)
 #define SD_NOT_PRESENT                             ((uint8_t)0x00)
 
-/** 
-  * @brief Supported SD Memory Cards 
+/**
+  * @brief Supported SD Memory Cards
   */
 #define SDIO_STD_CAPACITY_SD_CARD_V1_1             ((uint32_t)0x00000000)
 #define SDIO_STD_CAPACITY_SD_CARD_V2_0             ((uint32_t)0x00000001)
@@ -384,18 +384,18 @@ typedef struct
 
 /**
   * @}
-  */ 
-  
+  */
+
 /** @defgroup STM3210E_EVAL_SDIO_SD_Exported_Macros
   * @{
-  */ 
+  */
 /**
   * @}
-  */ 
+  */
 
 /** @defgroup STM3210E_EVAL_SDIO_SD_Exported_Functions
   * @{
-  */ 
+  */
 void SD_DeInit(void);
 SD_Error SD_Init(void);
 SDTransferState SD_GetStatus(void);
@@ -440,11 +440,11 @@ SD_Error SD_WaitWriteOperation(void);
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 
@@ -456,4 +456,4 @@ uint32_t SD_DMAEndOfTransferStatus(void);
 
 extern SD_CardInfo SDCardInfo;
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

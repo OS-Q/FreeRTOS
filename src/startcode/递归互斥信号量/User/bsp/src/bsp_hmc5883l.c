@@ -10,7 +10,7 @@
 *		版本号  日期        作者     说明
 *		V1.0    2013-02-01 armfly  正式发布
 *
-*	Copyright (C), 2013-2014, 安富莱电子 www.armfly.com
+*	Copyright (C), 2013-2014, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -35,16 +35,16 @@ void bsp_InitHMC5883L(void)
 {
 
 
-	
+
 	/* 设置Mode寄存器 */
 	#if 1
-		HMC5883L_WriteByte(0x00, 0x70);	
-		HMC5883L_WriteByte(0x01, 0x20);	
-		HMC5883L_WriteByte(0x02, 0x00);	
+		HMC5883L_WriteByte(0x00, 0x70);
+		HMC5883L_WriteByte(0x01, 0x20);
+		HMC5883L_WriteByte(0x02, 0x00);
 	#else	/* 自校准模式 */
-		HMC5883L_WriteByte(0x00, 0x70 + 2);	
-		HMC5883L_WriteByte(0x01, 0x20);	
-		HMC5883L_WriteByte(0x02, 0x00);		
+		HMC5883L_WriteByte(0x00, 0x70 + 2);
+		HMC5883L_WriteByte(0x01, 0x20);
+		HMC5883L_WriteByte(0x02, 0x00);
 	#endif
 
 	g_tMag.CfgRegA = HMC5883L_ReadByte(0);
@@ -55,12 +55,12 @@ void bsp_InitHMC5883L(void)
 	g_tMag.IDReg[1] = HMC5883L_ReadByte(11);
 	g_tMag.IDReg[2] = HMC5883L_ReadByte(12);
 	g_tMag.IDReg[3] = 0;
-		
+
 
 	/* 设置最小最大值初值 */
 	g_tMag.X_Min = 4096;
 	g_tMag.X_Max = -4096;
-	
+
 	g_tMag.Y_Min = 4096;
 	g_tMag.Y_Max = -4096;
 
@@ -171,9 +171,9 @@ void HMC5883L_ReadData(void)
 	g_tMag.X = (int16_t)((ucReadBuf[0] << 8) + ucReadBuf[1]);
 	g_tMag.Z = (int16_t)((ucReadBuf[2] << 8) + ucReadBuf[3]);
 	g_tMag.Y = (int16_t)((ucReadBuf[4] << 8) + ucReadBuf[5]);
-	
+
 	g_tMag.Status = ucReadBuf[6];
-	
+
 	/* 统计最大值和最小值 */
 	if ((g_tMag.X > - 2048) && (g_tMag.X < 2048))
 	{
@@ -184,7 +184,7 @@ void HMC5883L_ReadData(void)
 		if (g_tMag.X < g_tMag.X_Min)
 		{
 			g_tMag.X_Min = g_tMag.X;
-		}	
+		}
 	}
 
 	if ((g_tMag.Y > - 2048) && (g_tMag.Y < 2048))
@@ -196,9 +196,9 @@ void HMC5883L_ReadData(void)
 		if (g_tMag.Y < g_tMag.Y_Min)
 		{
 			g_tMag.Y_Min = g_tMag.Y;
-		}	
+		}
 	}
-	
+
 	if ((g_tMag.Z > - 2048) && (g_tMag.Z < 2048))
 	{
 		if (g_tMag.Z > g_tMag.Z_Max)
@@ -208,9 +208,9 @@ void HMC5883L_ReadData(void)
 		if (g_tMag.Z < g_tMag.Z_Min)
 		{
 			g_tMag.Z_Min = g_tMag.Z;
-		}	
+		}
 	}
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/
 

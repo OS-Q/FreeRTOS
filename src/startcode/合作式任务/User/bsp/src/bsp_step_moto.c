@@ -13,7 +13,7 @@
 *		版本号  日期         作者     说明
 *		V1.0    2015-07-19   armfly  正式发布
 *
-*	Copyright (C), 2015-2016, 安富莱电子 www.armfly.com
+*	Copyright (C), 2015-2016, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -68,19 +68,19 @@ void bsp_InitStepMoto(void)
 
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;	/* 推挽输出模式 */
-	
+
 	GPIO_InitStructure.GPIO_Pin = PIN_MOTO_A;
 	GPIO_Init(PORT_MOTO_A, &GPIO_InitStructure);
-	
+
 	GPIO_InitStructure.GPIO_Pin = PIN_MOTO_B;
 	GPIO_Init(PORT_MOTO_B, &GPIO_InitStructure);
-	
+
 	GPIO_InitStructure.GPIO_Pin = PIN_MOTO_C;
 	GPIO_Init(PORT_MOTO_C, &GPIO_InitStructure);
 
 	GPIO_InitStructure.GPIO_Pin = PIN_MOTO_D;
-	GPIO_Init(PORT_MOTO_D, &GPIO_InitStructure);	
-	
+	GPIO_Init(PORT_MOTO_D, &GPIO_InitStructure);
+
 	g_tMoto.Dir = 0;
 	g_tMoto.StepFreq = 0;
 	g_tMoto.StepCount = 0;
@@ -104,7 +104,7 @@ void MOTO_Start(uint32_t _speed, uint8_t _dir, uint32_t _stpes)
 	g_tMoto.StepFreq = _speed;
 	g_tMoto.StepCount = _stpes;
 	g_tMoto.Running = 1;
-	
+
 	//void bsp_SetTIMforInt(TIM_TypeDef* TIMx, uint32_t _ulFreq, uint8_t _PreemptionPriority, uint8_t _SubPriority)
 	bsp_SetTIMforInt(TIM6, _speed, 2, 2);
 }
@@ -122,7 +122,7 @@ void MOTO_Start(uint32_t _speed, uint8_t _dir, uint32_t _stpes)
 void MOTO_ShangeSpeed(uint32_t _speed)
 {
 	g_tMoto.StepFreq = _speed;
-	
+
 	if (g_tMoto.Running == 1)
 	{
 		//void bsp_SetTIMforInt(TIM_TypeDef* TIMx, uint32_t _ulFreq, uint8_t _PreemptionPriority, uint8_t _SubPriority)
@@ -143,12 +143,12 @@ void MOTO_Stop(void)
 	//void bsp_SetTIMforInt(TIM_TypeDef* TIMx, uint32_t _ulFreq, uint8_t _PreemptionPriority, uint8_t _SubPriority)
 	bsp_SetTIMforInt(TIM6, 0, 0, 0);
 	g_tMoto.Running = 0;
-	
+
 	/* 所有线圈停电 */
 	MOTO_A_1();
 	MOTO_B_1();
 	MOTO_C_1();
-	MOTO_D_1();		
+	MOTO_D_1();
 }
 
 
@@ -178,13 +178,13 @@ void MOTO_Pause(void)
 uint32_t MOTO_RoudToStep(void)
 {
 	uint32_t steps;
-	
-	/* 28BYJ48 电机步距角度 = 5.625/64度. 
+
+	/* 28BYJ48 电机步距角度 = 5.625/64度.
 		一圈 360度；
 		step = 360 / (5.625 / 64)
-	*/	
+	*/
 	steps = (360 * 64 * 1000 / 4) / 5625;		// 4096步
-	
+
 	return steps;
 }
 
@@ -200,7 +200,7 @@ uint32_t MOTO_RoudToStep(void)
 void MOTO_ISR(void)
 {
 	uint8_t n;
-	
+
 	if (g_tMoto.Running == 0)
 	{
 		return;
@@ -209,97 +209,97 @@ void MOTO_ISR(void)
 #if 1	/* A - AB - B - BC - C - CD - D - DA */
 	switch (g_tMoto.Pos)
 	{
-		case 0:			
+		case 0:
 			MOTO_A_0();
 			MOTO_B_1();
 			MOTO_C_1();
 			MOTO_D_1();
 			break;
-		
+
 		case 1:
 			MOTO_A_0();
 			MOTO_B_0();
 			MOTO_C_1();
-			MOTO_D_1();	
-			break;	
+			MOTO_D_1();
+			break;
 
 		case 2:
 			MOTO_A_1();
 			MOTO_B_0();
 			MOTO_C_1();
-			MOTO_D_1();	
-			break;			
+			MOTO_D_1();
+			break;
 
 		case 3:
 			MOTO_A_1();
 			MOTO_B_0();
 			MOTO_C_0();
-			MOTO_D_1();	
-			break;					
+			MOTO_D_1();
+			break;
 
 		case 4:
 			MOTO_A_1();
 			MOTO_B_1();
 			MOTO_C_0();
-			MOTO_D_1();	
-			break;		
+			MOTO_D_1();
+			break;
 
 		case 5:
 			MOTO_A_1();
 			MOTO_B_1();
 			MOTO_C_0();
-			MOTO_D_0();	
-			break;		
+			MOTO_D_0();
+			break;
 
 		case 6:
 			MOTO_A_1();
 			MOTO_B_1();
 			MOTO_C_1();
-			MOTO_D_0();	
-			break;									
-			
+			MOTO_D_0();
+			break;
+
 		case 7:
 			MOTO_A_0();
 			MOTO_B_1();
 			MOTO_C_1();
-			MOTO_D_0();	
-			break;							
+			MOTO_D_0();
+			break;
 	}
 	n = 7;
 #else
 	/* A -  B -  C  - D  */
 	switch (g_tMoto.Pos)
 	{
-		case 0:			
+		case 0:
 			MOTO_A_0();
 			MOTO_B_1();
 			MOTO_C_1();
 			MOTO_D_1();
 			break;
-		
+
 		case 1:
 			MOTO_A_1();
 			MOTO_B_0();
 			MOTO_C_1();
-			MOTO_D_1();	
-			break;	
+			MOTO_D_1();
+			break;
 
 		case 2:
 			MOTO_A_1();
 			MOTO_B_1();
 			MOTO_C_0();
-			MOTO_D_1();	
-			break;			
+			MOTO_D_1();
+			break;
 
 		case 3:
 			MOTO_A_1();
 			MOTO_B_1();
 			MOTO_C_1();
-			MOTO_D_0();	
-			break;											
-	}	
+			MOTO_D_0();
+			break;
+	}
 	n = 3;
-#endif	
+#endif
 	if (g_tMoto.Dir == 0)	/* 正转 */
 	{
 		if (++g_tMoto.Pos > n)
@@ -318,18 +318,18 @@ void MOTO_ISR(void)
 			g_tMoto.Pos--;
 		}
 	}
-	
+
 	if (g_tMoto.StepCount > 0)
-	{		
+	{
 		g_tMoto.StepCount--;
-		
+
 		if (g_tMoto.StepCount == 0)
-		{		
+		{
 			TIM_ClearITPendingBit(TIM6, TIM_IT_Update);		/* 清除中断标志位 */
-			
+
 			MOTO_Pause();	/* 暂停 */
 		}
-	}	
+	}
 }
 
 /*
@@ -352,4 +352,4 @@ void TIM6_IRQHandler(void)
 }
 #endif
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

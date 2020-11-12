@@ -10,7 +10,7 @@
 *		版本号  日期        作者     说明
 *		V1.0    2015-05-23  armfly  正式发布
 *
-*	Copyright (C), 2015-2016, 安富莱电子 www.armfly.com
+*	Copyright (C), 2015-2016, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -29,50 +29,50 @@ void bsp_InitExtSRAM(void)
 {
 	FSMC_NORSRAMInitTypeDef  FSMC_NORSRAMInitStructure;
 	FSMC_NORSRAMTimingInitTypeDef  p;
-	GPIO_InitTypeDef GPIO_InitStructure; 
+	GPIO_InitTypeDef GPIO_InitStructure;
 
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_FSMC, ENABLE);
-		
+
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD | RCC_APB2Periph_GPIOG | RCC_APB2Periph_GPIOE |
 	                     RCC_APB2Periph_GPIOF, ENABLE);
-	
+
 	/* 配置SRAM数据线 */
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_8 | GPIO_Pin_9 |
 	                            GPIO_Pin_10 | GPIO_Pin_14 | GPIO_Pin_15;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOD, &GPIO_InitStructure); 
-	
+	GPIO_Init(GPIOD, &GPIO_InitStructure);
+
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_10 |
-	                            GPIO_Pin_11 | GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | 
+	                            GPIO_Pin_11 | GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 |
 	                            GPIO_Pin_15;
 	GPIO_Init(GPIOE, &GPIO_InitStructure);
-	
+
 	/* 配置SRAM 地址线 */
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 | 
-	                            GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_12 | GPIO_Pin_13 | 
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 |
+	                            GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_12 | GPIO_Pin_13 |
 	                            GPIO_Pin_14 | GPIO_Pin_15;
 	GPIO_Init(GPIOF, &GPIO_InitStructure);
-	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 | 
+
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 |
 	                            GPIO_Pin_4 | GPIO_Pin_5;
 	GPIO_Init(GPIOG, &GPIO_InitStructure);
-	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_12 | GPIO_Pin_13; 
+
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_12 | GPIO_Pin_13;
 	GPIO_Init(GPIOD, &GPIO_InitStructure);
-	
-	/* 配置 NOE 和 NWE */  
+
+	/* 配置 NOE 和 NWE */
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 |GPIO_Pin_5;
 	GPIO_Init(GPIOD, &GPIO_InitStructure);
-	
+
 	/* 配置 NE3 */
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10; 
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
 	GPIO_Init(GPIOG, &GPIO_InitStructure);
-	
+
 	/* 配置 NBL0, NBL1 */
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1; 
-	GPIO_Init(GPIOE, &GPIO_InitStructure); 
-	
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1;
+	GPIO_Init(GPIOE, &GPIO_InitStructure);
+
 	/* 配置FSMC */
 	p.FSMC_AddressSetupTime = 0;
 	p.FSMC_AddressHoldTime = 0;
@@ -81,13 +81,13 @@ void bsp_InitExtSRAM(void)
 	p.FSMC_CLKDivision = 0;
 	p.FSMC_DataLatency = 0;
 	p.FSMC_AccessMode = FSMC_AccessMode_A;
-	
+
 	FSMC_NORSRAMInitStructure.FSMC_Bank = FSMC_Bank1_NORSRAM3;
 	FSMC_NORSRAMInitStructure.FSMC_DataAddressMux = FSMC_DataAddressMux_Disable;
 	FSMC_NORSRAMInitStructure.FSMC_MemoryType = FSMC_MemoryType_SRAM;
 	FSMC_NORSRAMInitStructure.FSMC_MemoryDataWidth = FSMC_MemoryDataWidth_16b;
 	FSMC_NORSRAMInitStructure.FSMC_BurstAccessMode = FSMC_BurstAccessMode_Disable;
-	FSMC_NORSRAMInitStructure.FSMC_AsynchronousWait = FSMC_AsynchronousWait_Disable;  
+	FSMC_NORSRAMInitStructure.FSMC_AsynchronousWait = FSMC_AsynchronousWait_Disable;
 	FSMC_NORSRAMInitStructure.FSMC_WaitSignalPolarity = FSMC_WaitSignalPolarity_Low;
 	FSMC_NORSRAMInitStructure.FSMC_WrapMode = FSMC_WrapMode_Disable;
 	FSMC_NORSRAMInitStructure.FSMC_WaitSignalActive = FSMC_WaitSignalActive_BeforeWaitState;
@@ -97,11 +97,11 @@ void bsp_InitExtSRAM(void)
 	FSMC_NORSRAMInitStructure.FSMC_WriteBurst = FSMC_WriteBurst_Disable;
 	FSMC_NORSRAMInitStructure.FSMC_ReadWriteTimingStruct = &p;
 	FSMC_NORSRAMInitStructure.FSMC_WriteTimingStruct = &p;
-	
-	FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure); 
-	
+
+	FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure);
+
 	/*!< Enable FSMC Bank1_SRAM Bank */
-	FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM3, ENABLE);  
+	FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM3, ENABLE);
 }
 
 /*
@@ -193,4 +193,4 @@ uint8_t bsp_TestExtSRAM(void)
 	return 0;
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

@@ -9,7 +9,7 @@
 *		版本号  日期        作者     说明
 *		V1.0    2013-02-01 armfly  正式发布
 *
-*	Copyright (C), 2013-2014, 安富莱电子 www.armfly.com
+*	Copyright (C), 2013-2014, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -165,7 +165,7 @@ uint8_t bsp_WriteCpuFlash(uint32_t _ulFlashAddr, uint8_t *_ucpSrc, uint32_t _ulS
 	if ((_ulSize % 2) != 0)
 	{
 		return 1;
-	}	
+	}
 
 	ucRet = bsp_CmpCpuFlash(_ulFlashAddr, _ucpSrc, _ulSize);
 
@@ -180,7 +180,7 @@ uint8_t bsp_WriteCpuFlash(uint32_t _ulFlashAddr, uint8_t *_ucpSrc, uint32_t _ulS
 	FLASH_Unlock();
 
   	/* Clear pending flags (if any) */
-	FLASH_ClearFlag(FLASH_FLAG_BSY | FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPRTERR);	
+	FLASH_ClearFlag(FLASH_FLAG_BSY | FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPRTERR);
 
 	/* 需要擦除 */
 	if (ucRet == FLASH_REQ_ERASE)
@@ -189,13 +189,13 @@ uint8_t bsp_WriteCpuFlash(uint32_t _ulFlashAddr, uint8_t *_ucpSrc, uint32_t _ulS
 		if (status != FLASH_COMPLETE)
 		{
 			return 2;
-		}		
+		}
 	}
 
 	/* 按字节模式编程（为提高效率，可以按字编程，一次写入4字节） */
 	for (i = 0; i < _ulSize / 2; i++)
 	{
-		//FLASH_ProgramByte(_ulFlashAddr++, *_ucpSrc++);		
+		//FLASH_ProgramByte(_ulFlashAddr++, *_ucpSrc++);
 		usTemp = _ucpSrc[2 * i];
 		usTemp |= (_ucpSrc[2 * i + 1] << 8);
 		status = FLASH_ProgramHalfWord(_ulFlashAddr, usTemp);
@@ -203,7 +203,7 @@ uint8_t bsp_WriteCpuFlash(uint32_t _ulFlashAddr, uint8_t *_ucpSrc, uint32_t _ulS
 		{
 			break;
 		}
-		
+
 		_ulFlashAddr += 2;
 	}
 
@@ -219,4 +219,4 @@ uint8_t bsp_WriteCpuFlash(uint32_t _ulFlashAddr, uint8_t *_ucpSrc, uint32_t _ulS
 	return 2;
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/

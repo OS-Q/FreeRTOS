@@ -10,7 +10,7 @@
 *		版本号  日期        作者     说明
 *		V1.0    2013-07-12 armfly  正式发布
 *
-*	Copyright (C), 2013-2014, 安富莱电子 www.armfly.com
+*	Copyright (C), 2013-2014, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -140,7 +140,7 @@ void vs1053_Init(void)
 		PF9           ==> XCS\     (片选, 和LED4复用，访问VS1003B时，LED4会闪烁)
 		PB5           <== DREQ
 		PF8           ==> XDCS/BSYNC   (数据和命令选择)
-		
+
 	*/
 	/* 打开相关模块的时钟 */
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB
@@ -157,21 +157,21 @@ void vs1053_Init(void)
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;    /* 推挽输出 */
-	GPIO_Init(GPIOF,&GPIO_InitStructure);	
+	GPIO_Init(GPIOF,&GPIO_InitStructure);
 
 	/* 配置PF9作为VS1003B的XCS */
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;    /* 推挽输出 */
-	GPIO_Init(GPIOF,&GPIO_InitStructure);	
+	GPIO_Init(GPIOF,&GPIO_InitStructure);
 
 	VS1053_CS_1();
 	VS1053_DS_1();
 
 #if 0
 	{
-		
-		/*　软件SPI模拟还是硬件SPI由 bsp_spi_bus.c 文件决定。 不要在这个地方配置SPI硬件 */		
+
+		/*　软件SPI模拟还是硬件SPI由 bsp_spi_bus.c 文件决定。 不要在这个地方配置SPI硬件 */
 		/*　配置SPI1口线：SCK, MISO and MOSI */
 		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
 		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -182,15 +182,15 @@ void vs1053_Init(void)
 		/* 配置SPI硬件参数用于访问MP3解码器VS1053B */
 		/* 打开SPI时钟 */
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
-		
+
 		bsp_SPI_Init(SPI_Direction_2Lines_FullDuplex | SPI_Mode_Master | SPI_DataSize_8b
 			| SPI_CPOL_Low | SPI_CPHA_1Edge | SPI_NSS_Soft | SPI_BaudRatePrescaler_64 | SPI_FirstBit_MSB);
-		
+
 		SPI_Cmd(SPI1, DISABLE);			/* 禁止SPI  */
 		SPI_Cmd(SPI1, ENABLE);			/* 使能SPI  */
 	}
-	//bsp_CfgSPIForVS1053B();	
-#endif	
+	//bsp_CfgSPIForVS1053B();
+#endif
 }
 
 /*
@@ -325,7 +325,7 @@ void vs1053_WriteCmd(uint8_t _ucAddr, uint16_t _usData)
 	bsp_spiWrite0(_ucAddr); 			/* 寄存器地址 */
 	bsp_spiWrite0(_usData >> 8); 	/* 发送高8位 */
 	bsp_spiWrite0(_usData);	 		/* 发送低8位 */
-	
+
 	vs1053_SetCS(1);
 }
 
@@ -397,12 +397,12 @@ uint16_t vs1053_ReadReg(uint8_t _ucAddr)
 	}
 
 	vs1053_SetCS(0);
-	
+
 	bsp_spiWrite0(VS_READ_COMMAND);	/* 发送vs1053读命令 */
 	bsp_spiWrite0(_ucAddr);			/* 发送地址 */
 	usTemp = bsp_spiRead0() << 8;	/* 读取高字节 */
 	usTemp += bsp_spiRead0();		/* 读取低字节 */
-	
+
 	vs1053_SetCS(1);
 	return usTemp;
 }
@@ -520,7 +520,7 @@ uint8_t vs1053_TestRam(void)
 	}
 
 	vs1053_SetDS(0);
-	
+
 	bsp_spiWrite0(0x4d);
 	bsp_spiWrite0(0xea);
 	bsp_spiWrite0(0x6d);
@@ -529,7 +529,7 @@ uint8_t vs1053_TestRam(void)
 	bsp_spiWrite0(0x00);
 	bsp_spiWrite0(0x00);
 	bsp_spiWrite0(0x00);
-	
+
 	vs1053_SetDS(1);
 
 	/* 等待芯片内部操作完成 */

@@ -10,7 +10,7 @@
 *		版本号  日期        作者    说明
 *		V1.0    2013-02-01 armfly  正式发布
 *
-*	Copyright (C), 2010-2012, 安富莱电子 www.armfly.com
+*	Copyright (C), 2010-2012, 安富莱www.OS-Q.comm
 *
 *********************************************************************************************************
 */
@@ -330,13 +330,13 @@ void OLED_DispStr(uint16_t _usX, uint16_t _usY, char *_ptr, FONT_T *_tFont)
 	uint8_t m, width;
 	uint8_t font_width,font_height, font_bytes;
 	uint16_t x, y;
-	const uint8_t *pAscDot;	
+	const uint8_t *pAscDot;
 
-#ifdef USE_SMALL_FONT		
+#ifdef USE_SMALL_FONT
 	const uint8_t *pHzDot;
-#else	
+#else
 	uint32_t AddrHZK;
-#endif	
+#endif
 
 	/* 如果字体结构为空指针，则缺省按16点阵 */
 	if (_tFont->FontCode == FC_ST_12)
@@ -345,11 +345,11 @@ void OLED_DispStr(uint16_t _usX, uint16_t _usY, char *_ptr, FONT_T *_tFont)
 		font_width = 12;
 		font_bytes = 24;
 		pAscDot = g_Ascii12;
-	#ifdef USE_SMALL_FONT		
+	#ifdef USE_SMALL_FONT
 		pHzDot = g_Hz12;
-	#else		
+	#else
 		AddrHZK = HZK12_ADDR;
-	#endif		
+	#endif
 	}
 	else
 	{
@@ -358,7 +358,7 @@ void OLED_DispStr(uint16_t _usX, uint16_t _usY, char *_ptr, FONT_T *_tFont)
 		font_width = 16;
 		font_bytes = 32;
 		pAscDot = g_Ascii16;
-	#ifdef USE_SMALL_FONT		
+	#ifdef USE_SMALL_FONT
 		pHzDot = g_Hz16;
 	#else
 		AddrHZK = HZK16_ADDR;
@@ -906,4 +906,4 @@ static void OLED_WriteData(uint8_t _ucData)
 #endif
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/
