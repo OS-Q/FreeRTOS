@@ -1,4 +1,3 @@
-del *.uvop* /s
 del *.uvgui* /s
 del *.saved* /s
 del *.o /s

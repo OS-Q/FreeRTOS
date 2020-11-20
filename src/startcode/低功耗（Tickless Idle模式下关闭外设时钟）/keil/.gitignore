@@ -2,5 +2,6 @@ obj/
 list/
 RTE/
 DebugConfig/
-*.uvgu*
-*.uvop*
+*
+!*.uvoptx
+!*.uvprojx
