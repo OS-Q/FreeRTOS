@@ -1,32 +1,4 @@
-/*
-*                1. 学习FreeRTOS的消息队列（中断方式）
-*                2. 按下按键K1可以通过串口打印任务执行情况
-*                   任务名      任务状态 优先级   剩余栈 任务序号
-*                   vTaskUserIF     R       1       334     1
-*                   IDLE            R       0       116     5
-*                   vTaskMsgPro     B       3       458     3
-*                   vTaskLED        B       2       458     2
-*                   vTaskStart      B       4       490     4
-*
-*                   任务名       运行计数         使用率
-*                   vTaskUserIF     10987           <1%
-*                   IDLE            1437641         98%
-*                   vTaskMsgPro     1224            <1%
-*                   vTaskLED        4146            <1%
-*                   vTaskStart      3               <1%
 
-*                    vTaskTaskUserIF 任务：按键消息处理
-*                    vTaskLED 任务       ：使用函数xQueueReceive接定时器中断发送的消息队列数据
-*                    vTaskMsgPro 任务    ：使用函数xQueueReceive接定时器中断发送的消息队列数据
-*                    vTaskStart 任务     ：按键扫描
-*                 3. 任务运行转态的定义如下，跟上面串口打印字母B, R, D, S对应：
-*                    #define tskBLOCKED_CHAR		( 'B' )
-*                    #define tskREADY_CHAR		    ( 'R' )
-*                    #define tskDELETED_CHAR		( 'D' )
-*                    #define tskSUSPENDED_CHAR	    ( 'S' )
-*                 4. K2键按下，启动单次定时器中断，50ms后在定时器中断给任务vTaskMsgPro发送消息
-*                 5. K3键按下，启动单次定时器中断，50ms后在定时器中断给任务vTaskMsgPro发送消息
-*/
 #include "includes.h"
 
 
