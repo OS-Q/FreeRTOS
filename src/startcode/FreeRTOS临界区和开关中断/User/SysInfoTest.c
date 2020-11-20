@@ -1,12 +1,8 @@
 #include "bsp.h"
-
-
 /* 定时器频率，50us一次中断 */
 #define  timerINTERRUPT_FREQUENCY	20000
-
 /* 中断优先级 */
 #define  timerHIGHEST_PRIORITY		1
-
 /* 被系统调用 */
 volatile uint32_t ulHighFrequencyTimerTicks = 0UL;
 

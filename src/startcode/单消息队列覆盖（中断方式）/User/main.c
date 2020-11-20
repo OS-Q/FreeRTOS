@@ -34,8 +34,6 @@ static void vTaskLED(void *pvParameters)
 		xResult = xQueueReceive(xQueue2,                   /* 消息队列句柄 */
 		                        (void *)&ptMsg,  		   /* 这里获取的是结构体的地址 */
 		                        (TickType_t)xMaxBlockTime);/* 设置阻塞时间 */
-
-
 		if(xResult == pdPASS)
 		{
 			/* 成功接收，并通过串口将数据打印出来 */
