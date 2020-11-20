@@ -259,4 +259,4 @@ static void AppTaskCreate (void)
                     NULL );         /* 任务句柄  */
 }
 
-/***************************** 安富莱www.OS-Q.comm (END OF FILE) *********************************/
+/*----------------------- (C) COPYRIGHT 2020 www.OS-Q.comm --------------------*/
