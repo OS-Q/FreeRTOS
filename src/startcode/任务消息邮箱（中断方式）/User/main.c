@@ -1,48 +1,4 @@
-/*
-*********************************************************************************************************
-*
-*	模块名称 : 主程序模块。
-*	文件名称 : main.c
-*	版    本 : V1.0
-*	说    明 : 本实验主要学习FreeRTOS的任务通知实现消息邮箱（中断方式）
-*              实验目的：
-*                1. 学习FreeRTOS的任务通知实现消息邮箱（中断方式）
-*              实验内容：
-*                2. 按下按键K1可以通过串口打印任务执行情况
-*                   任务名      任务状态 优先级   剩余栈 任务序号
-*                   vTaskUserIF     R       1       334     1
-*                   IDLE            R       0       116     5
-*                   vTaskMsgPro     B       3       458     3
-*                   vTaskLED        B       2       484     2
-*                   vTaskStart      B       4       490     4
-*
-*                   任务名       运行计数         使用率
-*                   vTaskUserIF     2850            1%
-*                   IDLE            265626          98%
-*                   vTaskMsgPro     373             <1%
-*                   vTaskLED        0               <1%
-*                   vTaskStart      1353            <1%
-*                   串口软件建议使用SecureCRT（V4光盘里面有此软件）查看打印信息。
-*                    vTaskTaskUserIF 任务：按键消息处理
-*                    vTaskLED 任务       ：LED闪烁
-*                    vTaskMsgPro 任务    ：使用函数xTaskNotifyWait接收任务vTaskTaskUserIF发送的消息
-*                    vTaskStart 任务     ：按键扫描
-*                 3. 任务运行转态的定义如下，跟上面串口打印字母B, R, D, S对应：
-*                    #define tskBLOCKED_CHAR		( 'B' )
-*                    #define tskREADY_CHAR		    ( 'R' )
-*                    #define tskDELETED_CHAR		( 'D' )
-*                    #define tskSUSPENDED_CHAR	    ( 'S' )
-*                 4. 本实验通过函数xTaskNotify和xTaskNotifyWait实现消息邮箱的中断方式功能。
-*                 5. K2键按下，启动单次定时器中断，50ms后在定时器中断给任务vTaskMsgPro发送消息
-*                 6. K3键按下，启动单次定时器中断，50ms后在定时器中断给任务vTaskMsgPro发送消息
-*
-*              注意事项：
-*                 1. 本实验推荐使用串口软件SecureCRT，要不串口打印效果不整齐。此软件在
-*                    V4开发板光盘里面有。
-*                 2. 务必将编辑器的缩进参数和TAB设置为4来阅读本文件，要不代码显示不整齐。
-*
-*********************************************************************************************************
-*/
+
 #include "includes.h"
 
 
