@@ -404,11 +404,6 @@
               <FilePath>..\..\BSP\bsp.c</FilePath>
             </File>
             <File>
-              <FileName>bsp.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\BSP\bsp.h</FilePath>
-            </File>
-            <File>
               <FileName>bsp_key.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\BSP\src\bsp_key.c</FilePath>
