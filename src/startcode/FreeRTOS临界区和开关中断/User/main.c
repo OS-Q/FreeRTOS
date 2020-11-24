@@ -1,134 +1,82 @@
 /*
-*********************************************************************************************************
+*                   ä¸´ç•ŒåŒºè§£é‡Šï¼š
+*					 ä»£ç çš„ä¸´ç•ŒçŸ­ä¹Ÿç§°ä¸ºä¸´ç•ŒåŒºï¼ŒæŒ‡å¤„ç†æ—¶ä¸å¯åˆ†å‰²çš„ä»£ç ã€‚ä¸€æ—¦è¿™éƒ¨åˆ†ä»£ç å¼€å§‹æ‰§è¡Œï¼Œåˆ™ä¸å…è®¸
+*                    ä»»ä½•ä¸­æ–­æ‰“å…¥ã€‚ä¸ºç¡®ä¿ä¸´ç•Œæ®µä»£ç çš„æ‰§è¡Œä¸è¢«ä¸­æ–­ï¼Œåœ¨è¿›å…¥ä¸´ç•Œæ®µä¹‹å‰å¿…é¡»å…³ä¸­æ–­ï¼Œè€Œä¸´ç•Œæ®µ
+*                    ä»£ç æ‰§è¡Œå®ŒåŽï¼Œè¦ç«‹å³å¼€ä¸­æ–­ã€‚
+*                   ï¼ˆ1ï¼‰æœ¬å®žéªŒé€šè¿‡å¦‚ä¸‹ä¸¤ä¸ªå‡½æ•°å®žçŽ°è¿›å…¥ä¸´ç•Œæ®µå’ŒæŽ¨å‡ºä¸´ç•Œæ®µ
+*					      taskENTER_CRITICAL();    è¿›å…¥ä¸´ç•ŒåŒº
+*					        ä¸´ç•ŒåŒºä»£ç 
+*					      taskEXIT_CRITICAL();     æŽ¨å‡ºä¸´ç•ŒåŒº
 *
-*	Ä£¿éÃû³Æ : Ö÷³ÌÐòÄ£¿é¡£
-*	ÎÄ¼þÃû³Æ : main.c
-*	°æ    ±¾ : V1.0
-*	Ëµ    Ã÷ : ±¾ÊµÑéÖ÷ÒªÑ§Ï°FreeRTOSµÄÁÙ½çÇøºÍ¿ª¹ØÖÐ¶ÏÉèÖÃ
-*              ÊµÑéÄ¿µÄ£º
-*                1. Ñ§Ï°FreeRTOSµÄÁÙ½çÇøºÍ¿ª¹ØÖÐ¶ÏÉèÖÃ
-*              ÊµÑéÄÚÈÝ£º
-*                2. °´ÏÂ°´¼üK1¿ÉÒÔÍ¨¹ý´®¿Ú´òÓ¡ÈÎÎñÖ´ÐÐÇé¿ö
-*                   ÈÎÎñÃû      ÈÎÎñ×´Ì¬ ÓÅÏÈ¼¶   Ê£ÓàÕ» ÈÎÎñÐòºÅ
-*                   vTaskUserIF     R       1       343     1
-*                   IDLE            R       0       116     5
-*                   vTaskLED        B       2       475     2
-*                   vTaskMsgPro     B       3       476     3
-*                   vTaskStart      B       4       490     4
+*                    ï¼ˆ2ï¼‰é€šè¿‡å¦‚ä¸‹ä¸¤ä¸ªå‡½æ•°å®žçŽ°å¼€å…³ä¸­æ–­ï¼Œæ³¨æ„ï¼Œå…³é—­äº†ä¸­æ–­ä¹Ÿå°±å…³é—­äº†ä»»åŠ¡çš„è°ƒåº¦ï¼š
+*		                  taskDISABLE_INTERRUPTS();  å…³é—­ä¸­æ–­
+*						    é˜²æ­¢è¢«ä¸­æ–­æ‰“æ–­çš„ä»£ç 
+*                         taskENABLE_INTERRUPTS();  æ‰“å¼€ä¸­æ–­
 *
-*                   ÈÎÎñÃû       ÔËÐÐ¼ÆÊý         Ê¹ÓÃÂÊ
-*                   vTaskUserIF     2               <1%
-*                   IDLE            24016           99%
-*                   vTaskMsgPro     9               <1%
-*                   vTaskStart      124             <1%
-*                   vTaskLED        9               <1%
-*                   ´®¿ÚÈí¼þ½¨ÒéÊ¹ÓÃSecureCRT£¨V4¹âÅÌÀïÃæÓÐ´ËÈí¼þ£©²é¿´´òÓ¡ÐÅÏ¢¡£
-*                    vTaskTaskUserIF ÈÎÎñ£º°´¼üÏûÏ¢´¦Àí
-*                    vTaskLED ÈÎÎñ       £ºLEDÉÁË¸£¬´®¿Ú´òÓ¡
-*                    vTaskMsgPro ÈÎÎñ    £ºLEDÉÁË¸£¬´®¿Ú´òÓ¡
-*                    vTaskStart ÈÎÎñ     £º°´¼üÉ¨Ãè
-*                 3. ÈÎÎñÔËÐÐ×ªÌ¬µÄ¶¨ÒåÈçÏÂ£¬¸úÉÏÃæ´®¿Ú´òÓ¡×ÖÄ¸B, R, D, S¶ÔÓ¦£º
-*                    #define tskBLOCKED_CHAR		( 'B' )
-*                    #define tskREADY_CHAR		    ( 'R' )
-*                    #define tskDELETED_CHAR		( 'D' )
-*                    #define tskSUSPENDED_CHAR	    ( 'S' )
-*                 4. ÁÙ½çÇø½âÊÍ£º
-*					 ´úÂëµÄÁÙ½ç¶ÌÒ²³ÆÎªÁÙ½çÇø£¬Ö¸´¦ÀíÊ±²»¿É·Ö¸îµÄ´úÂë¡£Ò»µ©Õâ²¿·Ö´úÂë¿ªÊ¼Ö´ÐÐ£¬Ôò²»ÔÊÐí
-*                    ÈÎºÎÖÐ¶Ï´òÈë¡£ÎªÈ·±£ÁÙ½ç¶Î´úÂëµÄÖ´ÐÐ²»±»ÖÐ¶Ï£¬ÔÚ½øÈëÁÙ½ç¶ÎÖ®Ç°±ØÐë¹ØÖÐ¶Ï£¬¶øÁÙ½ç¶Î
-*                    ´úÂëÖ´ÐÐÍêºó£¬ÒªÁ¢¼´¿ªÖÐ¶Ï¡£
-*                 5. £¨1£©±¾ÊµÑéÍ¨¹ýÈçÏÂÁ½¸öº¯ÊýÊµÏÖ½øÈëÁÙ½ç¶ÎºÍÍÆ³öÁÙ½ç¶Î
-*					      taskENTER_CRITICAL();    ½øÈëÁÙ½çÇø
-*					        ÁÙ½çÇø´úÂë
-*					      taskEXIT_CRITICAL();     ÍÆ³öÁÙ½çÇø
-*
-*                    £¨2£©Í¨¹ýÈçÏÂÁ½¸öº¯ÊýÊµÏÖ¿ª¹ØÖÐ¶Ï£¬×¢Òâ£¬¹Ø±ÕÁËÖÐ¶ÏÒ²¾Í¹Ø±ÕÁËÈÎÎñµÄµ÷¶È£º
-*		                  taskDISABLE_INTERRUPTS();  ¹Ø±ÕÖÐ¶Ï
-*						    ·ÀÖ¹±»ÖÐ¶Ï´ò¶ÏµÄ´úÂë
-*                         taskENABLE_INTERRUPTS();  ´ò¿ªÖÐ¶Ï
-*
-*                    £¨3£©ÁÙ½çÇøÉèÖÃºÍ¿ª¹ØÖÐ¶ÏµÄÇø±ð¡£
-*                         ÁÙ½çÇøÉèÖÃÀïÃæÒ²ÓÐ¿ª¹ØÖÐ¶Ï²Ù×÷µÄ£¬²¢ÇÒÖ§³Ö¿ª¹ØÖÐ¶ÏµÄÇ¶Ì×Ê¹ÓÃ£¬¶øµ¥´¿µÄ¿ª¹Ø
-*                         ÖÐ¶Ï²Ù×÷ÊÇ²»ÄÜ¹»Ç¶Ì×Ê¹ÓÃµÄ£¬±ÈÈçÏÂÃæ£º
+*                    ï¼ˆ3ï¼‰ä¸´ç•ŒåŒºè®¾ç½®å’Œå¼€å…³ä¸­æ–­çš„åŒºåˆ«ã€‚
+*                         ä¸´ç•ŒåŒºè®¾ç½®é‡Œé¢ä¹Ÿæœ‰å¼€å…³ä¸­æ–­æ“ä½œçš„ï¼Œå¹¶ä¸”æ”¯æŒå¼€å…³ä¸­æ–­çš„åµŒå¥—ä½¿ç”¨ï¼Œè€Œå•çº¯çš„å¼€å…³
+*                         ä¸­æ–­æ“ä½œæ˜¯ä¸èƒ½å¤ŸåµŒå¥—ä½¿ç”¨çš„ï¼Œæ¯”å¦‚ä¸‹é¢ï¼š
 *                         void FunctionA()
 *                         {
-*	                          taskDISABLE_INTERRUPTS();  ¹Ø±ÕÖÐ¶Ï
-*	                          FunctionB(); µ÷ÓÃº¯ÊýB
-*	                          FunctionC(); µ÷ÓÃº¯ÊýC
-*	                          taskENABLE_INTERRUPTS();  ´ò¿ªÖÐ¶Ï
+*	                          taskDISABLE_INTERRUPTS();  å…³é—­ä¸­æ–­
+*	                          FunctionB(); è°ƒç”¨å‡½æ•°B
+*	                          FunctionC(); è°ƒç”¨å‡½æ•°C
+*	                          taskENABLE_INTERRUPTS();  æ‰“å¼€ä¸­æ–­
 *                         }
 *
 *                         void FunctionB()
 *                         {
-*	                          taskDISABLE_INTERRUPTS();  ¹Ø±ÕÖÐ¶Ï
-*	                          ´úÂë
-*	                          taskENABLE_INTERRUPTS();  ´ò¿ªÖÐ¶Ï
+*	                          taskDISABLE_INTERRUPTS();  å…³é—­ä¸­æ–­
+*	                          ä»£ç 
+*	                          taskENABLE_INTERRUPTS();  æ‰“å¼€ä¸­æ–­
 *                         }
-*                        ¹¤³ÌÖÐµ÷ÓÃÁËFunctionA¾Í»á³öÏÖÖ´ÐÐÍêFunctionBºóÖÐ¶Ï±»´ò¿ªµÄÇé¿ö£¬´ËÊ±
-*                        FunctionC½«²»±»±£»¤ÁË¡£
-*                 6. ±¾ÊµÑéÍ¨¹ýÁÙ½çÇøÉèÖÃºÍ¿ª¹ØÖÐ¶ÏµÄ¹¦ÄÜ£¬ÊµÏÖprintfº¯ÊýµÄ¶àÈÎÎñµ÷ÓÃ¡£
-*
-*              ×¢ÒâÊÂÏî£º
-*                 1. ±¾ÊµÑéÍÆ¼öÊ¹ÓÃ´®¿ÚÈí¼þSecureCRT£¬Òª²»´®¿Ú´òÓ¡Ð§¹û²»ÕûÆë¡£´ËÈí¼þÔÚ
-*                    V4¿ª·¢°å¹âÅÌÀïÃæÓÐ¡£
-*                 2. Îñ±Ø½«±à¼­Æ÷µÄËõ½ø²ÎÊýºÍTABÉèÖÃÎª4À´ÔÄ¶Á±¾ÎÄ¼þ£¬Òª²»´úÂëÏÔÊ¾²»ÕûÆë¡£
-
+*                        å·¥ç¨‹ä¸­è°ƒç”¨äº†FunctionAå°±ä¼šå‡ºçŽ°æ‰§è¡Œå®ŒFunctionBåŽä¸­æ–­è¢«æ‰“å¼€çš„æƒ…å†µï¼Œæ­¤æ—¶
+*                        FunctionCå°†ä¸è¢«ä¿æŠ¤äº†ã€‚
+*       æœ¬å®žéªŒé€šè¿‡ä¸´ç•ŒåŒºè®¾ç½®å’Œå¼€å…³ä¸­æ–­çš„åŠŸèƒ½ï¼Œå®žçŽ°printfå‡½æ•°çš„å¤šä»»åŠ¡è°ƒç”¨ã€‚
 *********************************************************************************************************
 */
 #include "includes.h"
 
-/*
-**********************************************************************************************************
-											º¯ÊýÉùÃ÷
-**********************************************************************************************************
-*/
+
 static void vTaskTaskUserIF(void *pvParameters);
 static void vTaskLED(void *pvParameters);
 static void vTaskMsgPro(void *pvParameters);
 static void vTaskStart(void *pvParameters);
 static void AppTaskCreate (void);
 
-/*
-**********************************************************************************************************
-											±äÁ¿ÉùÃ÷
-**********************************************************************************************************
-*/
+
 static TaskHandle_t xHandleTaskLED = NULL;
 
-/*
-*********************************************************************************************************
-*	º¯ Êý Ãû: main
-*	¹¦ÄÜËµÃ÷: ±ê×¼c³ÌÐòÈë¿Ú¡£
-*	ÐÎ    ²Î£ºÎÞ
-*	·µ »Ø Öµ: ÎÞ
-*********************************************************************************************************
-*/
+/*******************************************************************************
+**å‡½æ•°ä¿¡æ¯ ï¼š
+**åŠŸèƒ½æè¿° ï¼š
+**è¾“å…¥å‚æ•° ï¼šæ— 
+**è¾“å‡ºå‚æ•° ï¼šæ— 
+********************************************************************************/
 int main(void)
 {
-	/* Ó²¼þ³õÊ¼»¯³õÊ¼»¯ */
+	/* ç¡¬ä»¶åˆå§‹åŒ–åˆå§‹åŒ– */
 	bsp_Init();
 
-	/* ³õÊ¼»¯Ò»¸ö¶¨Ê±Æ÷ÖÐ¶Ï£¬¾«¶È¸ßÓÚµÎ´ð¶¨Ê±Æ÷ÖÐ¶Ï£¬ÕâÑù²Å¿ÉÒÔ»ñµÃ×¼È·µÄÏµÍ³ÐÅÏ¢ */
+	/* åˆå§‹åŒ–ä¸€ä¸ªå®šæ—¶å™¨ä¸­æ–­ï¼Œç²¾åº¦é«˜äºŽæ»´ç­”å®šæ—¶å™¨ä¸­æ–­ï¼Œè¿™æ ·æ‰å¯ä»¥èŽ·å¾—å‡†ç¡®çš„ç³»ç»Ÿä¿¡æ¯ */
 	vSetupSysInfoTest();
 
-	/* ´´½¨ÈÎÎñ */
+	/* åˆ›å»ºä»»åŠ¡ */
 	AppTaskCreate();
 
-    /* Æô¶¯µ÷¶È£¬¿ªÊ¼Ö´ÐÐÈÎÎñ */
+    /* å¯åŠ¨è°ƒåº¦ï¼Œå¼€å§‹æ‰§è¡Œä»»åŠ¡ */
     vTaskStartScheduler();
 
-	/* Èç¹ûÏµÍ³Õý³£Æô¶¯ÊÇ²»»áÔËÐÐµ½ÕâÀïµÄ£¬ÔËÐÐµ½ÕâÀï¼«ÓÐ¿ÉÄÜÊÇ¿ÕÏÐÈÎÎñheap¿Õ¼ä²»×ãÔì³É´´½¨Ê§°Ü */
+	/* å¦‚æžœç³»ç»Ÿæ­£å¸¸å¯åŠ¨æ˜¯ä¸ä¼šè¿è¡Œåˆ°è¿™é‡Œçš„ï¼Œè¿è¡Œåˆ°è¿™é‡Œæžæœ‰å¯èƒ½æ˜¯ç©ºé—²ä»»åŠ¡heapç©ºé—´ä¸è¶³é€ æˆåˆ›å»ºå¤±è´¥ */
 	while(1);
 }
 
-/*
-*********************************************************************************************************
-*	º¯ Êý Ãû: vTaskTaskUserIF
-*	¹¦ÄÜËµÃ÷: °´¼üÏûÏ¢´¦Àí
-*	ÐÎ    ²Î: pvParameters ÊÇÔÚ´´½¨¸ÃÈÎÎñÊ±´«µÝµÄÐÎ²Î
-*	·µ »Ø Öµ: ÎÞ
-*   ÓÅ ÏÈ ¼¶: 1  (ÊýÖµÔ½Ð¡ÓÅÏÈ¼¶Ô½µÍ£¬Õâ¸ö¸úuCOSÏà·´)
-*********************************************************************************************************
-*/
+/*******************************************************************************
+**å‡½æ•°ä¿¡æ¯ ï¼š
+**åŠŸèƒ½æè¿° ï¼š
+**è¾“å…¥å‚æ•° ï¼šæ— 
+**è¾“å‡ºå‚æ•° ï¼šæ— 
+********************************************************************************/
 static void vTaskTaskUserIF(void *pvParameters)
 {
 	uint8_t ucKeyCode;
@@ -142,23 +90,23 @@ static void vTaskTaskUserIF(void *pvParameters)
 		{
 			switch (ucKeyCode)
 			{
-				/* K1¼ü°´ÏÂ ´òÓ¡ÈÎÎñÖ´ÐÐÇé¿ö */
+				/* K1é”®æŒ‰ä¸‹ æ‰“å°ä»»åŠ¡æ‰§è¡Œæƒ…å†µ */
 				case KEY_DOWN_K1:
-                    /* ½øÈëÁÙ½çÇø */
+                    /* è¿›å…¥ä¸´ç•ŒåŒº */
 					taskENTER_CRITICAL();
 					printf("=================================================\r\n");
-					printf("ÈÎÎñÃû      ÈÎÎñ×´Ì¬ ÓÅÏÈ¼¶   Ê£ÓàÕ» ÈÎÎñÐòºÅ\r\n");
+					printf("ä»»åŠ¡å      ä»»åŠ¡çŠ¶æ€ ä¼˜å…ˆçº§   å‰©ä½™æ ˆ ä»»åŠ¡åºå·\r\n");
 					vTaskList((char *)&pcWriteBuffer);
 					printf("%s\r\n", pcWriteBuffer);
 
-					printf("\r\nÈÎÎñÃû       ÔËÐÐ¼ÆÊý         Ê¹ÓÃÂÊ\r\n");
+					printf("\r\nä»»åŠ¡å       è¿è¡Œè®¡æ•°         ä½¿ç”¨çŽ‡\r\n");
 					vTaskGetRunTimeStats((char *)&pcWriteBuffer);
 					printf("%s\r\n", pcWriteBuffer);
-					/* ÍË³öÁÙ½çÇø */
+					/* é€€å‡ºä¸´ç•ŒåŒº */
 					taskEXIT_CRITICAL();
 					break;
 
-				/* ÆäËûµÄ¼üÖµ²»´¦Àí */
+				/* å…¶ä»–çš„é”®å€¼ä¸å¤„ç† */
 				default:
 					break;
 			}
@@ -168,55 +116,49 @@ static void vTaskTaskUserIF(void *pvParameters)
 	}
 }
 
-/*
-*********************************************************************************************************
-*	º¯ Êý Ãû: vTaskLED
-*	¹¦ÄÜËµÃ÷: LEDÉÁË¸ºÍ´®¿Ú´òÓ¡
-*	ÐÎ    ²Î: pvParameters ÊÇÔÚ´´½¨¸ÃÈÎÎñÊ±´«µÝµÄÐÎ²Î
-*	·µ »Ø Öµ: ÎÞ
-*   ÓÅ ÏÈ ¼¶: 2
-*********************************************************************************************************
-*/
+/*******************************************************************************
+**å‡½æ•°ä¿¡æ¯ ï¼š
+**åŠŸèƒ½æè¿° ï¼š
+**è¾“å…¥å‚æ•° ï¼šæ— 
+**è¾“å‡ºå‚æ•° ï¼šæ— 
+********************************************************************************/
 static void vTaskLED(void *pvParameters)
 {
 	TickType_t xLastWakeTime;
 	const TickType_t xFrequency = 200;
 
-	/* »ñÈ¡µ±Ç°µÄÏµÍ³Ê±¼ä */
+	/* èŽ·å–å½“å‰çš„ç³»ç»Ÿæ—¶é—´ */
     xLastWakeTime = xTaskGetTickCount();
 
     while(1)
     {
-		/* ½øÈëÁÙ½çÇø */
+		/* è¿›å…¥ä¸´ç•ŒåŒº */
 		taskENTER_CRITICAL();
-		printf("ÈÎÎñvTaskLEDÕýÔÚÔËÐÐ\r\n");
-		/* ÍË³öÁÙ½çÇø */
+		printf("ä»»åŠ¡vTaskLEDæ­£åœ¨è¿è¡Œ\r\n");
+		/* é€€å‡ºä¸´ç•ŒåŒº */
 		taskEXIT_CRITICAL();
-       	bsp_LedToggle(2);
+		bsp_LedToggle(2);
 		bsp_LedToggle(3);
 
-		/* vTaskDelayUntilÊÇ¾ø¶ÔÑÓ³Ù£¬vTaskDelayÊÇÏà¶ÔÑÓ³Ù¡£*/
+		/* vTaskDelayUntilæ˜¯ç»å¯¹å»¶è¿Ÿï¼ŒvTaskDelayæ˜¯ç›¸å¯¹å»¶è¿Ÿã€‚*/
         vTaskDelayUntil(&xLastWakeTime, xFrequency);
     }
 }
 
-/*
-*********************************************************************************************************
-*	º¯ Êý Ãû: vTaskMsgPro
-*	¹¦ÄÜËµÃ÷: LEDÉÁË¸ºÍ´®¿Ú´òÓ¡
-*	ÐÎ    ²Î: pvParameters ÊÇÔÚ´´½¨¸ÃÈÎÎñÊ±´«µÝµÄÐÎ²Î
-*	·µ »Ø Öµ: ÎÞ
-*   ÓÅ ÏÈ ¼¶: 3
-*********************************************************************************************************
-*/
+/*******************************************************************************
+**å‡½æ•°ä¿¡æ¯ ï¼š
+**åŠŸèƒ½æè¿° ï¼š
+**è¾“å…¥å‚æ•° ï¼šæ— 
+**è¾“å‡ºå‚æ•° ï¼šæ— 
+********************************************************************************/
 static void vTaskMsgPro(void *pvParameters)
 {
     while(1)
     {
-		/* ¹Ø±ÕÖÐ¶Ï */
+		/* å…³é—­ä¸­æ–­ */
 		taskDISABLE_INTERRUPTS();
-		printf("ÈÎÎñvTaskMsgProÕýÔÚÔËÐÐ\r\n");
-		/* ´ò¿ªÖÐ¶Ï */
+		printf("ä»»åŠ¡vTaskMsgProæ­£åœ¨è¿è¡Œ\r\n");
+		/* æ‰“å¼€ä¸­æ–­ */
 		taskENABLE_INTERRUPTS();
 
 		bsp_LedToggle(1);
@@ -227,18 +169,18 @@ static void vTaskMsgPro(void *pvParameters)
 
 /*
 *********************************************************************************************************
-*	º¯ Êý Ãû: vTaskStart
-*	¹¦ÄÜËµÃ÷: Æô¶¯ÈÎÎñ£¬Ò²¾ÍÊÇ×î¸ßÓÅÏÈ¼¶ÈÎÎñ¡£
-*	ÐÎ    ²Î: pvParameters ÊÇÔÚ´´½¨¸ÃÈÎÎñÊ±´«µÝµÄÐÎ²Î
-*	·µ »Ø Öµ: ÎÞ
-*   ÓÅ ÏÈ ¼¶: 4
+*	å‡½ æ•° å: vTaskStart
+*	åŠŸèƒ½è¯´æ˜Ž: å¯åŠ¨ä»»åŠ¡ï¼Œä¹Ÿå°±æ˜¯æœ€é«˜ä¼˜å…ˆçº§ä»»åŠ¡ã€‚
+*	å½¢    å‚: pvParameters æ˜¯åœ¨åˆ›å»ºè¯¥ä»»åŠ¡æ—¶ä¼ é€’çš„å½¢å‚
+*	è¿” å›ž å€¼: æ— 
+*   ä¼˜ å…ˆ çº§: 4
 *********************************************************************************************************
 */
 static void vTaskStart(void *pvParameters)
 {
     while(1)
     {
-		/* °´¼üÉ¨Ãè */
+		/* æŒ‰é”®æ‰«æ */
 		bsp_KeyScan();
         vTaskDelay(10);
     }
@@ -246,43 +188,43 @@ static void vTaskStart(void *pvParameters)
 
 /*
 *********************************************************************************************************
-*	º¯ Êý Ãû: AppTaskCreate
-*	¹¦ÄÜËµÃ÷: ´´½¨Ó¦ÓÃÈÎÎñ
-*	ÐÎ    ²Î£ºÎÞ
-*	·µ »Ø Öµ: ÎÞ
+*	å‡½ æ•° å: AppTaskCreate
+*	åŠŸèƒ½è¯´æ˜Ž: åˆ›å»ºåº”ç”¨ä»»åŠ¡
+*	å½¢    å‚ï¼šæ— 
+*	è¿” å›ž å€¼: æ— 
 *********************************************************************************************************
 */
 static void AppTaskCreate (void)
 {
-    xTaskCreate(    vTaskTaskUserIF,   /* ÈÎÎñº¯Êý  */
-                    "vTaskUserIF",     /* ÈÎÎñÃû    */
-                    512,               /* stack´óÐ¡£¬µ¥Î»word£¬Ò²¾ÍÊÇ4×Ö½Ú */
-                    NULL,              /* ÈÎÎñ²ÎÊý  */
-                    1,                 /* ÈÎÎñÓÅÏÈ¼¶*/
-                    NULL );            /* ÈÎÎñ¾ä±ú  */
+    xTaskCreate(    vTaskTaskUserIF,   /* ä»»åŠ¡å‡½æ•°  */
+                    "vTaskUserIF",     /* ä»»åŠ¡å    */
+                    512,               /* stackå¤§å°ï¼Œå•ä½wordï¼Œä¹Ÿå°±æ˜¯4å­—èŠ‚ */
+                    NULL,              /* ä»»åŠ¡å‚æ•°  */
+                    1,                 /* ä»»åŠ¡ä¼˜å…ˆçº§*/
+                    NULL );            /* ä»»åŠ¡å¥æŸ„  */
 
 
-	xTaskCreate(    vTaskLED,    /* ÈÎÎñº¯Êý  */
-                    "vTaskLED",  /* ÈÎÎñÃû    */
-                    512,         /* stack´óÐ¡£¬µ¥Î»word£¬Ò²¾ÍÊÇ4×Ö½Ú */
-                    NULL,        /* ÈÎÎñ²ÎÊý  */
-                    2,           /* ÈÎÎñÓÅÏÈ¼¶*/
-                    &xHandleTaskLED );   /* ÈÎÎñ¾ä±ú  */
+	xTaskCreate(    vTaskLED,    /* ä»»åŠ¡å‡½æ•°  */
+                    "vTaskLED",  /* ä»»åŠ¡å    */
+                    512,         /* stackå¤§å°ï¼Œå•ä½wordï¼Œä¹Ÿå°±æ˜¯4å­—èŠ‚ */
+                    NULL,        /* ä»»åŠ¡å‚æ•°  */
+                    2,           /* ä»»åŠ¡ä¼˜å…ˆçº§*/
+                    &xHandleTaskLED );   /* ä»»åŠ¡å¥æŸ„  */
 
-	xTaskCreate(    vTaskMsgPro,     /* ÈÎÎñº¯Êý  */
-                    "vTaskMsgPro",   /* ÈÎÎñÃû    */
-                    512,             /* stack´óÐ¡£¬µ¥Î»word£¬Ò²¾ÍÊÇ4×Ö½Ú */
-                    NULL,            /* ÈÎÎñ²ÎÊý  */
-                    3,               /* ÈÎÎñÓÅÏÈ¼¶*/
-                    NULL );          /* ÈÎÎñ¾ä±ú  */
+	xTaskCreate(    vTaskMsgPro,     /* ä»»åŠ¡å‡½æ•°  */
+                    "vTaskMsgPro",   /* ä»»åŠ¡å    */
+                    512,             /* stackå¤§å°ï¼Œå•ä½wordï¼Œä¹Ÿå°±æ˜¯4å­—èŠ‚ */
+                    NULL,            /* ä»»åŠ¡å‚æ•°  */
+                    3,               /* ä»»åŠ¡ä¼˜å…ˆçº§*/
+                    NULL );          /* ä»»åŠ¡å¥æŸ„  */
 
 
-	xTaskCreate(    vTaskStart,     /* ÈÎÎñº¯Êý  */
-                    "vTaskStart",   /* ÈÎÎñÃû    */
-                    512,            /* stack´óÐ¡£¬µ¥Î»word£¬Ò²¾ÍÊÇ4×Ö½Ú */
-                    NULL,           /* ÈÎÎñ²ÎÊý  */
-                    4,              /* ÈÎÎñÓÅÏÈ¼¶*/
-                    NULL );         /* ÈÎÎñ¾ä±ú  */
+	xTaskCreate(    vTaskStart,     /* ä»»åŠ¡å‡½æ•°  */
+                    "vTaskStart",   /* ä»»åŠ¡å    */
+                    512,            /* stackå¤§å°ï¼Œå•ä½wordï¼Œä¹Ÿå°±æ˜¯4å­—èŠ‚ */
+                    NULL,           /* ä»»åŠ¡å‚æ•°  */
+                    4,              /* ä»»åŠ¡ä¼˜å…ˆçº§*/
+                    NULL );         /* ä»»åŠ¡å¥æŸ„  */
 }
 
-/***************************** °²¸»À³µç×Ó www.OS-Q.com (END OF FILE) *********************************/
+/*----------------------- (C) COPYRIGHT 2020 www.OS-Q.comm --------------------*/

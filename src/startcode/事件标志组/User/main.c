@@ -1,71 +1,11 @@
-/*
-*********************************************************************************************************
-*
-*	Ä£¿éÃû³Æ : Ö÷³ÌÐòÄ£¿é¡£
-*	ÎÄ¼þÃû³Æ : main.c
-*	°æ    ±¾ : V1.0
-*	Ëµ    Ã÷ : ±¾ÊµÑéÖ÷ÒªÑ§Ï°FreeRTOSµÄÊÂ¼þ±êÖ¾×é
-*              ÊµÑéÄ¿µÄ£º
-*                1. Ñ§Ï°FreeRTOSµÄÊÂ¼þ±êÖ¾×é
-*              ÊµÑéÄÚÈÝ£º
-*                3. °´ÏÂ°´¼üK1¿ÉÒÔÍ¨¹ý´®¿Ú´òÓ¡ÈÎÎñÖ´ÐÐÇé¿ö
-*                   ÈÎÎñÃû      ÈÎÎñ×´Ì¬ ÓÅÏÈ¼¶   Ê£ÓàÕ» ÈÎÎñÐòºÅ
-*                   vTaskUserIF     R       1       334     1
-*                   IDLE            R       0       120     5
-*                   vTaskLED        B       2       484     2
-*                   vTaskMsgPro     B       3       476     3
-*                   vTaskStart      B       4       490     4
-*
-*                   ÈÎÎñÃû       ÔËÐÐ¼ÆÊý         Ê¹ÓÃÂÊ
-*                   vTaskUserIF     1211            1%
-*                   IDLE            76779           97%
-*                   vTaskLED        19              <1%
-*                   vTaskMsgPro     0               <1%
-*                   vTaskStart      393             <1%
-*                   ´®¿ÚÈí¼þ½¨ÒéÊ¹ÓÃSecureCRT£¨V4¹âÅÌÀïÃæÓÐ´ËÈí¼þ£©²é¿´´òÓ¡ÐÅÏ¢¡£
-*                    vTaskTaskUserIF ÈÎÎñ£º°´¼üÏûÏ¢´¦Àí
-*                    vTaskLED ÈÎÎñ       £ºLEDÉÁË¸
-*                    vTaskMsgPro ÈÎÎñ    £ºÊ¹ÓÃº¯ÊýxEventGroupWaitBits½ÓÊÕÈÎÎñvTaskTaskUserIF·¢ËÍµÄÊÂ¼þ±êÖ¾
-*                    vTaskStart ÈÎÎñ     £º°´¼üÉ¨Ãè
-*                 4. ÈÎÎñÔËÐÐ×ªÌ¬µÄ¶¨ÒåÈçÏÂ£¬¸úÉÏÃæ´®¿Ú´òÓ¡×ÖÄ¸B, R, D, S¶ÔÓ¦£º
-*                    #define tskBLOCKED_CHAR		( 'B' )
-*                    #define tskREADY_CHAR		    ( 'R' )
-*                    #define tskDELETED_CHAR		( 'D' )
-*                    #define tskSUSPENDED_CHAR	    ( 'S' )
-*                 5. K2¼ü°´ÏÂ£¬Ö±½Ó·¢ËÍÊÂ¼þ±êÖ¾¸øÈÎÎñvTaskMsgPro£¬ÉèÖÃbit0¡£
-*                 6. K3¼ü°´ÏÂ£¬Ö±½Ó·¢ËÍÊÂ¼þ±êÖ¾¸øÈÎÎñvTaskMsgPro£¬ÉèÖÃbit1¡£
-*                 7. ÈÎÎñvTaskMsgProÖ»ÓÐ½ÓÊÕµ½bit0ºÍbit1¶¼±»ÉèÖÃÁË²ÅÖ´ÐÐ´®¿Ú´òÓ¡ÏûÏ¢¡£
-*              ×¢ÒâÊÂÏî£º
-*                 1. ±¾ÊµÑéÍÆ¼öÊ¹ÓÃ´®¿ÚÈí¼þSecureCRT£¬Òª²»´®¿Ú´òÓ¡Ð§¹û²»ÕûÆë¡£´ËÈí¼þÔÚ
-*                    V4¿ª·¢°å¹âÅÌÀïÃæÓÐ¡£
-*                 2. Îñ±Ø½«±à¼­Æ÷µÄËõ½ø²ÎÊýºÍTABÉèÖÃÎª4À´ÔÄ¶Á±¾ÎÄ¼þ£¬Òª²»´úÂëÏÔÊ¾²»ÕûÆë¡£
-*
-*	ÐÞ¸Ä¼ÇÂ¼ :
-*		°æ±¾ºÅ    ÈÕÆÚ         ×÷Õß            ËµÃ÷
-*       V1.0    2015-08-19   Eric2013    1. ST¹Ì¼þ¿âµ½V3.6.1°æ±¾
-*                                        2. BSPÇý¶¯°üV1.2
-*                                        3. FreeRTOS°æ±¾V8.2.2
-*
-*	Copyright (C), 2015-2020, °²¸»À³www.OS-Q.comm
-*
-*********************************************************************************************************
-*/
+
 #include "includes.h"
 
-/*
-**********************************************************************************************************
-											ºê¶¨Òå
-**********************************************************************************************************
-*/
+
 #define BIT_0	(1 << 0)
 #define BIT_1	(1 << 1)
 #define BIT_ALL (BIT_0 | BIT_1)
 
-/*
-**********************************************************************************************************
-											º¯ÊýÉùÃ÷
-**********************************************************************************************************
-*/
 static void vTaskTaskUserIF(void *pvParameters);
 static void vTaskLED(void *pvParameters);
 static void vTaskMsgPro(void *pvParameters);
@@ -73,53 +13,44 @@ static void vTaskStart(void *pvParameters);
 static void AppTaskCreate (void);
 static void AppObjCreate (void);
 
-/*
-**********************************************************************************************************
-											±äÁ¿ÉùÃ÷
-**********************************************************************************************************
-*/
+
 static TaskHandle_t xHandleTaskLED = NULL;
 static TaskHandle_t xHandleTaskMsgPro = NULL;
 static EventGroupHandle_t xCreatedEventGroup = NULL;
 
-/*
-*********************************************************************************************************
-*	º¯ Êý Ãû: main
-*	¹¦ÄÜËµÃ÷: ±ê×¼c³ÌÐòÈë¿Ú¡£
-*	ÐÎ    ²Î£ºÎÞ
-*	·µ »Ø Öµ: ÎÞ
-*********************************************************************************************************
-*/
+/*******************************************************************************
+**å‡½æ•°ä¿¡æ¯ ï¼š
+**åŠŸèƒ½æè¿° ï¼š
+**è¾“å…¥å‚æ•° ï¼šæ— 
+**è¾“å‡ºå‚æ•° ï¼šæ— 
+********************************************************************************/
 int main(void)
 {
-	/* Ó²¼þ³õÊ¼»¯³õÊ¼»¯ */
+	/* ç¡¬ä»¶åˆå§‹åŒ–åˆå§‹åŒ– */
 	bsp_Init();
 
-	/* ³õÊ¼»¯Ò»¸ö¶¨Ê±Æ÷ÖÐ¶Ï£¬¾«¶È¸ßÓÚµÎ´ð¶¨Ê±Æ÷ÖÐ¶Ï£¬ÕâÑù²Å¿ÉÒÔ»ñµÃ×¼È·µÄÏµÍ³ÐÅÏ¢ */
+	/* åˆå§‹åŒ–ä¸€ä¸ªå®šæ—¶å™¨ä¸­æ–­ï¼Œç²¾åº¦é«˜äºŽæ»´ç­”å®šæ—¶å™¨ä¸­æ–­ï¼Œè¿™æ ·æ‰å¯ä»¥èŽ·å¾—å‡†ç¡®çš„ç³»ç»Ÿä¿¡æ¯ */
 	vSetupSysInfoTest();
 
-	/* ´´½¨ÈÎÎñ */
+	/* åˆ›å»ºä»»åŠ¡ */
 	AppTaskCreate();
 
-	/* ´´½¨ÈÎÎñÍ¨ÐÅ»úÖÆ */
+	/* åˆ›å»ºä»»åŠ¡é€šä¿¡æœºåˆ¶ */
 	AppObjCreate();
 
-    /* Æô¶¯µ÷¶È£¬¿ªÊ¼Ö´ÐÐÈÎÎñ */
+    /* å¯åŠ¨è°ƒåº¦ï¼Œå¼€å§‹æ‰§è¡Œä»»åŠ¡ */
     vTaskStartScheduler();
 
-	/* Èç¹ûÏµÍ³Õý³£Æô¶¯ÊÇ²»»áÔËÐÐµ½ÕâÀïµÄ£¬ÔËÐÐµ½ÕâÀï¼«ÓÐ¿ÉÄÜÊÇ¿ÕÏÐÈÎÎñheap¿Õ¼ä²»×ãÔì³É´´½¨Ê§°Ü */
+	/* å¦‚æžœç³»ç»Ÿæ­£å¸¸å¯åŠ¨æ˜¯ä¸ä¼šè¿è¡Œåˆ°è¿™é‡Œçš„ï¼Œè¿è¡Œåˆ°è¿™é‡Œæžæœ‰å¯èƒ½æ˜¯ç©ºé—²ä»»åŠ¡heapç©ºé—´ä¸è¶³é€ æˆåˆ›å»ºå¤±è´¥ */
 	while(1);
 }
 
-/*
-*********************************************************************************************************
-*	º¯ Êý Ãû: vTaskTaskUserIF
-*	¹¦ÄÜËµÃ÷: °´¼üÏûÏ¢´¦Àí
-*	ÐÎ    ²Î: pvParameters ÊÇÔÚ´´½¨¸ÃÈÎÎñÊ±´«µÝµÄÐÎ²Î
-*	·µ »Ø Öµ: ÎÞ
-*   ÓÅ ÏÈ ¼¶: 1  (ÊýÖµÔ½Ð¡ÓÅÏÈ¼¶Ô½µÍ£¬Õâ¸ö¸úuCOSÏà·´)
-*********************************************************************************************************
-*/
+/*******************************************************************************
+**å‡½æ•°ä¿¡æ¯ ï¼š
+**åŠŸèƒ½æè¿° ï¼š
+**è¾“å…¥å‚æ•° ï¼šæ— 
+**è¾“å‡ºå‚æ•° ï¼šæ— 
+********************************************************************************/
 static void vTaskTaskUserIF(void *pvParameters)
 {
 	uint8_t ucKeyCode;
@@ -134,47 +65,47 @@ static void vTaskTaskUserIF(void *pvParameters)
 		{
 			switch (ucKeyCode)
 			{
-				/* K1¼ü°´ÏÂ ´òÓ¡ÈÎÎñÖ´ÐÐÇé¿ö */
+				/* K1é”®æŒ‰ä¸‹ æ‰“å°ä»»åŠ¡æ‰§è¡Œæƒ…å†µ */
 				case KEY_DOWN_K1:
 					printf("=================================================\r\n");
-					printf("ÈÎÎñÃû      ÈÎÎñ×´Ì¬ ÓÅÏÈ¼¶   Ê£ÓàÕ» ÈÎÎñÐòºÅ\r\n");
+					printf("ä»»åŠ¡å      ä»»åŠ¡çŠ¶æ€ ä¼˜å…ˆçº§   å‰©ä½™æ ˆ ä»»åŠ¡åºå·\r\n");
 					vTaskList((char *)&pcWriteBuffer);
 					printf("%s\r\n", pcWriteBuffer);
 
-					printf("\r\nÈÎÎñÃû       ÔËÐÐ¼ÆÊý         Ê¹ÓÃÂÊ\r\n");
+					printf("\r\nä»»åŠ¡å       è¿è¡Œè®¡æ•°         ä½¿ç”¨çŽ‡\r\n");
 					vTaskGetRunTimeStats((char *)&pcWriteBuffer);
 					printf("%s\r\n", pcWriteBuffer);
 					break;
 
-				/* K2¼ü°´ÏÂ£¬Ö±½Ó·¢ËÍÊÂ¼þ±êÖ¾¸øÈÎÎñvTaskMsgPro£¬ÉèÖÃbit0 */
+				/* K2é”®æŒ‰ä¸‹ï¼Œç›´æŽ¥å‘é€äº‹ä»¶æ ‡å¿—ç»™ä»»åŠ¡vTaskMsgProï¼Œè®¾ç½®bit0 */
 				case KEY_DOWN_K2:
-					/* ÉèÖÃÊÂ¼þ±êÖ¾×éµÄbit0 */
+					/* è®¾ç½®äº‹ä»¶æ ‡å¿—ç»„çš„bit0 */
 					uxBits = xEventGroupSetBits(xCreatedEventGroup, BIT_0);
 					if((uxBits & BIT_0) != 0)
 					{
-						printf("K2¼ü°´ÏÂ£¬ÊÂ¼þ±êÖ¾µÄbit0±»ÉèÖÃ\r\n");
+						printf("K2é”®æŒ‰ä¸‹ï¼Œäº‹ä»¶æ ‡å¿—çš„bit0è¢«è®¾ç½®\r\n");
 					}
 					else
 					{
-						printf("K2¼ü°´ÏÂ£¬ÊÂ¼þ±êÖ¾µÄbit0±»Çå³ý£¬ËµÃ÷ÈÎÎñvTaskMsgProÒÑ¾­½ÓÊÜµ½bit0ºÍbit1±»ÉèÖÃµÄÇé¿ö\r\n");
+						printf("K2é”®æŒ‰ä¸‹ï¼Œäº‹ä»¶æ ‡å¿—çš„bit0è¢«æ¸…é™¤ï¼Œè¯´æ˜Žä»»åŠ¡vTaskMsgProå·²ç»æŽ¥å—åˆ°bit0å’Œbit1è¢«è®¾ç½®çš„æƒ…å†µ\r\n");
 					}
 					break;
 
-				/* K3¼ü°´ÏÂ£¬Ö±½Ó·¢ËÍÊÂ¼þ±êÖ¾¸øÈÎÎñvTaskMsgPro£¬ÉèÖÃbit1 */
+				/* K3é”®æŒ‰ä¸‹ï¼Œç›´æŽ¥å‘é€äº‹ä»¶æ ‡å¿—ç»™ä»»åŠ¡vTaskMsgProï¼Œè®¾ç½®bit1 */
 				case KEY_DOWN_K3:
-					/* ÉèÖÃÊÂ¼þ±êÖ¾×éµÄbit1 */
+					/* è®¾ç½®äº‹ä»¶æ ‡å¿—ç»„çš„bit1 */
 					uxBits = xEventGroupSetBits(xCreatedEventGroup, BIT_1);
 					if((uxBits & BIT_1) != 0)
 					{
-						printf("K3¼ü°´ÏÂ£¬ÊÂ¼þ±êÖ¾µÄbit1±»ÉèÖÃ\r\n");
+						printf("K3é”®æŒ‰ä¸‹ï¼Œäº‹ä»¶æ ‡å¿—çš„bit1è¢«è®¾ç½®\r\n");
 					}
 					else
 					{
-						printf("K3¼ü°´ÏÂ£¬ÊÂ¼þ±êÖ¾µÄbit1±»Çå³ý£¬ËµÃ÷ÈÎÎñvTaskMsgProÒÑ¾­½ÓÊÜµ½bit0ºÍbit1±»ÉèÖÃµÄÇé¿ö\r\n");
+						printf("K3é”®æŒ‰ä¸‹ï¼Œäº‹ä»¶æ ‡å¿—çš„bit1è¢«æ¸…é™¤ï¼Œè¯´æ˜Žä»»åŠ¡vTaskMsgProå·²ç»æŽ¥å—åˆ°bit0å’Œbit1è¢«è®¾ç½®çš„æƒ…å†µ\r\n");
 					}
 					break;
 
-				/* ÆäËûµÄ¼üÖµ²»´¦Àí */
+				/* å…¶ä»–çš„é”®å€¼ä¸å¤„ç† */
 				default:
 					break;
 			}
@@ -184,21 +115,18 @@ static void vTaskTaskUserIF(void *pvParameters)
 	}
 }
 
-/*
-*********************************************************************************************************
-*	º¯ Êý Ãû: vTaskLED
-*	¹¦ÄÜËµÃ÷: LEDÉÁË¸
-*	ÐÎ    ²Î: pvParameters ÊÇÔÚ´´½¨¸ÃÈÎÎñÊ±´«µÝµÄÐÎ²Î
-*	·µ »Ø Öµ: ÎÞ
-*   ÓÅ ÏÈ ¼¶: 2
-*********************************************************************************************************
-*/
+/*******************************************************************************
+**å‡½æ•°ä¿¡æ¯ ï¼š
+**åŠŸèƒ½æè¿° ï¼š
+**è¾“å…¥å‚æ•° ï¼šæ— 
+**è¾“å‡ºå‚æ•° ï¼šæ— 
+********************************************************************************/
 static void vTaskLED(void *pvParameters)
 {
 	TickType_t xLastWakeTime;
 	const TickType_t xFrequency = 200;
 
-	/* »ñÈ¡µ±Ç°µÄÏµÍ³Ê±¼ä */
+	/* èŽ·å–å½“å‰çš„ç³»ç»Ÿæ—¶é—´ */
     xLastWakeTime = xTaskGetTickCount();
 
     while(1)
@@ -206,125 +134,115 @@ static void vTaskLED(void *pvParameters)
        	bsp_LedToggle(2);
 		bsp_LedToggle(3);
 
-		/* vTaskDelayUntilÊÇ¾ø¶ÔÑÓ³Ù£¬vTaskDelayÊÇÏà¶ÔÑÓ³Ù¡£*/
+		/* vTaskDelayUntilæ˜¯ç»å¯¹å»¶è¿Ÿï¼ŒvTaskDelayæ˜¯ç›¸å¯¹å»¶è¿Ÿã€‚*/
         vTaskDelayUntil(&xLastWakeTime, xFrequency);
     }
 }
 
-/*
-*********************************************************************************************************
-*	º¯ Êý Ãû: vTaskMsgPro
-*	¹¦ÄÜËµÃ÷: Ê¹ÓÃº¯ÊýxEventGroupWaitBits½ÓÊÕÈÎÎñvTaskTaskUserIF·¢ËÍµÄÊÂ¼þ±êÖ¾
-*	ÐÎ    ²Î: pvParameters ÊÇÔÚ´´½¨¸ÃÈÎÎñÊ±´«µÝµÄÐÎ²Î
-*	·µ »Ø Öµ: ÎÞ
-*   ÓÅ ÏÈ ¼¶: 3
-*********************************************************************************************************
-*/
+/*******************************************************************************
+**å‡½æ•°ä¿¡æ¯ ï¼š
+**åŠŸèƒ½æè¿° ï¼š
+**è¾“å…¥å‚æ•° ï¼šæ— 
+**è¾“å‡ºå‚æ•° ï¼šæ— 
+********************************************************************************/
 static void vTaskMsgPro(void *pvParameters)
 {
 	EventBits_t uxBits;
-	const TickType_t xTicksToWait = 100 / portTICK_PERIOD_MS; /* ×î´óÑÓ³Ù100ms */
+	const TickType_t xTicksToWait = 100 / portTICK_PERIOD_MS; /* æœ€å¤§å»¶è¿Ÿ100ms */
 
     while(1)
     {
-		/* µÈK2°´¼ü°´ÏÂÉèÖÃbit0ºÍK3°´¼ü°´ÏÂÉèÖÃbit1 */
-		uxBits = xEventGroupWaitBits(xCreatedEventGroup, /* ÊÂ¼þ±êÖ¾×é¾ä±ú */
-							         BIT_ALL,            /* µÈ´ýbit0ºÍbit1±»ÉèÖÃ */
-							         pdTRUE,             /* ÍË³öÇ°bit0ºÍbit1±»Çå³ý£¬ÕâÀïÊÇbit0ºÍbit1¶¼±»ÉèÖÃ²Å±íÊ¾¡°ÍË³ö¡±*/
-							         pdTRUE,             /* ÉèÖÃÎªpdTRUE±íÊ¾µÈ´ýbit1ºÍbit0¶¼±»ÉèÖÃ*/
-							         xTicksToWait); 	 /* µÈ´ýÑÓ³ÙÊ±¼ä */
+		/* ç­‰K2æŒ‰é”®æŒ‰ä¸‹è®¾ç½®bit0å’ŒK3æŒ‰é”®æŒ‰ä¸‹è®¾ç½®bit1 */
+		uxBits = xEventGroupWaitBits(xCreatedEventGroup, /* äº‹ä»¶æ ‡å¿—ç»„å¥æŸ„ */
+							         BIT_ALL,            /* ç­‰å¾…bit0å’Œbit1è¢«è®¾ç½® */
+							         pdTRUE,             /* é€€å‡ºå‰bit0å’Œbit1è¢«æ¸…é™¤ï¼Œè¿™é‡Œæ˜¯bit0å’Œbit1éƒ½è¢«è®¾ç½®æ‰è¡¨ç¤ºâ€œé€€å‡ºâ€*/
+							         pdTRUE,             /* è®¾ç½®ä¸ºpdTRUEè¡¨ç¤ºç­‰å¾…bit1å’Œbit0éƒ½è¢«è®¾ç½®*/
+							         xTicksToWait); 	 /* ç­‰å¾…å»¶è¿Ÿæ—¶é—´ */
 
 		if((uxBits & BIT_ALL) == BIT_ALL)
 		{
-			/* ½ÓÊÕµ½bit1ºÍbit0¶¼±»ÉèÖÃµÄÏûÏ¢ */
-			printf("½ÓÊÕµ½bit0ºÍbit1¶¼±»ÉèÖÃµÄÏûÏ¢\r\n");
+			/* æŽ¥æ”¶åˆ°bit1å’Œbit0éƒ½è¢«è®¾ç½®çš„æ¶ˆæ¯ */
+			printf("æŽ¥æ”¶åˆ°bit0å’Œbit1éƒ½è¢«è®¾ç½®çš„æ¶ˆæ¯\r\n");
 		}
 		else
 		{
-			/* ³¬Ê±£¬ÁíÍâ×¢Òâ½ö½ÓÊÕµ½Ò»¸ö°´¼ü°´ÏÂµÄÏûÏ¢Ê±£¬±äÁ¿uxBitsµÄÏàÓ¦bitÒ²ÊÇ±»ÉèÖÃµÄ */
+			/* è¶…æ—¶ï¼Œå¦å¤–æ³¨æ„ä»…æŽ¥æ”¶åˆ°ä¸€ä¸ªæŒ‰é”®æŒ‰ä¸‹çš„æ¶ˆæ¯æ—¶ï¼Œå˜é‡uxBitsçš„ç›¸åº”bitä¹Ÿæ˜¯è¢«è®¾ç½®çš„ */
 			bsp_LedToggle(1);
 			bsp_LedToggle(4);
 		}
     }
 }
 
-/*
-*********************************************************************************************************
-*	º¯ Êý Ãû: vTaskStart
-*	¹¦ÄÜËµÃ÷: Æô¶¯ÈÎÎñ£¬Ò²¾ÍÊÇ×î¸ßÓÅÏÈ¼¶ÈÎÎñ¡£
-*	ÐÎ    ²Î: pvParameters ÊÇÔÚ´´½¨¸ÃÈÎÎñÊ±´«µÝµÄÐÎ²Î
-*	·µ »Ø Öµ: ÎÞ
-*   ÓÅ ÏÈ ¼¶: 4
-*********************************************************************************************************
-*/
+/*******************************************************************************
+**å‡½æ•°ä¿¡æ¯ ï¼š
+**åŠŸèƒ½æè¿° ï¼š
+**è¾“å…¥å‚æ•° ï¼šæ— 
+**è¾“å‡ºå‚æ•° ï¼šæ— 
+********************************************************************************/
 static void vTaskStart(void *pvParameters)
 {
     while(1)
     {
-		/* °´¼üÉ¨Ãè */
+		/* æŒ‰é”®æ‰«æ */
 		bsp_KeyScan();
         vTaskDelay(10);
     }
 }
 
-/*
-*********************************************************************************************************
-*	º¯ Êý Ãû: AppTaskCreate
-*	¹¦ÄÜËµÃ÷: ´´½¨Ó¦ÓÃÈÎÎñ
-*	ÐÎ    ²Î£ºÎÞ
-*	·µ »Ø Öµ: ÎÞ
-*********************************************************************************************************
-*/
+/*******************************************************************************
+**å‡½æ•°ä¿¡æ¯ ï¼š
+**åŠŸèƒ½æè¿° ï¼š
+**è¾“å…¥å‚æ•° ï¼šæ— 
+**è¾“å‡ºå‚æ•° ï¼šæ— 
+********************************************************************************/
 static void AppTaskCreate (void)
 {
-    xTaskCreate(    vTaskTaskUserIF,   /* ÈÎÎñº¯Êý  */
-                    "vTaskUserIF",     /* ÈÎÎñÃû    */
-                    512,               /* stack´óÐ¡£¬µ¥Î»word£¬Ò²¾ÍÊÇ4×Ö½Ú */
-                    NULL,              /* ÈÎÎñ²ÎÊý  */
-                    1,                 /* ÈÎÎñÓÅÏÈ¼¶*/
-                    NULL );            /* ÈÎÎñ¾ä±ú  */
+    xTaskCreate(    vTaskTaskUserIF,   /* ä»»åŠ¡å‡½æ•°  */
+                    "vTaskUserIF",     /* ä»»åŠ¡å    */
+                    512,               /* stackå¤§å°ï¼Œå•ä½wordï¼Œä¹Ÿå°±æ˜¯4å­—èŠ‚ */
+                    NULL,              /* ä»»åŠ¡å‚æ•°  */
+                    1,                 /* ä»»åŠ¡ä¼˜å…ˆçº§*/
+                    NULL );            /* ä»»åŠ¡å¥æŸ„  */
 
 
-	xTaskCreate(    vTaskLED,    /* ÈÎÎñº¯Êý  */
-                    "vTaskLED",  /* ÈÎÎñÃû    */
-                    512,         /* stack´óÐ¡£¬µ¥Î»word£¬Ò²¾ÍÊÇ4×Ö½Ú */
-                    NULL,        /* ÈÎÎñ²ÎÊý  */
-                    2,           /* ÈÎÎñÓÅÏÈ¼¶*/
-                    &xHandleTaskLED );   /* ÈÎÎñ¾ä±ú  */
+	xTaskCreate(    vTaskLED,    /* ä»»åŠ¡å‡½æ•°  */
+                    "vTaskLED",  /* ä»»åŠ¡å    */
+                    512,         /* stackå¤§å°ï¼Œå•ä½wordï¼Œä¹Ÿå°±æ˜¯4å­—èŠ‚ */
+                    NULL,        /* ä»»åŠ¡å‚æ•°  */
+                    2,           /* ä»»åŠ¡ä¼˜å…ˆçº§*/
+                    &xHandleTaskLED );   /* ä»»åŠ¡å¥æŸ„  */
 
-	xTaskCreate(    vTaskMsgPro,     /* ÈÎÎñº¯Êý  */
-                    "vTaskMsgPro",   /* ÈÎÎñÃû    */
-                    512,             /* stack´óÐ¡£¬µ¥Î»word£¬Ò²¾ÍÊÇ4×Ö½Ú */
-                    NULL,            /* ÈÎÎñ²ÎÊý  */
-                    3,               /* ÈÎÎñÓÅÏÈ¼¶*/
-                    &xHandleTaskMsgPro );  /* ÈÎÎñ¾ä±ú  */
+	xTaskCreate(    vTaskMsgPro,     /* ä»»åŠ¡å‡½æ•°  */
+                    "vTaskMsgPro",   /* ä»»åŠ¡å    */
+                    512,             /* stackå¤§å°ï¼Œå•ä½wordï¼Œä¹Ÿå°±æ˜¯4å­—èŠ‚ */
+                    NULL,            /* ä»»åŠ¡å‚æ•°  */
+                    3,               /* ä»»åŠ¡ä¼˜å…ˆçº§*/
+                    &xHandleTaskMsgPro );  /* ä»»åŠ¡å¥æŸ„  */
 
 
-	xTaskCreate(    vTaskStart,     /* ÈÎÎñº¯Êý  */
-                    "vTaskStart",   /* ÈÎÎñÃû    */
-                    512,            /* stack´óÐ¡£¬µ¥Î»word£¬Ò²¾ÍÊÇ4×Ö½Ú */
-                    NULL,           /* ÈÎÎñ²ÎÊý  */
-                    4,              /* ÈÎÎñÓÅÏÈ¼¶*/
-                    NULL );         /* ÈÎÎñ¾ä±ú  */
+	xTaskCreate(    vTaskStart,     /* ä»»åŠ¡å‡½æ•°  */
+                    "vTaskStart",   /* ä»»åŠ¡å    */
+                    512,            /* stackå¤§å°ï¼Œå•ä½wordï¼Œä¹Ÿå°±æ˜¯4å­—èŠ‚ */
+                    NULL,           /* ä»»åŠ¡å‚æ•°  */
+                    4,              /* ä»»åŠ¡ä¼˜å…ˆçº§*/
+                    NULL );         /* ä»»åŠ¡å¥æŸ„  */
 }
 
-/*
-*********************************************************************************************************
-*	º¯ Êý Ãû: AppObjCreate
-*	¹¦ÄÜËµÃ÷: ´´½¨ÈÎÎñÍ¨ÐÅ»úÖÆ
-*	ÐÎ    ²Î: ÎÞ
-*	·µ »Ø Öµ: ÎÞ
-*********************************************************************************************************
-*/
+/*******************************************************************************
+**å‡½æ•°ä¿¡æ¯ ï¼š
+**åŠŸèƒ½æè¿° ï¼š
+**è¾“å…¥å‚æ•° ï¼šæ— 
+**è¾“å‡ºå‚æ•° ï¼šæ— 
+********************************************************************************/
 static void AppObjCreate (void)
 {
-	/* ´´½¨ÊÂ¼þ±êÖ¾×é */
+	/* åˆ›å»ºäº‹ä»¶æ ‡å¿—ç»„ */
 	xCreatedEventGroup = xEventGroupCreate();
 
 	if(xCreatedEventGroup == NULL)
     {
-        /* Ã»ÓÐ´´½¨³É¹¦£¬ÓÃ»§¿ÉÒÔÔÚÕâÀï¼ÓÈë´´½¨Ê§°ÜµÄ´¦Àí»úÖÆ */
+        /* æ²¡æœ‰åˆ›å»ºæˆåŠŸï¼Œç”¨æˆ·å¯ä»¥åœ¨è¿™é‡ŒåŠ å…¥åˆ›å»ºå¤±è´¥çš„å¤„ç†æœºåˆ¶ */
     }
 }
 
-/***************************** °²¸»À³www.OS-Q.comm (END OF FILE) *********************************/
+/*----------------------- (C) COPYRIGHT 2020 www.OS-Q.comm --------------------*/

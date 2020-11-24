@@ -1,26 +1,16 @@
 
 #include "includes.h"
 
-
 static void vTaskTaskUserIF(void *pvParameters);
 static void vTaskLED(void *pvParameters);
 static void vTaskMsgPro(void *pvParameters);
 static void vTaskStart(void *pvParameters);
 static void AppTaskCreate (void);
 
-
 static TaskHandle_t xHandleTaskLED = NULL;
 static TaskHandle_t xHandleTaskMsgPro = NULL;
 
 /*******************************************************************************
-**函数信息 ：
-**功能描述 ：
-**输入参数 ：无
-**输出参数 ：无
-********************************************************************************/
-int main(void)
-{
-	/* 硬件初始化初始化 */
 	bsp_Init();
 
 	/* 初始化一个定时器中断，精度高于滴答定时器中断，这样才可以获得准确的系统信息 */
@@ -36,7 +26,6 @@ int main(void)
 	while(1);
 }
 
-
 /*******************************************************************************
 **函数信息 ：
 **功能描述 ：
@@ -48,11 +37,9 @@ static void vTaskTaskUserIF(void *pvParameters)
 	uint8_t ucCount = 0;
 	uint8_t ucKeyCode;
 	uint8_t pcWriteBuffer[500];
-
     while(1)
     {
 		ucKeyCode = bsp_GetKey();
-
 		if (ucKeyCode != KEY_NONE)
 		{
 			switch (ucKeyCode)
@@ -102,8 +89,6 @@ static void vTaskTaskUserIF(void *pvParameters)
 		vTaskDelay(10);
 	}
 }
-
-
 /*******************************************************************************
 **函数信息 ：
 **功能描述 ：
@@ -128,7 +113,6 @@ static void vTaskLED(void *pvParameters)
     }
 }
 
-
 /*******************************************************************************
 **函数信息 ：
 **功能描述 ：
@@ -140,7 +124,6 @@ static void vTaskMsgPro(void *pvParameters)
 	BaseType_t xResult;
 	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(500); /* 设置最大等待时间为500ms */
 	uint32_t ulNotifiedValue;
-
     while(1)
     {
 		/*
@@ -174,7 +157,6 @@ static void vTaskMsgPro(void *pvParameters)
 		}
     }
 }
-
 
 /*******************************************************************************
 **函数信息 ：

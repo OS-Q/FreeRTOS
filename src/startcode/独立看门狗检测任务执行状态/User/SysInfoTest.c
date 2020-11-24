@@ -62,5 +62,4 @@ void TIM6_IRQHandler( void )
 		TIM_ClearITPendingBit(TIM6, TIM_IT_Update);
 	}
 }
-
-/***************************** °²¸»À³www.OS-Q.comm (END OF FILE) *********************************/
+/*----------------------- (C) COPYRIGHT 2020 www.OS-Q.comm --------------------*/
